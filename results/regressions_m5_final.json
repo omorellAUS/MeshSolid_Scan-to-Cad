@@ -1,0 +1,131 @@
+{
+ "date": "2026-10-31",
+ "code": "7d14ab0 (libigl deviation) + 0471a67 engine/f6dee4c add-in for pytest",
+ "pytest": "40 passed, 5 deselected (slow marker)",
+ "m3": {
+  "bolt_circle_flange": {
+   "status": "ok",
+   "rms": 0.01961,
+   "p95": 0.03839,
+   "s2m_p95": 0.03276,
+   "gate": true,
+   "deviation_s": 2.23
+  },
+  "chamfer_fillet_block": {
+   "status": "ok",
+   "rms": 0.01992,
+   "p95": 0.0391,
+   "s2m_p95": 0.03004,
+   "gate": true,
+   "deviation_s": 30.04
+  },
+  "chamfered_block": {
+   "status": "ok",
+   "rms": 0.01982,
+   "p95": 0.0386,
+   "s2m_p95": 0.02909,
+   "gate": true,
+   "deviation_s": 11.21
+  },
+  "counterbore_plate": {
+   "status": "ok",
+   "rms": 0.01968,
+   "p95": 0.03852,
+   "s2m_p95": 0.03013,
+   "gate": true,
+   "deviation_s": 6.91
+  },
+  "countersunk_plate": {
+   "status": "ok",
+   "rms": 0.01985,
+   "p95": 0.03871,
+   "s2m_p95": 0.02897,
+   "gate": true,
+   "deviation_s": 5.91
+  },
+  "drafted_block": {
+   "status": "ok",
+   "rms": 0.01988,
+   "p95": 0.03894,
+   "s2m_p95": 0.02763,
+   "gate": true,
+   "deviation_s": 10.55
+  },
+  "pipe_elbow": {
+   "status": "ok",
+   "rms": 0.02023,
+   "p95": 0.03978,
+   "s2m_p95": 0.03544,
+   "gate": true,
+   "deviation_s": 32.99
+  },
+  "pocket_plate": {
+   "status": "ok",
+   "rms": 0.01975,
+   "p95": 0.0385,
+   "s2m_p95": 0.02789,
+   "gate": true,
+   "deviation_s": 12.81
+  },
+  "slotted_plate": {
+   "status": "ok",
+   "rms": 0.01976,
+   "p95": 0.03867,
+   "s2m_p95": 0.02781,
+   "gate": true,
+   "deviation_s": 18.86
+  },
+  "threaded_stud": {
+   "status": "ok",
+   "rms": 0.5758,
+   "p95": 0.96024,
+   "s2m_p95": 0.59447,
+   "gate": true,
+   "deviation_s": 125.25
+  }
+ },
+ "coupling": {
+  "status": "ok",
+  "rms": 0.00048,
+  "p95": 0.00095,
+  "s2m_p95": 0.03131,
+  "gate": true,
+  "deviation_s": 75.72
+ },
+ "user": {
+  "s04": {
+   "status": "ok",
+   "rms": 0.12785,
+   "p95": 0.12934,
+   "s2m_p95": 0.86192,
+   "gate": true,
+   "deviation_s": 105.32
+  },
+  "s05": {
+   "status": "ok",
+   "rms": 0.12228,
+   "p95": 0.13456,
+   "s2m_p95": 0.71201,
+   "gate": true,
+   "deviation_s": 70.28
+  },
+  "s06": {
+   "status": "ok",
+   "rms": 0.1226,
+   "p95": 0.1334,
+   "s2m_p95": 0.6325,
+   "gate": true,
+   "deviation_s": 63.95
+  }
+ },
+ "p01_snapped": {
+  "status": "ok",
+  "rms": 0.22144,
+  "p95": 0.12731,
+  "s2m_p95": 0.14335,
+  "gate": true,
+  "deviation_s": 277.15
+ },
+ "vs_previous": "deviation numbers identical to the r9 run (trimesh search) on every part; p01 deviation stage 85 s (310 s with f02692d; OOM before b316f49)",
+ "stg1_le_round_no_fork": "blade-only stg1 build with MESHSOLID_NO_FORK=1: post_trim r 0.65 on 2 edges, blade volume 3653.5876 vs 3653.5869 mm3 with fork"
+}

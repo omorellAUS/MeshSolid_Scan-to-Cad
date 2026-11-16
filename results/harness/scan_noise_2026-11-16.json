@@ -1,0 +1,342 @@
+{
+  "stg1_impeller": {
+    "scan": "C:\\Users\\ollym\\AppData\\Local\\meshsolid\\jobs\\20261114-182656\\mesh_body.stl",
+    "vertices": 655979,
+    "whole_scan": {
+      "patch_radius_mm": 5.64,
+      "spacing_mm": 10.0,
+      "n_candidates": 607,
+      "n_rejected": 248,
+      "median_edge_mm": 0.3367,
+      "all": {
+        "patches": 359,
+        "median_rms_quadric": 0.08303,
+        "p90_rms_quadric": 0.17654,
+        "p10_rms_quadric": 0.01544,
+        "median_rms_plane": 0.23324,
+        "median_points_per_patch": 871,
+        "median_whiteness": 0.386
+      },
+      "planar": {
+        "patches": 22,
+        "median_rms_quadric": 0.01719,
+        "p90_rms_quadric": 0.02218,
+        "p10_rms_quadric": 0.01009,
+        "median_rms_plane": 0.02265,
+        "median_points_per_patch": 1046,
+        "median_whiteness": 0.369
+      },
+      "curved": {
+        "patches": 337,
+        "median_rms_quadric": 0.08701,
+        "p90_rms_quadric": 0.18033,
+        "p10_rms_quadric": 0.01847,
+        "median_rms_plane": 0.25211,
+        "median_points_per_patch": 861,
+        "median_whiteness": 0.388
+      }
+    },
+    "end_face_low": {
+      "vertices": 824,
+      "flatness_global_plane": {
+        "n": 824,
+        "rms": 0.07955,
+        "pv": 0.44469,
+        "p99_abs": 0.19043
+      },
+      "patches": {
+        "patch_radius_mm": 5.64,
+        "spacing_mm": 10.0,
+        "n_candidates": 12,
+        "n_rejected": 0,
+        "median_edge_mm": 0.3367,
+        "all": {
+          "patches": 12,
+          "median_rms_quadric": 0.01186,
+          "p90_rms_quadric": 0.0176,
+          "p10_rms_quadric": 0.00706,
+          "median_rms_plane": 0.01762,
+          "median_points_per_patch": 49,
+          "median_whiteness": 0.748
+        },
+        "planar": null,
+        "curved": {
+          "patches": 12,
+          "median_rms_quadric": 0.01186,
+          "p90_rms_quadric": 0.0176,
+          "p10_rms_quadric": 0.00706,
+          "median_rms_plane": 0.01762,
+          "median_points_per_patch": 49,
+          "median_whiteness": 0.748
+        }
+      }
+    },
+    "end_face_high": {
+      "vertices": 31624,
+      "flatness_global_plane": {
+        "n": 31624,
+        "rms": 0.20213,
+        "pv": 1.27996,
+        "p99_abs": 0.58087
+      },
+      "patches": {
+        "patch_radius_mm": 5.64,
+        "spacing_mm": 10.0,
+        "n_candidates": 57,
+        "n_rejected": 3,
+        "median_edge_mm": 0.3367,
+        "all": {
+          "patches": 54,
+          "median_rms_quadric": 0.01679,
+          "p90_rms_quadric": 0.02442,
+          "p10_rms_quadric": 0.00735,
+          "median_rms_plane": 0.02474,
+          "median_points_per_patch": 855,
+          "median_whiteness": 0.395
+        },
+        "planar": {
+          "patches": 33,
+          "median_rms_quadric": 0.01702,
+          "p90_rms_quadric": 0.02444,
+          "p10_rms_quadric": 0.00907,
+          "median_rms_plane": 0.02365,
+          "median_points_per_patch": 999,
+          "median_whiteness": 0.374
+        },
+        "curved": {
+          "patches": 21,
+          "median_rms_quadric": 0.01633,
+          "p90_rms_quadric": 0.02231,
+          "p10_rms_quadric": 0.00697,
+          "median_rms_plane": 0.02747,
+          "median_points_per_patch": 598,
+          "median_whiteness": 0.415
+        }
+      }
+    }
+  },
+  "stage3_impeller": {
+    "scan": "C:\\Users\\ollym\\AppData\\Local\\meshsolid\\jobs\\20261115-064855\\mesh_body.stl",
+    "vertices": 150055,
+    "whole_scan": {
+      "patch_radius_mm": 5.64,
+      "spacing_mm": 10.0,
+      "n_candidates": 136,
+      "n_rejected": 61,
+      "median_edge_mm": 0.3414,
+      "all": {
+        "patches": 75,
+        "median_rms_quadric": 0.07906,
+        "p90_rms_quadric": 0.70086,
+        "p10_rms_quadric": 3e-05,
+        "median_rms_plane": 0.55337,
+        "median_points_per_patch": 1002,
+        "median_whiteness": 0.44
+      },
+      "planar": {
+        "patches": 25,
+        "median_rms_quadric": 6e-05,
+        "p90_rms_quadric": 0.00021,
+        "p10_rms_quadric": 2e-05,
+        "median_rms_plane": 0.00126,
+        "median_points_per_patch": 1008,
+        "median_whiteness": 0.398
+      },
+      "curved": {
+        "patches": 50,
+        "median_rms_quadric": 0.19066,
+        "p90_rms_quadric": 0.71872,
+        "p10_rms_quadric": 0.06146,
+        "median_rms_plane": 0.69039,
+        "median_points_per_patch": 986,
+        "median_whiteness": 0.456
+      }
+    },
+    "end_face_low": {
+      "vertices": 52671,
+      "flatness_global_plane": {
+        "n": 52671,
+        "rms": 0.07084,
+        "pv": 0.64584,
+        "p99_abs": 0.32378
+      },
+      "patches": {
+        "patch_radius_mm": 5.64,
+        "spacing_mm": 10.0,
+        "n_candidates": 71,
+        "n_rejected": 20,
+        "median_edge_mm": 0.3414,
+        "all": {
+          "patches": 51,
+          "median_rms_quadric": 0.00017,
+          "p90_rms_quadric": 0.00052,
+          "p10_rms_quadric": 2e-05,
+          "median_rms_plane": 0.00306,
+          "median_points_per_patch": 987,
+          "median_whiteness": 0.415
+        },
+        "planar": {
+          "patches": 47,
+          "median_rms_quadric": 0.00014,
+          "p90_rms_quadric": 0.00042,
+          "p10_rms_quadric": 2e-05,
+          "median_rms_plane": 0.00291,
+          "median_points_per_patch": 1000,
+          "median_whiteness": 0.41
+        },
+        "curved": {
+          "patches": 4,
+          "median_rms_quadric": 0.00058,
+          "p90_rms_quadric": 0.00074,
+          "p10_rms_quadric": 0.00052,
+          "median_rms_plane": 0.01473,
+          "median_points_per_patch": 689,
+          "median_whiteness": 0.477
+        }
+      }
+    },
+    "end_face_high": {
+      "vertices": 2610,
+      "flatness_global_plane": {
+        "n": 2610,
+        "rms": 1e-05,
+        "pv": 0.00032,
+        "p99_abs": 2e-05
+      },
+      "patches": {
+        "patch_radius_mm": 5.64,
+        "spacing_mm": 10.0,
+        "n_candidates": 6,
+        "n_rejected": 3,
+        "median_edge_mm": 0.3414,
+        "all": {
+          "patches": 3,
+          "median_rms_quadric": 0.0,
+          "p90_rms_quadric": 1e-05,
+          "p10_rms_quadric": 0.0,
+          "median_rms_plane": 0.0,
+          "median_points_per_patch": 912,
+          "median_whiteness": 0.771
+        },
+        "planar": {
+          "patches": 3,
+          "median_rms_quadric": 0.0,
+          "p90_rms_quadric": 1e-05,
+          "p10_rms_quadric": 0.0,
+          "median_rms_plane": 0.0,
+          "median_points_per_patch": 912,
+          "median_whiteness": 0.771
+        },
+        "curved": null
+      }
+    }
+  },
+  "pinion_X2.B1872": {
+    "scan": "C:\\Users\\ollym\\AppData\\Local\\meshsolid\\jobs\\20261114-060647\\mesh_body.stl",
+    "vertices": 101913,
+    "whole_scan": {
+      "patch_radius_mm": 5.64,
+      "spacing_mm": 10.0,
+      "n_candidates": 383,
+      "n_rejected": 147,
+      "median_edge_mm": 0.6498,
+      "all": {
+        "patches": 236,
+        "median_rms_quadric": 0.01435,
+        "p90_rms_quadric": 0.13557,
+        "p10_rms_quadric": 0.00436,
+        "median_rms_plane": 0.3649,
+        "median_points_per_patch": 191,
+        "median_whiteness": 0.595
+      },
+      "planar": null,
+      "curved": {
+        "patches": 236,
+        "median_rms_quadric": 0.01435,
+        "p90_rms_quadric": 0.13557,
+        "p10_rms_quadric": 0.00436,
+        "median_rms_plane": 0.3649,
+        "median_points_per_patch": 191,
+        "median_whiteness": 0.595
+      }
+    },
+    "end_face_low": {
+      "vertices": 1309,
+      "flatness_global_plane": {
+        "n": 1309,
+        "rms": 0.0985,
+        "pv": 0.51289,
+        "p99_abs": 0.27145
+      },
+      "patches": {
+        "patch_radius_mm": 5.64,
+        "spacing_mm": 10.0,
+        "n_candidates": 24,
+        "n_rejected": 1,
+        "median_edge_mm": 0.6498,
+        "all": {
+          "patches": 23,
+          "median_rms_quadric": 0.00936,
+          "p90_rms_quadric": 0.01306,
+          "p10_rms_quadric": 0.0004,
+          "median_rms_plane": 0.03032,
+          "median_points_per_patch": 57,
+          "median_whiteness": 0.871
+        },
+        "planar": {
+          "patches": 6,
+          "median_rms_quadric": 0.00044,
+          "p90_rms_quadric": 0.00944,
+          "p10_rms_quadric": 0.00023,
+          "median_rms_plane": 0.00855,
+          "median_points_per_patch": 46,
+          "median_whiteness": 0.972
+        },
+        "curved": {
+          "patches": 17,
+          "median_rms_quadric": 0.00963,
+          "p90_rms_quadric": 0.01367,
+          "p10_rms_quadric": 0.00114,
+          "median_rms_plane": 0.03274,
+          "median_points_per_patch": 60,
+          "median_whiteness": 0.831
+        }
+      }
+    },
+    "end_face_high": {
+      "vertices": 245,
+      "flatness_global_plane": {
+        "n": 245,
+        "rms": 0.04917,
+        "pv": 0.35619,
+        "p99_abs": 0.15204
+      },
+      "patches": {
+        "patch_radius_mm": 5.64,
+        "spacing_mm": 10.0,
+        "n_candidates": 4,
+        "n_rejected": 0,
+        "median_edge_mm": 0.6498,
+        "all": {
+          "patches": 4,
+          "median_rms_quadric": 0.02716,
+          "p90_rms_quadric": 0.03239,
+          "p10_rms_quadric": 0.02332,
+          "median_rms_plane": 0.04351,
+          "median_points_per_patch": 101,
+          "median_whiteness": 0.766
+        },
+        "planar": null,
+        "curved": {
+          "patches": 4,
+          "median_rms_quadric": 0.02716,
+          "p90_rms_quadric": 0.03239,
+          "p10_rms_quadric": 0.02332,
+          "median_rms_plane": 0.04351,
+          "median_points_per_patch": 101,
+          "median_whiteness": 0.766
+        }
+      }
+    }
+  }
+}

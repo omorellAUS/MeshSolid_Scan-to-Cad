@@ -1,0 +1,512 @@
+{
+ "model": "out/user/stg1/m5_v5.step (gitignored)",
+ "build": {
+  "valid": true,
+  "n_solids": 1,
+  "n_faces": 128,
+  "volume": 271404.6939151696,
+  "hub_volume": 230544.78954181162,
+  "blade_volume": 3653.586930492684,
+  "slab_valid": true,
+  "front_face": {
+   "z": 54.789953180229965,
+   "r_outer": 11.812119601177908
+  },
+  "rim_hub_z": 3.957364852278502,
+  "bore_d": 14.29,
+  "le_round": {
+   "rho": 0.65,
+   "edges": 2,
+   "ok": true
+  },
+  "seconds": 29.6
+ },
+ "metrology_point_to_plane_refined": {
+  "basis": "scanned surfaces (blades, hub, front hub face) with solid_body's zones and masks (balance cuts, stub, flat cap) applied to both",
+  "excluded_points": 8630,
+  "reference_cuts": 5,
+  "solid_body": {
+   "overall": {
+    "n": 254563,
+    "rms": 0.1312,
+    "p95": 0.2232,
+    "median": 0.0592,
+    "max": 2.0808
+   },
+   "zones": {
+    "blades": {
+     "n": 158404,
+     "rms": 0.1243,
+     "p95": 0.2338,
+     "median": 0.0552,
+     "max": 1.9917
+    },
+    "hub": {
+     "n": 93426,
+     "rms": 0.1421,
+     "p95": 0.2113,
+     "median": 0.0665,
+     "max": 2.0808
+    },
+    "frontface": {
+     "n": 2733,
+     "rms": 0.1343,
+     "p95": 0.3079,
+     "median": 0.0693,
+     "max": 0.5285
+    }
+   }
+  },
+  "m5_v5": {
+   "overall": {
+    "n": 254563,
+    "rms": 0.1141,
+    "p95": 0.2041,
+    "median": 0.046,
+    "max": 1.9967
+   },
+   "zones": {
+    "blades": {
+     "n": 158404,
+     "rms": 0.0778,
+     "p95": 0.1536,
+     "median": 0.0362,
+     "max": 1.9843
+    },
+    "hub": {
+     "n": 93426,
+     "rms": 0.1574,
+     "p95": 0.2999,
+     "median": 0.0697,
+     "max": 1.9967
+    },
+    "frontface": {
+     "n": 2733,
+     "rms": 0.1205,
+     "p95": 0.2371,
+     "median": 0.0862,
+     "max": 0.4014
+    }
+   }
+  }
+ },
+ "metrology_coarse_icp_only": {
+  "basis": "scanned surfaces (blades, hub, front hub face) with solid_body's zones and masks (balance cuts, stub, flat cap) applied to both",
+  "excluded_points": 8744,
+  "reference_cuts": 6,
+  "solid_body": {
+   "overall": {
+    "n": 254648,
+    "rms": 0.1285,
+    "p95": 0.2156,
+    "median": 0.0567,
+    "max": 2.082
+   },
+   "zones": {
+    "blades": {
+     "n": 158364,
+     "rms": 0.1232,
+     "p95": 0.229,
+     "median": 0.054,
+     "max": 1.8682
+    },
+    "hub": {
+     "n": 93501,
+     "rms": 0.1368,
+     "p95": 0.1986,
+     "median": 0.0611,
+     "max": 2.082
+    },
+    "frontface": {
+     "n": 2783,
+     "rms": 0.1364,
+     "p95": 0.3066,
+     "median": 0.0725,
+     "max": 0.5425
+    }
+   }
+  },
+  "m5_v5": {
+   "overall": {
+    "n": 254648,
+    "rms": 0.5114,
+    "p95": 1.0415,
+    "median": 0.2976,
+    "max": 2.006
+   },
+   "zones": {
+    "blades": {
+     "n": 158364,
+     "rms": 0.596,
+     "p95": 1.1101,
+     "median": 0.4094,
+     "max": 1.9653
+    },
+    "hub": {
+     "n": 93501,
+     "rms": 0.3307,
+     "p95": 0.6117,
+     "median": 0.1966,
+     "max": 2.006
+    },
+    "frontface": {
+     "n": 2783,
+     "rms": 0.2048,
+     "p95": 0.4359,
+     "median": 0.1213,
+     "max": 0.7013
+    }
+   }
+  }
+ },
+ "note": "coarse point-to-point ICP (the original benchmark procedure) lands our model in a wrong local minimum (tilt ~1.7 mrad); the refined alignment applies the same point-to-plane step to solid_body and to ours",
+ "blade_params": {
+  "N": 15,
+  "z_le_plane": 52.625,
+  "r_te": 82.808,
+  "le_round": {
+   "rho": 0.65,
+   "half_t": 0.92297958918282,
+   "plane_offset": 0.03,
+   "rms": 0.07117276859279269
+  },
+  "eye": {
+   "z_front": 54.789953180229965,
+   "r_cyl": 11.803767714272894,
+   "kind": "stub_cylinder"
+  },
+  "spans": {
+   "hub_root_incl_fillet": {
+    "LE_rz": [
+     13.182,
+     52.625
+    ],
+    "TE_rz": [
+     82.808,
+     4.042
+    ],
+    "meridional_length": 92.71,
+    "wrap_deg": 60.18,
+    "beta_inlet_deg_from_meridional": 20.1,
+    "beta_exit_deg_from_meridional": 31.7,
+    "thickness_tangential_mm": {
+     "0.05": 2.785,
+     "0.10": 3.058,
+     "0.25": 4.026,
+     "0.50": 5.997,
+     "0.75": 6.792,
+     "0.90": 6.021,
+     "0.97": 6.51
+    },
+    "thickness_normal_mm": {
+     "0.05": 2.668,
+     "0.10": 2.92,
+     "0.25": 3.937,
+     "0.50": 5.585,
+     "0.75": 6.075,
+     "0.90": 4.696,
+     "0.97": 5.5
+    }
+   },
+   "hub_above_fillet": {
+    "LE_rz": [
+     18.56,
+     52.625
+    ],
+    "TE_rz": [
+     82.808,
+     5.013
+    ],
+    "meridional_length": 87.54,
+    "wrap_deg": 58.6,
+    "beta_inlet_deg_from_meridional": 22.5,
+    "beta_exit_deg_from_meridional": 42.7,
+    "thickness_tangential_mm": {
+     "0.05": 1.896,
+     "0.10": 2.151,
+     "0.25": 2.39,
+     "0.50": 2.904,
+     "0.75": 3.96,
+     "0.90": 4.294,
+     "0.97": 4.352
+    },
+    "thickness_normal_mm": {
+     "0.05": 1.732,
+     "0.10": 1.999,
+     "0.25": 2.291,
+     "0.50": 2.772,
+     "0.75": 3.285,
+     "0.90": 3.174,
+     "0.97": 3.196
+    }
+   },
+   "mid": {
+    "LE_rz": [
+     24.406,
+     52.625
+    ],
+    "TE_rz": [
+     82.808,
+     6.07
+    ],
+    "meridional_length": 82.04,
+    "wrap_deg": 55.89,
+    "beta_inlet_deg_from_meridional": 28.2,
+    "beta_exit_deg_from_meridional": 42.7,
+    "thickness_tangential_mm": {
+     "0.05": 1.845,
+     "0.10": 2.061,
+     "0.25": 2.301,
+     "0.50": 2.646,
+     "0.75": 3.023,
+     "0.90": 3.21,
+     "0.97": 3.138
+    },
+    "thickness_normal_mm": {
+     "0.05": 1.603,
+     "0.10": 1.83,
+     "0.25": 2.153,
+     "0.50": 2.497,
+     "0.75": 2.517,
+     "0.90": 2.425,
+     "0.97": 2.302
+    }
+   },
+   "tip": {
+    "LE_rz": [
+     35.629,
+     52.625
+    ],
+    "TE_rz": [
+     82.808,
+     8.097
+    ],
+    "meridional_length": 72.0,
+    "wrap_deg": 52.98,
+    "beta_inlet_deg_from_meridional": 39.7,
+    "beta_exit_deg_from_meridional": 43.2,
+    "thickness_tangential_mm": {
+     "0.05": 1.997,
+     "0.10": 1.997,
+     "0.25": 2.049,
+     "0.50": 2.215,
+     "0.75": 2.433,
+     "0.90": 2.509,
+     "0.97": 2.283
+    },
+    "thickness_normal_mm": {
+     "0.05": 1.457,
+     "0.10": 1.515,
+     "0.25": 1.773,
+     "0.50": 2.041,
+     "0.75": 2.058,
+     "0.90": 1.874,
+     "0.97": 1.637
+    }
+   }
+  },
+  "tip_line_rz": [
+   [
+    36.097,
+    52.625
+   ],
+   [
+    37.716,
+    45.653
+   ],
+   [
+    39.323,
+    38.677
+   ],
+   [
+    41.774,
+    31.957
+   ],
+   [
+    45.328,
+    25.753
+   ],
+   [
+    50.017,
+    20.358
+   ],
+   [
+    55.708,
+    16.034
+   ],
+   [
+    62.124,
+    12.878
+   ],
+   [
+    68.978,
+    10.831
+   ],
+   [
+    76.041,
+    9.678
+   ],
+   [
+    82.808,
+    8.182
+   ]
+  ],
+  "hub_line_rz": [
+   [
+    12.715,
+    52.625
+   ],
+   [
+    15.994,
+    43.906
+   ],
+   [
+    20.012,
+    35.508
+   ],
+   [
+    25.129,
+    27.732
+   ],
+   [
+    31.241,
+    20.713
+   ],
+   [
+    38.405,
+    14.774
+   ],
+   [
+    46.436,
+    10.07
+   ],
+   [
+    55.102,
+    6.676
+   ],
+   [
+    64.2,
+    4.727
+   ],
+   [
+    73.494,
+    4.144
+   ],
+   [
+    82.808,
+    3.957
+   ]
+  ],
+  "exit_blade_height": 4.225,
+  "side_fit": {
+   "1": {
+    "n": 313859,
+    "rms_mm": 0.073,
+    "p95_mm": 0.156,
+    "empty_cells": 82,
+    "grid_fit_fallback": null
+   },
+   "-1": {
+    "n": 300211,
+    "rms_mm": 0.0811,
+    "p95_mm": 0.1483,
+    "empty_cells": 72,
+    "grid_fit_fallback": null
+   }
+  },
+  "axis_corrections": 6
+ },
+ "m5_v8": {
+  "what": "m5_v5 + per-passage hub floor h(p,phi) (floor slabs, hub lowered 0.4 mm, staged fuse)",
+  "build": {
+   "valid": true,
+   "n_solids": 1,
+   "n_faces": 336,
+   "volume": 273990.84995966125,
+   "le_round": {
+    "rho": 0.65,
+    "edges": 2,
+    "ok": true
+   },
+   "floor": {
+    "delta": 0.4,
+    "slab_volume": 1334.1391980057942,
+    "h_range": [
+     -0.119,
+     0.552
+    ]
+   },
+   "seconds": 2225.9
+  },
+  "metrology_refined_alignment": {
+   "basis": "scanned surfaces (blades, hub, front hub face) with solid_body's zones and masks (balance cuts, stub, flat cap) applied to both",
+   "excluded_points": 8630,
+   "reference_cuts": 5,
+   "solid_body": {
+    "overall": {
+     "n": 254563,
+     "rms": 0.1312,
+     "p95": 0.2232,
+     "median": 0.0592,
+     "max": 2.0808
+    },
+    "zones": {
+     "blades": {
+      "n": 158404,
+      "rms": 0.1243,
+      "p95": 0.2338,
+      "median": 0.0552,
+      "max": 1.9917
+     },
+     "hub": {
+      "n": 93426,
+      "rms": 0.1421,
+      "p95": 0.2113,
+      "median": 0.0665,
+      "max": 2.0808
+     },
+     "frontface": {
+      "n": 2733,
+      "rms": 0.1343,
+      "p95": 0.3079,
+      "median": 0.0693,
+      "max": 0.5285
+     }
+    }
+   },
+   "m5_v8": {
+    "overall": {
+     "n": 254563,
+     "rms": 0.0962,
+     "p95": 0.1567,
+     "median": 0.0365,
+     "max": 2.0369
+    },
+    "zones": {
+     "blades": {
+      "n": 158404,
+      "rms": 0.0746,
+      "p95": 0.149,
+      "median": 0.0324,
+      "max": 2.0064
+     },
+     "hub": {
+      "n": 93426,
+      "rms": 0.1244,
+      "p95": 0.165,
+      "median": 0.0442,
+      "max": 2.0369
+     },
+     "frontface": {
+      "n": 2733,
+      "rms": 0.1047,
+      "p95": 0.2086,
+      "median": 0.0707,
+      "max": 0.3542
+     }
+    }
+   }
+  }
+ },
+ "best": "m5_v8"
+}

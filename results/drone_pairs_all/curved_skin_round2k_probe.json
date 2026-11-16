@@ -1,0 +1,79 @@
+{
+  "WINGTIP L 2": {
+    "ok": false,
+    "nsol": 1,
+    "vol": 0.9988,
+    "rms": 0.05855,
+    "p95": 0.1021,
+    "s2m": 0.01394,
+    "levels": [
+      463.9288,
+      683.7948
+    ],
+    "slabs": [
+      {
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "sections": 80,
+        "corner_count_intent": null,
+        "fuse_fallback": null
+      }
+    ],
+    "t": 13.6,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.05855 / p95 0.1021, solid->mesh p95 0.01394 (tol 0.0115, lim_s2m 0.04219)"
+  },
+  "AILERON 1R VTOL": {
+    "ok": false,
+    "nsol": 1,
+    "vol": 1.0158,
+    "rms": 0.83715,
+    "p95": 1.62671,
+    "s2m": 0.37036,
+    "levels": [
+      366.6044,
+      498.5348
+    ],
+    "slabs": [
+      {
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "sections": 33,
+        "corner_count_intent": null,
+        "fuse_fallback": null
+      }
+    ],
+    "t": 5.4,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.8372 / p95 1.627, solid->mesh p95 0.3704 (tol 0.008264, lim_s2m 0.02862)"
+  },
+  "WING 2 L": {
+    "ok": false,
+    "nsol": 1,
+    "vol": 1.0092,
+    "rms": 0.96438,
+    "p95": 2.18132,
+    "s2m": 0.3058,
+    "levels": [
+      -395.0,
+      -322.8187,
+      -304.4495,
+      -290.0
+    ],
+    "slabs": [
+      {
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "sections": 37,
+        "corner_count_intent": null,
+        "fuse_fallback": "slab fuse produced n_solids=25 vol=34.67 valid=False"
+      }
+    ],
+    "t": 135.5,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.9644 / p95 2.181, solid->mesh p95 0.3058 (tol 0.01653, lim_s2m 0.06061)"
+  }
+}

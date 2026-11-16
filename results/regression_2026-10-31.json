@@ -1,0 +1,39 @@
+{
+ "date": "2026-10-31",
+ "after_commit": "3da7b9f (revolve neck/step/short-band changes)",
+ "m3": {
+  "chamfered_block": "ok",
+  "slotted_plate": "ok",
+  "counterbore_plate": "ok",
+  "bolt_circle_flange": "ok",
+  "countersunk_plate": "ok",
+  "drafted_block": "ok",
+  "pocket_plate": "ok",
+  "chamfer_fillet_block": "ok",
+  "threaded_stud": "ok",
+  "pipe_elbow": "ok"
+ },
+ "coupling": {
+  "status": "ok",
+  "vertex_rms": 0.0004828007607514219,
+  "solid_to_mesh_p95": 0.03130759154872003
+ },
+ "s04": {
+  "status": "ok",
+  "n_faces": 35,
+  "volume": 449361.64087638154,
+  "unchanged_vs_r6": true
+ },
+ "s05": {
+  "status": "ok",
+  "n_faces": 35,
+  "volume": 449402.395316587,
+  "unchanged_vs_r6": true
+ },
+ "s06": {
+  "status": "ok",
+  "n_faces": 34,
+  "volume": 449492.2613496728,
+  "unchanged_vs_r6": true
+ }
+}

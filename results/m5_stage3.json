@@ -1,0 +1,332 @@
+{
+ "what": "M5 stage 3: 13-blade wheels s07 (scan) and s09 (CAD mesh), built by meshsolid/impeller.py with the per-passage hub floor",
+ "basis": "scan vertices -> solid in the scan's own coordinates (no alignment); scan-only stub/cap and balance cuts excluded; tessellation lin 0.01 mm",
+ "fixes": [
+  "camber phase grid: empty/incoherent cells filled (7b825d0)",
+  "camber fitted away from the LE/TE end cells: a garbage TE row made the s09 blade sheets diverge (slab 5.0e6 mm3 -> 438 mm3) (e21ecc1)",
+  "slab side grids keep >= 30% of the median thickness in the extensions (7b825d0)",
+  "deviation: closest-point chunks sized by candidate count; exact subdivision of long-facet targets; impeller tessellation ang 0.5 rad (OOM on s09)"
+ ],
+ "s07": {
+  "build": {
+   "valid": true,
+   "n_solids": 1,
+   "n_faces": 253,
+   "volume": 37052.06187309411,
+   "blade_volume": 458.57201567437454,
+   "le_round": {
+    "rho": 0.5391179433044092,
+    "edges": 2,
+    "ok": false,
+    "error": "timeout 120s"
+   },
+   "floor": {
+    "delta": 0.4,
+    "slab_volume": 346.77466215267106,
+    "h_range": [
+     -0.051,
+     0.462
+    ]
+   },
+   "seconds": 915.6
+  },
+  "bore": "not in the scan: 14.275 assumed for the test build",
+  "deviation": {
+   "excluded_vertices": 4292,
+   "overall": {
+    "n": 128570,
+    "rms": 0.0604,
+    "p95": 0.1422,
+    "median": 0.0163,
+    "max": 0.83
+   },
+   "zones": {
+    "blades": {
+     "n": 59130,
+     "rms": 0.0596,
+     "p95": 0.1439,
+     "median": 0.0152,
+     "max": 0.398
+    },
+    "back_face": {
+     "n": 3549,
+     "rms": 0.0661,
+     "p95": 0.127,
+     "median": 0.0233,
+     "max": 0.83
+    },
+    "hub_and_front": {
+     "n": 65891,
+     "rms": 0.0608,
+     "p95": 0.142,
+     "median": 0.0172,
+     "max": 0.593
+    }
+   }
+  },
+  "balance_cuts_detected": 0,
+  "rebuild_m5b": {
+   "code": "1abad68",
+   "build": {
+    "valid": true,
+    "n_solids": 1,
+    "n_faces": 253,
+    "volume": 37277.02678327766,
+    "blade_volume": 456.7019216166864,
+    "seconds": 829.7
+   },
+   "le_round": {
+    "ok": false,
+    "method": "sharp_fallback",
+    "rho_estimated": 1.106
+   }
+  },
+  "rebuild_m5c": {
+   "code": "f1614ff (sheet LE round, conditional camber end slope, tip-fold fix)",
+   "build": {
+    "valid": true,
+    "n_solids": 1,
+    "n_faces": 292,
+    "volume": 37230.38638147242,
+    "blade_volume": 451.49421797269423,
+    "seconds": 1728.3
+   },
+   "le_round": {
+    "ok": true,
+    "method": "sheet_round",
+    "rho": 1.106
+   },
+   "deviation": {
+    "overall": {
+     "n": 128570,
+     "rms": 0.0481,
+     "p95": 0.0917,
+     "median": 0.0158,
+     "max": 0.83
+    },
+    "zones": {
+     "blades": {
+      "n": 59130,
+      "rms": 0.0442,
+      "p95": 0.0868,
+      "median": 0.015,
+      "max": 0.421
+     },
+     "back_face": {
+      "n": 3549,
+      "rms": 0.0657,
+      "p95": 0.1268,
+      "median": 0.0233,
+      "max": 0.83
+     },
+     "hub_and_front": {
+      "n": 65891,
+      "rms": 0.0503,
+      "p95": 0.0926,
+      "median": 0.0163,
+      "max": 0.592
+     }
+    }
+   }
+  }
+ },
+ "s09": {
+  "build": {
+   "valid": true,
+   "n_solids": 1,
+   "n_faces": 227,
+   "volume": 39007.70840011169,
+   "blade_volume": 380.29885960011103,
+   "le_round": {
+    "rho": 0.16,
+    "edges": 2,
+    "ok": false
+   },
+   "floor": {
+    "delta": 0.4,
+    "slab_volume": 339.73284195579737,
+    "h_range": [
+     0.001,
+     0.42
+    ]
+   },
+   "seconds": 1156.7
+  },
+  "bore": "scan 14.40; built 14.275 (stg1 design fit) for the test build",
+  "deviation": {
+   "excluded_vertices": 0,
+   "overall": {
+    "n": 157913,
+    "rms": 0.0943,
+    "p95": 0.1983,
+    "median": 0.0377,
+    "max": 1.241
+   },
+   "zones": {
+    "blades": {
+     "n": 107273,
+     "rms": 0.0923,
+     "p95": 0.1917,
+     "median": 0.0425,
+     "max": 1.241
+    },
+    "back_face": {
+     "n": 0
+    },
+    "hub_and_front": {
+     "n": 50640,
+     "rms": 0.0984,
+     "p95": 0.2074,
+     "median": 0.0295,
+     "max": 1.228
+    }
+   }
+  },
+  "balance_cuts_detected": 0,
+  "note": "CAD mesh: vertex statistics are weighted toward edges and fillets",
+  "rebuild_m5b": {
+   "code": "1abad68 (camber end-slope smoothing 38e274a)",
+   "build": {
+    "valid": true,
+    "n_solids": 1,
+    "n_faces": 215,
+    "volume": 38244.980110121134,
+    "blade_volume": 369.0095364896861,
+    "seconds": 1103.9
+   },
+   "le_round": {
+    "ok": false,
+    "method": "sharp_fallback",
+    "rho_estimated": 1.049
+   }
+  },
+  "rebuild_m5c": {
+   "code": "f971e8f (sheet LE round, tip-fold fix)",
+   "build": {
+    "valid": true,
+    "n_solids": 1,
+    "n_faces": 215,
+    "volume": 38341.785361946204,
+    "blade_volume": 385.0217032233758,
+    "seconds": 1248.7
+   },
+   "le_round": {
+    "ok": true,
+    "method": "sheet_round",
+    "rho": 0.786
+   },
+   "deviation": {
+    "overall": {
+     "n": 157913,
+     "rms": 0.0901,
+     "p95": 0.1988,
+     "median": 0.0331,
+     "max": 1.258
+    },
+    "zones": {
+     "blades": {
+      "n": 107273,
+      "rms": 0.0879,
+      "p95": 0.1981,
+      "median": 0.0359,
+      "max": 1.258
+     },
+     "back_face": {
+      "n": 0
+     },
+     "hub_and_front": {
+      "n": 50640,
+      "rms": 0.0946,
+      "p95": 0.2004,
+      "median": 0.0274,
+      "max": 1.221
+     }
+    }
+   }
+  }
+ },
+ "le_round": {
+  "outcome": "s07 and s09: not modelled, LE kept sharp and flagged (report: impeller.le_round_flag + warning); stg1: r 0.65 mm post-trim",
+  "tried": [
+   "both edges after the trim at r, 0.75r, 0.5r",
+   "both edges on the eye-plane-cut slab before the trim at r, 0.5r",
+   "one edge at a time with a ladder r .. 0.15r (56548e1; blade-only test on s07 and s09)",
+   "OCC fillet shapes Rational / QuasiAngular / Polynomial and loose SetParams (diagnostic)"
+  ],
+  "diagnosis": "OCC fillet walker fails (WalkingFailure / TwistedSurface / faulty end vertex) on the s07/s09 LE edges; success per edge flips with radius and results that build are often invalid. The s09 LE-round estimate is unstable (0.32 vs 1.05 mm between camber versions), so the LE may not be a flat-top-plus-round there. Smoothing the camber's LE continuation (38e274a) made one s09 edge fillet at 0.15 mm, not both.",
+  "sheet_round_b91c5ad": {
+   "s07": "blade-only test: rounded r 1.078 in the side sheets, valid, blade 442.6 vs 457.5 mm3 same-grid sharp",
+   "s09": "rejected: rounded blade volume above the same-grid sharp one; the s09 sheets fold near the tip extension (p-direction reversals at v 0.98-1.1), so volumes swing with the grid"
+  }
+ },
+ "stg1_check_pipe3": {
+  "code": "1abad68",
+  "metrology_refined": {
+   "pipe3": {
+    "overall": {
+     "n": 254563,
+     "rms": 0.0988,
+     "p95": 0.164,
+     "median": 0.0366,
+     "max": 2.0347
+    },
+    "zones": {
+     "blades": {
+      "n": 158404,
+      "rms": 0.0799,
+      "p95": 0.1632,
+      "median": 0.0326,
+      "max": 2.016
+     },
+     "hub": {
+      "n": 93426,
+      "rms": 0.1241,
+      "p95": 0.1616,
+      "median": 0.0438,
+      "max": 2.0347
+     },
+     "frontface": {
+      "n": 2733,
+      "rms": 0.1114,
+      "p95": 0.2217,
+      "median": 0.0744,
+      "max": 0.3607
+     }
+    }
+   },
+   "solid_body": {
+    "overall": {
+     "n": 254563,
+     "rms": 0.1312,
+     "p95": 0.2232,
+     "median": 0.0592,
+     "max": 2.0808
+    },
+    "zones": {
+     "blades": {
+      "n": 158404,
+      "rms": 0.1243,
+      "p95": 0.2338,
+      "median": 0.0552,
+      "max": 1.9917
+     },
+     "hub": {
+      "n": 93426,
+      "rms": 0.1421,
+      "p95": 0.2113,
+      "median": 0.0665,
+      "max": 2.0808
+     },
+     "frontface": {
+      "n": 2733,
+      "rms": 0.1343,
+      "p95": 0.3079,
+      "median": 0.0693,
+      "max": 0.5285
+     }
+    }
+   }
+  },
+  "vs_m5_v8": "slightly worse on blades (0.080/0.163 vs 0.075/0.149) and front face; still beats solid_body on all zones. f1614ff makes the camber end-slope smoothing conditional so stg1 keeps its old continuation."
+ }
+}

@@ -1,0 +1,570 @@
+{
+  "stg1_impeller": {
+    "n_blade_points": 353282,
+    "n_fit_points": 352954,
+    "blade_rms": {
+      "aligned_v2": 0.06225,
+      "after_common_fit": 0.06109,
+      "after_per_blade_fit": 0.04673
+    },
+    "blade_rms_gated_points": {
+      "aligned_v2": 0.06152,
+      "after_common_fit": 0.0604,
+      "after_per_blade_fit": 0.0458
+    },
+    "common_fit": {
+      "rot_deg": -0.00323,
+      "axial_mm": 0.0056,
+      "thickness_change_mm": -0.02187
+    },
+    "per_blade_spread_std": {
+      "rot_deg": 0.02992,
+      "axial_mm": 0.08281,
+      "thickness_change_mm": 0.03533,
+      "rot_at_tip_mm": 0.03926,
+      "tip_radius_mm": 75.17
+    },
+    "whole_part": {
+      "aligned_v2": {
+        "n_scan": 655979,
+        "n_inspected": 655932,
+        "n_excluded": 47,
+        "pct_excluded": 0.0072,
+        "capped_count": 15463,
+        "pct_capped": 2.3574,
+        "rms_uncapped": 0.12198,
+        "mean_signed": -0.02248,
+        "p95": 0.15363,
+        "p99": 0.31289,
+        "max_plus": 0.5006,
+        "max_minus": -2.03751,
+        "rms_capped": 0.06299,
+        "p95_capped": 0.1316,
+        "pass_pct_v1": 60.3656,
+        "pass_pct_legacy": 61.823,
+        "target_met_v1": false
+      },
+      "after_common_fit": {
+        "n_scan": 655979,
+        "n_inspected": 655932,
+        "n_excluded": 47,
+        "pct_excluded": 0.0072,
+        "capped_count": 15209,
+        "pct_capped": 2.3187,
+        "rms_uncapped": 0.12167,
+        "mean_signed": -0.01627,
+        "p95": 0.1512,
+        "p99": 0.31177,
+        "max_plus": 0.5006,
+        "max_minus": -2.03751,
+        "rms_capped": 0.06253,
+        "p95_capped": 0.13023,
+        "pass_pct_v1": 60.318,
+        "pass_pct_legacy": 61.7498,
+        "target_met_v1": false
+      },
+      "after_per_blade_fit": {
+        "n_scan": 655979,
+        "n_inspected": 655932,
+        "n_excluded": 47,
+        "pct_excluded": 0.0072,
+        "capped_count": 12659,
+        "pct_capped": 1.9299,
+        "rms_uncapped": 0.11819,
+        "mean_signed": -0.01627,
+        "p95": 0.13499,
+        "p99": 0.31237,
+        "max_plus": 0.5006,
+        "max_minus": -2.03751,
+        "rms_capped": 0.05691,
+        "p95_capped": 0.11982,
+        "pass_pct_v1": 66.5388,
+        "pass_pct_legacy": 67.8482,
+        "target_met_v1": false
+      }
+    },
+    "per_blade": [
+      {
+        "blade": 0,
+        "n": 22004,
+        "rot_deg": -0.01239,
+        "axial_mm": 0.07872,
+        "axial_observable": true,
+        "normal_offset_mm": 0.01055,
+        "thickness_change_mm": 0.02109,
+        "rms_before": 0.04774,
+        "rms_after": 0.0409
+      },
+      {
+        "blade": 1,
+        "n": 23506,
+        "rot_deg": -0.02231,
+        "axial_mm": 0.03899,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00223,
+        "thickness_change_mm": -0.00446,
+        "rms_before": 0.04504,
+        "rms_after": 0.04284
+      },
+      {
+        "blade": 2,
+        "n": 23772,
+        "rot_deg": 0.00557,
+        "axial_mm": 0.10637,
+        "axial_observable": true,
+        "normal_offset_mm": -0.01623,
+        "thickness_change_mm": -0.03247,
+        "rms_before": 0.06835,
+        "rms_after": 0.04946
+      },
+      {
+        "blade": 3,
+        "n": 23991,
+        "rot_deg": -0.06727,
+        "axial_mm": -0.23932,
+        "axial_observable": true,
+        "normal_offset_mm": -0.01328,
+        "thickness_change_mm": -0.02656,
+        "rms_before": 0.12686,
+        "rms_after": 0.06416
+      },
+      {
+        "blade": 4,
+        "n": 24655,
+        "rot_deg": -0.00795,
+        "axial_mm": -0.00206,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00384,
+        "thickness_change_mm": -0.00769,
+        "rms_before": 0.04311,
+        "rms_after": 0.04254
+      },
+      {
+        "blade": 5,
+        "n": 25153,
+        "rot_deg": -0.01838,
+        "axial_mm": 0.00966,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00068,
+        "thickness_change_mm": 0.00136,
+        "rms_before": 0.04066,
+        "rms_after": 0.03936
+      },
+      {
+        "blade": 6,
+        "n": 27297,
+        "rot_deg": 0.03399,
+        "axial_mm": -0.00676,
+        "axial_observable": true,
+        "normal_offset_mm": 0.01027,
+        "thickness_change_mm": 0.02053,
+        "rms_before": 0.04976,
+        "rms_after": 0.04398
+      },
+      {
+        "blade": 7,
+        "n": 24396,
+        "rot_deg": -0.02766,
+        "axial_mm": 0.01866,
+        "axial_observable": true,
+        "normal_offset_mm": 0.02129,
+        "thickness_change_mm": 0.04259,
+        "rms_before": 0.04806,
+        "rms_after": 0.04197
+      },
+      {
+        "blade": 8,
+        "n": 23425,
+        "rot_deg": 0.00858,
+        "axial_mm": 0.06937,
+        "axial_observable": true,
+        "normal_offset_mm": 0.03263,
+        "thickness_change_mm": 0.06526,
+        "rms_before": 0.06028,
+        "rms_after": 0.04867
+      },
+      {
+        "blade": 9,
+        "n": 23701,
+        "rot_deg": 0.02799,
+        "axial_mm": -0.03428,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00255,
+        "thickness_change_mm": -0.00509,
+        "rms_before": 0.04798,
+        "rms_after": 0.04567
+      },
+      {
+        "blade": 10,
+        "n": 22072,
+        "rot_deg": 0.01203,
+        "axial_mm": 0.03448,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00152,
+        "thickness_change_mm": -0.00303,
+        "rms_before": 0.04527,
+        "rms_after": 0.04112
+      },
+      {
+        "blade": 11,
+        "n": 21411,
+        "rot_deg": -0.02939,
+        "axial_mm": -0.00472,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00902,
+        "thickness_change_mm": 0.01804,
+        "rms_before": 0.04973,
+        "rms_after": 0.04456
+      },
+      {
+        "blade": 12,
+        "n": 22595,
+        "rot_deg": 0.00233,
+        "axial_mm": -0.05316,
+        "axial_observable": true,
+        "normal_offset_mm": -0.01214,
+        "thickness_change_mm": -0.02428,
+        "rms_before": 0.04886,
+        "rms_after": 0.04497
+      },
+      {
+        "blade": 13,
+        "n": 23933,
+        "rot_deg": 0.05977,
+        "axial_mm": -0.07848,
+        "axial_observable": true,
+        "normal_offset_mm": -0.04292,
+        "thickness_change_mm": -0.08583,
+        "rms_before": 0.07282,
+        "rms_after": 0.05551
+      },
+      {
+        "blade": 14,
+        "n": 21371,
+        "rot_deg": 0.02158,
+        "axial_mm": 0.09987,
+        "axial_observable": true,
+        "normal_offset_mm": 0.02031,
+        "thickness_change_mm": 0.04062,
+        "rms_before": 0.06604,
+        "rms_after": 0.04883
+      }
+    ],
+    "alignment": {
+      "iterations": 4,
+      "converged": true,
+      "bound_hit": false,
+      "refinement": {
+        "rotation_deg": 0.008001,
+        "rotation_axis": [
+          -0.791365,
+          0.45266,
+          0.410901
+        ],
+        "centroid_shift_mm": 0.005427,
+        "translation_mm": [
+          -0.002199,
+          -0.001143,
+          0.002007
+        ],
+        "iterations": 3,
+        "n_points": 655932,
+        "warning": null
+      },
+      "direct_check": {
+        "rms_at_pose_mm": 0.0692043,
+        "perturbed": {
+          "rx+0.005deg": 0.0692515,
+          "rx-0.005deg": 0.0692517,
+          "ry+0.005deg": 0.0692525,
+          "ry-0.005deg": 0.0692527,
+          "rz+0.005deg": 0.069242,
+          "rz-0.005deg": 0.069242,
+          "r_axis+0.005deg": 0.069242,
+          "r_axis-0.005deg": 0.069242,
+          "tx+0.005mm": 0.0692564,
+          "tx-0.005mm": 0.0692567,
+          "ty+0.005mm": 0.069258,
+          "ty-0.005mm": 0.069258,
+          "tz+0.005mm": 0.0692759,
+          "tz-0.005mm": 0.0692767
+        },
+        "ok": true,
+        "note": "same gated point set (6-sigma MAD) at every pose; ok = the pose is a measured minimum"
+      }
+    }
+  },
+  "stage3_impeller": {
+    "n_blade_points": 42134,
+    "n_fit_points": 41542,
+    "blade_rms": {
+      "aligned_v2": 0.03733,
+      "after_common_fit": 0.03724,
+      "after_per_blade_fit": 0.03646
+    },
+    "blade_rms_gated_points": {
+      "aligned_v2": 0.02915,
+      "after_common_fit": 0.02901,
+      "after_per_blade_fit": 0.0283
+    },
+    "common_fit": {
+      "rot_deg": 0.00371,
+      "axial_mm": 0.00266,
+      "thickness_change_mm": -0.00659
+    },
+    "per_blade_spread_std": {
+      "rot_deg": 0.00968,
+      "axial_mm": 0.01798,
+      "thickness_change_mm": 0.01088,
+      "rot_at_tip_mm": 0.00663,
+      "tip_radius_mm": 39.27
+    },
+    "whole_part": {
+      "aligned_v2": {
+        "n_scan": 150055,
+        "n_inspected": 146812,
+        "n_excluded": 3243,
+        "pct_excluded": 2.1612,
+        "capped_count": 2702,
+        "pct_capped": 1.8404,
+        "rms_uncapped": 0.05868,
+        "mean_signed": -0.00352,
+        "p95": 0.09358,
+        "p99": 0.28394,
+        "max_plus": 0.42761,
+        "max_minus": -0.72332,
+        "rms_capped": 0.03541,
+        "p95_capped": 0.07677,
+        "pass_pct_v1": 87.8103,
+        "pass_pct_legacy": 89.4567,
+        "target_met_v1": false
+      },
+      "after_common_fit": {
+        "n_scan": 150055,
+        "n_inspected": 146812,
+        "n_excluded": 3243,
+        "pct_excluded": 2.1612,
+        "capped_count": 2708,
+        "pct_capped": 1.8445,
+        "rms_uncapped": 0.05867,
+        "mean_signed": -0.00274,
+        "p95": 0.09337,
+        "p99": 0.28411,
+        "max_plus": 0.42761,
+        "max_minus": -0.72332,
+        "rms_capped": 0.03534,
+        "p95_capped": 0.07652,
+        "pass_pct_v1": 87.8293,
+        "pass_pct_legacy": 89.4798,
+        "target_met_v1": false
+      },
+      "after_per_blade_fit": {
+        "n_scan": 150055,
+        "n_inspected": 146812,
+        "n_excluded": 3243,
+        "pct_excluded": 2.1612,
+        "capped_count": 2704,
+        "pct_capped": 1.8418,
+        "rms_uncapped": 0.05853,
+        "mean_signed": -0.00273,
+        "p95": 0.09271,
+        "p99": 0.28417,
+        "max_plus": 0.42761,
+        "max_minus": -0.72332,
+        "rms_capped": 0.03511,
+        "p95_capped": 0.07614,
+        "pass_pct_v1": 87.9022,
+        "pass_pct_legacy": 89.5516,
+        "target_met_v1": false
+      }
+    },
+    "per_blade": [
+      {
+        "blade": 0,
+        "n": 3266,
+        "rot_deg": -0.01449,
+        "axial_mm": -0.02649,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00797,
+        "thickness_change_mm": 0.01594,
+        "rms_before": 0.03389,
+        "rms_after": 0.03232
+      },
+      {
+        "blade": 1,
+        "n": 3231,
+        "rot_deg": -0.01043,
+        "axial_mm": -0.02019,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00647,
+        "thickness_change_mm": 0.01294,
+        "rms_before": 0.03496,
+        "rms_after": 0.03401
+      },
+      {
+        "blade": 2,
+        "n": 3281,
+        "rot_deg": -0.00896,
+        "axial_mm": -0.01621,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00394,
+        "thickness_change_mm": 0.00789,
+        "rms_before": 0.0349,
+        "rms_after": 0.03429
+      },
+      {
+        "blade": 3,
+        "n": 3260,
+        "rot_deg": -0.00549,
+        "axial_mm": -0.01214,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00117,
+        "thickness_change_mm": 0.00233,
+        "rms_before": 0.03274,
+        "rms_after": 0.03239
+      },
+      {
+        "blade": 4,
+        "n": 3195,
+        "rot_deg": 0.00263,
+        "axial_mm": 0.00171,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00401,
+        "thickness_change_mm": -0.00802,
+        "rms_before": 0.03576,
+        "rms_after": 0.03573
+      },
+      {
+        "blade": 5,
+        "n": 3262,
+        "rot_deg": -0.0018,
+        "axial_mm": 0.00398,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00365,
+        "thickness_change_mm": -0.00729,
+        "rms_before": 0.03489,
+        "rms_after": 0.03488
+      },
+      {
+        "blade": 6,
+        "n": 3202,
+        "rot_deg": 0.00134,
+        "axial_mm": 0.00892,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00291,
+        "thickness_change_mm": -0.00581,
+        "rms_before": 0.03611,
+        "rms_after": 0.03615
+      },
+      {
+        "blade": 7,
+        "n": 3244,
+        "rot_deg": -0.00493,
+        "axial_mm": -0.00163,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00071,
+        "thickness_change_mm": 0.00142,
+        "rms_before": 0.0336,
+        "rms_after": 0.03359
+      },
+      {
+        "blade": 8,
+        "n": 3263,
+        "rot_deg": 0.00809,
+        "axial_mm": 0.02602,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00381,
+        "thickness_change_mm": -0.00762,
+        "rms_before": 0.03722,
+        "rms_after": 0.0362
+      },
+      {
+        "blade": 9,
+        "n": 3262,
+        "rot_deg": 0.00941,
+        "axial_mm": 0.02081,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00623,
+        "thickness_change_mm": -0.01246,
+        "rms_before": 0.0389,
+        "rms_after": 0.03799
+      },
+      {
+        "blade": 10,
+        "n": 3217,
+        "rot_deg": 0.02303,
+        "axial_mm": 0.02932,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00833,
+        "thickness_change_mm": -0.01667,
+        "rms_before": 0.04497,
+        "rms_after": 0.043
+      },
+      {
+        "blade": 11,
+        "n": 3218,
+        "rot_deg": 0.00767,
+        "axial_mm": 0.01299,
+        "axial_observable": true,
+        "normal_offset_mm": -0.00309,
+        "thickness_change_mm": -0.00618,
+        "rms_before": 0.04768,
+        "rms_after": 0.04683
+      },
+      {
+        "blade": 12,
+        "n": 3233,
+        "rot_deg": -0.00317,
+        "axial_mm": -0.02115,
+        "axial_observable": true,
+        "normal_offset_mm": 0.00961,
+        "thickness_change_mm": 0.01922,
+        "rms_before": 0.03545,
+        "rms_after": 0.03384
+      }
+    ],
+    "alignment": {
+      "iterations": 4,
+      "converged": true,
+      "bound_hit": false,
+      "refinement": {
+        "rotation_deg": 0.003289,
+        "rotation_axis": [
+          -0.623607,
+          0.194435,
+          -0.757172
+        ],
+        "centroid_shift_mm": 0.000504,
+        "translation_mm": [
+          2.7e-05,
+          -0.000941,
+          -0.000833
+        ],
+        "iterations": 4,
+        "n_points": 146812,
+        "warning": null
+      },
+      "direct_check": {
+        "rms_at_pose_mm": 0.0307445,
+        "perturbed": {
+          "rx+0.005deg": 0.0307806,
+          "rx-0.005deg": 0.0307804,
+          "ry+0.005deg": 0.0307606,
+          "ry-0.005deg": 0.0307607,
+          "rz+0.005deg": 0.0307787,
+          "rz-0.005deg": 0.0307786,
+          "r_axis+0.005deg": 0.0307606,
+          "r_axis-0.005deg": 0.0307607,
+          "tx+0.005mm": 0.0308136,
+          "tx-0.005mm": 0.0308137,
+          "ty+0.005mm": 0.0310085,
+          "ty-0.005mm": 0.0310069,
+          "tz+0.005mm": 0.0308138,
+          "tz-0.005mm": 0.0308145
+        },
+        "ok": true,
+        "note": "same gated point set (6-sigma MAD) at every pose; ok = the pose is a measured minimum"
+      }
+    }
+  }
+}

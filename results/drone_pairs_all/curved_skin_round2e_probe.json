@@ -1,0 +1,118 @@
+{
+  "WINGTIP L 2": {
+    "ok": false,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.1576 / p95 0.3325, solid->mesh p95 0.04676 (tol 0.0115)",
+    "vol_ratio": 0.9974977030575622,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 0.3325,
+      "rms": 0.15762,
+      "solid_to_mesh_p95": 0.04676,
+      "hausdorff": 1.54622
+    },
+    "tol": 0.011505,
+    "slabs": [
+      {
+        "from": 466.676,
+        "to": 681.0476,
+        "sections": 40,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false
+      }
+    ],
+    "seconds": 5.551435708999634,
+    "step": {
+      "test_to_ref": {
+        "rms": 0.0347,
+        "p95": 0.04486,
+        "max": 0.61011,
+        "mean_signed": -0.00868,
+        "n": 60000
+      },
+      "ref_to_test": {
+        "rms": 0.05687,
+        "p95": 0.06191,
+        "max": 1.63665,
+        "mean_signed": 0.01241,
+        "n": 60000
+      },
+      "hausdorff": 1.63665,
+      "bands": {
+        "<= 0.02 mm": 0.8841,
+        "<= 0.05 mm": 0.9542,
+        "<= 0.1 mm": 0.9738,
+        "<= 0.2 mm": 0.9923,
+        "<= 0.5 mm": 0.9998
+      },
+      "volume": {
+        "test": 60970.311,
+        "ref": 61155.534,
+        "rel_diff": -0.003029
+      }
+    }
+  },
+  "WINGTIP R 2": {
+    "ok": false,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.1583 / p95 0.3329, solid->mesh p95 0.04509 (tol 0.01218)",
+    "vol_ratio": 0.9973551085567103,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 0.33294,
+      "rms": 0.15827,
+      "solid_to_mesh_p95": 0.04509,
+      "hausdorff": 1.62001
+    },
+    "tol": 0.01218,
+    "slabs": [
+      {
+        "from": 505.3169,
+        "to": 719.6885,
+        "sections": 40,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false
+      }
+    ],
+    "seconds": 5.510446071624756
+  },
+  "WING 2 L": {
+    "ok": false,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.9263 / p95 1.773, solid->mesh p95 0.3192 (tol 0.01653)",
+    "vol_ratio": 1.0075958338185518,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 1.773,
+      "rms": 0.92626,
+      "solid_to_mesh_p95": 0.31918,
+      "hausdorff": 9.63366
+    },
+    "tol": 0.01653,
+    "slabs": [
+      {
+        "from": -395.0,
+        "to": -290.0,
+        "sections": 40,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false
+      }
+    ],
+    "seconds": 7.044748544692993
+  }
+}

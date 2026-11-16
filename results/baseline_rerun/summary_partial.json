@@ -1,0 +1,35 @@
+{
+  "s06": {
+    "rc": 0,
+    "wall_s": 111.5
+  },
+  "s05": {
+    "rc": 0,
+    "wall_s": 148.1
+  },
+  "p01": {
+    "rc": 0,
+    "wall_s": 1037.3,
+    "status": "ok",
+    "rms": 0.20858,
+    "p95": 0.26328,
+    "gate": true,
+    "match": true
+  },
+  "s07": {
+    "rc": 0,
+    "wall_s": 1396.9
+  },
+  "s09": {
+    "rc": 0,
+    "wall_s": 1451.1,
+    "match": true,
+    "status": "ok"
+  },
+  "stg1": {
+    "rc": 0,
+    "wall_s": 3319.7,
+    "match": true,
+    "status": "ok"
+  }
+}

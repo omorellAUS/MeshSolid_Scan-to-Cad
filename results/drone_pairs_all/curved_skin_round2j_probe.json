@@ -1,0 +1,201 @@
+{
+  "WING 2 L": {
+    "ok": false,
+    "tol": 0.01653,
+    "vol": null,
+    "rms": null,
+    "p95": null,
+    "s2m": null,
+    "lim_s2m": null,
+    "levels": [
+      -395.0,
+      -322.8187,
+      -304.4495,
+      -290.0
+    ],
+    "slabs": [
+      {
+        "from": -395.0,
+        "to": -322.8187,
+        "sections": 27,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "corner_deg": 0.0,
+        "prismatic": false
+      },
+      {
+        "from": -322.8187,
+        "to": -304.4495,
+        "sections": 7,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "corner_deg": 0.0,
+        "prismatic": false
+      },
+      {
+        "from": -304.4495,
+        "to": -290.0,
+        "sections": 7,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "corner_deg": 0.0,
+        "prismatic": false
+      }
+    ],
+    "t": 99.0,
+    "reason": "section loft over its time budget (before unify) / prior fuse-fail then ladder; OCC hang risk on longer budgets",
+    "nsol": 0,
+    "valid": false,
+    "mesh_vol": 299196.893,
+    "solid_vol": null,
+    "note": "3 corner-count breaks landed; all slabs fell back to smooth; fuse fuzzy ladder reaches solid before unify but budget/hang"
+  },
+  "AILERON 1R VTOL": {
+    "ok": false,
+    "nsol": 1,
+    "vol": 1.0077,
+    "rms": 0.81166,
+    "p95": 1.58328,
+    "s2m": 0.22812,
+    "levels": [
+      366.6044,
+      498.5348
+    ],
+    "slabs": [
+      {
+        "from": 366.6044,
+        "to": 498.5348,
+        "sections": 33,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false,
+        "smooth": true,
+        "corner_deg": 0.0
+      }
+    ],
+    "t": 6.5,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.8117 / p95 1.583, solid->mesh p95 0.2281 (tol 0.008264, lim_s2m 0.02862)"
+  },
+  "WINGTIP L 2": {
+    "ok": false,
+    "tol": 0.0115,
+    "vol": 1.0022,
+    "rms": 0.1039,
+    "p95": 0.22193,
+    "s2m": 0.03048,
+    "lim_s2m": 0.04219,
+    "levels": [
+      463.9288,
+      683.7948
+    ],
+    "slabs": [
+      {
+        "from": 463.9288,
+        "to": 683.7948,
+        "sections": 80,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "corner_deg": 0.0,
+        "prismatic": false
+      }
+    ],
+    "t": 17.8,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.1039 / p95 0.2219, solid->mesh p95 0.03048 (tol 0.0115, lim_s2m 0.04219)",
+    "nsol": 1,
+    "valid": true,
+    "zones": {
+      "ALL": {
+        "max": 1.3876134514415082,
+        "mean": 0.0357616265051036,
+        "rms": 0.10390068357628973,
+        "p95": 0.2219262400804071,
+        "n": 3013
+      },
+      "tip": {
+        "max": 0.22180053313455397,
+        "mean": 0.013238379804881711,
+        "rms": 0.02962629177007782,
+        "p95": 0.05091178923724609,
+        "n": 298
+      },
+      "TE": {
+        "max": 1.1916745079259021,
+        "mean": 0.035356427304352185,
+        "rms": 0.157306394253063,
+        "p95": 0.03979609129608631,
+        "n": 110
+      },
+      "LE": {
+        "max": 0.4456258670668952,
+        "mean": 0.1000658778991702,
+        "rms": 0.15758456524564107,
+        "p95": 0.3719466473028441,
+        "n": 187
+      },
+      "mid": {
+        "max": 1.3876134514415082,
+        "mean": 0.03358280285665792,
+        "rms": 0.10147608155209584,
+        "p95": 0.18394437041697045,
+        "n": 2418
+      }
+    }
+  },
+  "FUS 1 L": {
+    "ok": false,
+    "tol": 0.01308,
+    "vol": null,
+    "rms": null,
+    "p95": null,
+    "s2m": null,
+    "lim_s2m": null,
+    "levels": [
+      81.6,
+      86.6,
+      88.2831,
+      91.6,
+      100.0099,
+      186.6
+    ],
+    "slabs": [
+      {
+        "from": 81.6,
+        "to": 86.6,
+        "sections": 5,
+        "corners": [
+          9
+        ],
+        "smooth": false
+      },
+      {
+        "from": 86.6,
+        "to": 88.2831,
+        "sections": 5,
+        "corners": [
+          9
+        ],
+        "smooth": false
+      }
+    ],
+    "t": 31.9,
+    "reason": "section loft over its time budget (cap over-split; OCC can hang past budget inside ThruSections)",
+    "nsol": 0,
+    "valid": false,
+    "mesh_vol": 143813.179,
+    "solid_vol": null
+  }
+}

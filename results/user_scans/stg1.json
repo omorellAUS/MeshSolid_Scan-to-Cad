@@ -1,0 +1,1359 @@
+{
+ "part": "TA2000 stage 1 impeller X2-B1941 (user's Fusion hub files, 25 Oct 2026)",
+ "files": {
+  "mesh": "mesh.stl (67 MB, 1,336,334 triangles, 12 shells)",
+  "brep_v1": "brep_v1.stp (56 MB) - draft",
+  "circ_pattern": "circ_pattern.stp (315 MB, one blade + circular pattern) - draft",
+  "solid_body": "solid_body.stp (246 MB) - FINAL model"
+ },
+ "units_note": "mesh.stl is 10x too large (OD 1657.7 vs 165.7 in all three STEPs): it was scaled by 0.1 for every comparison. This is a unit fix, not per-part tuning.",
+ "steps": {
+  "brep_v1": {
+   "bytes": 56168976,
+   "read_seconds": 5.7,
+   "rss_gb_peak": 0.83,
+   "brepcheck_valid": true,
+   "n_solids": 16,
+   "n_shells": 16,
+   "n_faces": 1028,
+   "face_types": {
+    "cone": 44,
+    "bspline": 755,
+    "torus": 77,
+    "plane": 50,
+    "cylinder": 102
+   },
+   "volume": 350442.2,
+   "area": 96968.7,
+   "solid_volumes_top10": [
+    341308.9,
+    653.3,
+    653.0,
+    653.0,
+    652.9,
+    652.9,
+    652.7,
+    652.6,
+    652.2,
+    652.2
+   ],
+   "tess_triangles": 284038,
+   "outer_d": 165.68,
+   "height": 61.1,
+   "blades": 15
+  },
+  "circ_pattern": {
+   "bytes": 314523329,
+   "read_seconds": 31.7,
+   "rss_gb_peak": 1.96,
+   "brepcheck_valid": false,
+   "n_solids": 1,
+   "n_shells": 1,
+   "n_faces": 3545,
+   "face_types": {
+    "cylinder": 240,
+    "bspline": 2674,
+    "torus": 75,
+    "plane": 450,
+    "cone": 106
+   },
+   "volume": 347028.8,
+   "area": 83672.4,
+   "solid_volumes_top10": [
+    347028.8
+   ],
+   "tess_triangles": 393572,
+   "outer_d": 166.15,
+   "height": 61.31,
+   "blades": 15
+  },
+  "solid_body": {
+   "bytes": 246095757,
+   "read_seconds": 21.6,
+   "rss_gb_peak": 1.73,
+   "brepcheck_valid": true,
+   "n_solids": 15,
+   "n_shells": 15,
+   "n_faces": 2625,
+   "face_types": {
+    "bspline": 2070,
+    "torus": 45,
+    "cylinder": 165,
+    "plane": 270,
+    "cone": 75
+   },
+   "volume": 993140.6,
+   "area": 295298.6,
+   "solid_volumes_top10": [
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9,
+    66197.9
+   ],
+   "tess_triangles": 784416,
+   "outer_d": 166.18,
+   "height": 61.03,
+   "blades": 15
+  }
+ },
+ "step_notes": {
+  "brep_v1": "valid; 16 solids = 1 hub body (341,309 mm3) + 15 separate blade bodies (about 653 mm3 each), not combined; volume is the sum",
+  "circ_pattern": "ONE solid but BRepCheck INVALID; OCC bbox 226.7 mm comes from B-spline poles, the tessellation is 166.15 mm; tessellation falls apart into 14 pieces (seam faults); volume 347,029 mm3",
+  "solid_body": "valid, but 15 identical solids of 66,197.9 mm3 each (sum 993,141 mm3 = 2.83x the one-body volume), i.e. overlapping patterned bodies never combined into one solid. Sits off-origin in its file (centre about (-90.7,-77.7)); recentred for comparison. Union volume not computed (OOM on the 15-body containment test)",
+  "blade_count": "15 full blades, no splitters, in the scan and all three STEPs (FFT of the tangent-facing surface at 0.35R to 0.92R gives k=15 at every radius)"
+ },
+ "measured": {
+  "outer_diameter_mm": {
+   "scan": 165.74,
+   "brep_v1": 165.68,
+   "circ_pattern": 166.15,
+   "solid_body": 166.18
+  },
+  "bore_diameter_mm": {
+   "brep_v1": 14.36,
+   "circ_pattern": 14.31,
+   "solid_body": 14.29,
+   "scan": "not captured: the scan has no open bore (axis region closed)"
+  },
+  "blades": 15,
+  "splitters": 0,
+  "open_or_shrouded": "open (unshrouded): no cover disc in the scan or the models (the radius-z view shows only hub and blades). Consistent with the TA2000 docs, which give a stage 1 axial tip clearance of 0.024 in (0.610 mm) to a stationary shroud",
+  "height_mm": {
+   "models": "61.0-61.3 (incl. a 6.4 mm boss on the backface at r 15-55)",
+   "scan": "68.1 = models' eye-to-rim height plus a 24.3 mm dia x 13 mm stub below the eye (shaft end, nut or fixture), with a flat back at the rim plane and no boss"
+  },
+  "fit_facts_user": "impeller-to-shaft interference 0.025 mm by micrometer at 25-28 C; removal with about 7 t hydraulic preload, impeller heated to about 120 C and the shaft cooled with freeze spray; expected thermal growth 0.10-0.15 mm. Two impellers have different bores after pressing damage. Model the bore to design fit and report the measured value; the scan cannot give the bore here."
+ },
+ "scan_vs_models": {
+  "brep_v1": {
+   "overall": {
+    "rms": 1.2077,
+    "p95": 0.3629,
+    "max": 13.3109,
+    "median": 0.0866
+   },
+   "overall_excl_gt2mm": {
+    "rms": 0.1912,
+    "p95": 0.3113,
+    "max": 1.9991,
+    "median": 0.084
+   },
+   "frac_points_gt2mm": 0.0207,
+   "zones": {
+    "blades": {
+     "n": 154439,
+     "rms": 0.1692,
+     "p95": 0.2052,
+     "max": 5.8943,
+     "median": 0.0529,
+     "signed_median": -0.0149,
+     "excl_gt2mm": {
+      "rms": 0.1005,
+      "p95": 0.2039,
+      "max": 1.9214,
+      "median": 0.0529
+     }
+    },
+    "hub": {
+     "n": 104666,
+     "rms": 1.5596,
+     "p95": 0.8406,
+     "max": 11.1711,
+     "median": 0.1328,
+     "signed_median": -0.0705,
+     "excl_gt2mm": {
+      "rms": 0.2335,
+      "p95": 0.3992,
+      "max": 1.9983,
+      "median": 0.1273
+     }
+    },
+    "bore": {
+     "n": 1488,
+     "rms": 10.3077,
+     "p95": 13.2527,
+     "max": 13.3109,
+     "median": 11.1329,
+     "signed_median": 11.1329,
+     "excl_gt2mm": {
+      "rms": 1.2259,
+      "p95": 1.8861,
+      "max": 1.9395,
+      "median": 0.9758
+     }
+    },
+    "backface": {
+     "n": 39407,
+     "rms": 0.7199,
+     "p95": 0.4489,
+     "max": 6.6485,
+     "median": 0.2065,
+     "signed_median": -0.2065,
+     "excl_gt2mm": {
+      "rms": 0.3052,
+      "p95": 0.373,
+      "max": 1.9991,
+      "median": 0.2043
+     }
+    }
+   }
+  },
+  "circ_pattern": {
+   "overall": {
+    "rms": 0.5945,
+    "p95": 0.4738,
+    "max": 13.4457,
+    "median": 0.1463
+   },
+   "overall_excl_gt2mm": {
+    "rms": 0.2417,
+    "p95": 0.3899,
+    "max": 1.9998,
+    "median": 0.1435
+   },
+   "frac_points_gt2mm": 0.0161,
+   "zones": {
+    "blades": {
+     "n": 150383,
+     "rms": 0.3291,
+     "p95": 0.3544,
+     "max": 8.5457,
+     "median": 0.1014,
+     "signed_median": -0.0806,
+     "excl_gt2mm": {
+      "rms": 0.19,
+      "p95": 0.348,
+      "max": 1.9998,
+      "median": 0.1009
+     }
+    },
+    "hub": {
+     "n": 108806,
+     "rms": 0.6889,
+     "p95": 0.6003,
+     "max": 10.9378,
+     "median": 0.15,
+     "signed_median": -0.0957,
+     "excl_gt2mm": {
+      "rms": 0.2582,
+      "p95": 0.4447,
+      "max": 1.9987,
+      "median": 0.1465
+     }
+    },
+    "bore": {
+     "n": 1693,
+     "rms": 4.2413,
+     "p95": 6.3354,
+     "max": 13.4457,
+     "median": 3.6445,
+     "signed_median": 3.4559,
+     "excl_gt2mm": {
+      "rms": 1.1231,
+      "p95": 1.9084,
+      "max": 1.9939,
+      "median": 0.9337
+     }
+    },
+    "backface": {
+     "n": 39118,
+     "rms": 0.442,
+     "p95": 0.4372,
+     "max": 6.6873,
+     "median": 0.2455,
+     "signed_median": -0.2455,
+     "excl_gt2mm": {
+      "rms": 0.3258,
+      "p95": 0.4004,
+      "max": 1.9996,
+      "median": 0.2449
+     }
+    }
+   }
+  },
+  "solid_body": {
+   "overall": {
+    "rms": 1.2432,
+    "p95": 0.3302,
+    "max": 13.4057,
+    "median": 0.0665
+   },
+   "overall_excl_gt2mm": {
+    "rms": 0.1736,
+    "p95": 0.2442,
+    "max": 2.0,
+    "median": 0.0649
+   },
+   "frac_points_gt2mm": 0.0195,
+   "zones": {
+    "blades": {
+     "n": 159193,
+     "rms": 0.2769,
+     "p95": 0.2418,
+     "max": 6.5711,
+     "median": 0.0543,
+     "signed_median": -0.0019,
+     "excl_gt2mm": {
+      "rms": 0.1355,
+      "p95": 0.2326,
+      "max": 1.9961,
+      "median": 0.0541
+     }
+    },
+    "hub": {
+     "n": 100630,
+     "rms": 1.5826,
+     "p95": 0.4971,
+     "max": 11.259,
+     "median": 0.0648,
+     "signed_median": -0.0374,
+     "excl_gt2mm": {
+      "rms": 0.1719,
+      "p95": 0.2101,
+      "max": 1.997,
+      "median": 0.0619
+     }
+    },
+    "bore": {
+     "n": 1489,
+     "rms": 11.348,
+     "p95": 13.3622,
+     "max": 13.4057,
+     "median": 11.235,
+     "signed_median": 11.235,
+     "excl_gt2mm": {
+      "rms": 1.1058,
+      "p95": 1.9458,
+      "max": 1.9924,
+      "median": 1.0005
+     }
+    },
+    "backface": {
+     "n": 38688,
+     "rms": 0.4451,
+     "p95": 0.3542,
+     "max": 6.6064,
+     "median": 0.1564,
+     "signed_median": -0.1564,
+     "excl_gt2mm": {
+      "rms": 0.2819,
+      "p95": 0.3338,
+      "max": 2.0,
+      "median": 0.156
+     }
+    }
+   }
+  }
+ },
+ "zone_definition": "each scan point is zoned by its nearest model point (model axis = z): bore = r < r_bore+1 mm; backface = axial normal at/behind the rim back plane; blades = normal mostly tangential (|n.e_theta| > 0.5); hub = rest. Scan-only geometry (the stub, the flat cap) lands in 'bore'/'hub' as > 2 mm outliers; 'excl_gt2mm' leaves those out",
+ "model_vs_model": {
+  "brep_v1_vs_circ_pattern": {
+   "overall": {
+    "rms": 0.3519,
+    "p95": 0.2925,
+    "max": 9.9152,
+    "median": 0.0912
+   },
+   "overall_excl_gt2mm": {
+    "rms": 0.1667,
+    "p95": 0.2847,
+    "max": 1.9982,
+    "median": 0.0908
+   },
+   "frac_points_gt2mm": 0.004,
+   "zones": {
+    "blades": {
+     "n": 68769,
+     "rms": 0.1959,
+     "p95": 0.355,
+     "max": 5.0933,
+     "median": 0.0906,
+     "signed_median": -0.0425,
+     "excl_gt2mm": {
+      "rms": 0.1724,
+      "p95": 0.3513,
+      "max": 1.9982,
+      "median": 0.0905
+     }
+    },
+    "hub": {
+     "n": 72591,
+     "rms": 0.4366,
+     "p95": 0.2515,
+     "max": 9.9152,
+     "median": 0.0909,
+     "signed_median": 0.0411,
+     "excl_gt2mm": {
+      "rms": 0.1573,
+      "p95": 0.2452,
+      "max": 1.9863,
+      "median": 0.0903
+     }
+    },
+    "bore": {
+     "n": 177,
+     "rms": 0.7316,
+     "p95": 1.7226,
+     "max": 1.7721,
+     "median": 0.1048,
+     "signed_median": -0.0253,
+     "excl_gt2mm": {
+      "rms": 0.7316,
+      "p95": 1.7226,
+      "max": 1.7721,
+      "median": 0.1048
+     }
+    },
+    "backface": {
+     "n": 633,
+     "rms": 1.2774,
+     "p95": 3.1725,
+     "max": 9.5504,
+     "median": 0.1645,
+     "signed_median": -0.1645,
+     "excl_gt2mm": {
+      "rms": 0.1517,
+      "p95": 0.1868,
+      "max": 0.2146,
+      "median": 0.1598
+     }
+    }
+   }
+  },
+  "brep_v1_vs_solid_body": {
+   "overall": {
+    "rms": 0.244,
+    "p95": 0.2533,
+    "max": 4.5224,
+    "median": 0.0599
+   },
+   "overall_excl_gt2mm": {
+    "rms": 0.1547,
+    "p95": 0.2403,
+    "max": 1.9994,
+    "median": 0.0595
+   },
+   "frac_points_gt2mm": 0.0048,
+   "zones": {
+    "blades": {
+     "n": 77735,
+     "rms": 0.2674,
+     "p95": 0.3405,
+     "max": 4.5224,
+     "median": 0.0608,
+     "signed_median": 0.0089,
+     "excl_gt2mm": {
+      "rms": 0.1728,
+      "p95": 0.313,
+      "max": 1.9994,
+      "median": 0.0603
+     }
+    },
+    "hub": {
+     "n": 63858,
+     "rms": 0.1815,
+     "p95": 0.2005,
+     "max": 4.3924,
+     "median": 0.0588,
+     "signed_median": 0.008,
+     "excl_gt2mm": {
+      "rms": 0.1292,
+      "p95": 0.1975,
+      "max": 1.9935,
+      "median": 0.0586
+     }
+    },
+    "bore": {
+     "n": 142,
+     "rms": 0.0898,
+     "p95": 0.1501,
+     "max": 0.1747,
+     "median": 0.0818,
+     "signed_median": 0.0806,
+     "excl_gt2mm": {
+      "rms": 0.0898,
+      "p95": 0.1501,
+      "max": 0.1747,
+      "median": 0.0818
+     }
+    },
+    "backface": {
+     "n": 435,
+     "rms": 1.3581,
+     "p95": 3.0095,
+     "max": 3.0548,
+     "median": 0.0584,
+     "signed_median": -0.0477,
+     "excl_gt2mm": {
+      "rms": 0.2057,
+      "p95": 0.5611,
+      "max": 0.5737,
+      "median": 0.0468
+     }
+    }
+   }
+  },
+  "circ_pattern_vs_solid_body": {
+   "overall": {
+    "rms": 0.1442,
+    "p95": 0.1142,
+    "max": 2.9378,
+    "median": 0.0251
+   },
+   "overall_excl_gt2mm": {
+    "rms": 0.0988,
+    "p95": 0.1131,
+    "max": 1.8317,
+    "median": 0.0251
+   },
+   "frac_points_gt2mm": 0.0014,
+   "zones": {
+    "blades": {
+     "n": 128897,
+     "rms": 0.1789,
+     "p95": 0.1242,
+     "max": 2.9378,
+     "median": 0.0222,
+     "signed_median": 0.0083,
+     "excl_gt2mm": {
+      "rms": 0.1191,
+      "p95": 0.1216,
+      "max": 1.8317,
+      "median": 0.0222
+     }
+    },
+    "hub": {
+     "n": 76018,
+     "rms": 0.0494,
+     "p95": 0.1057,
+     "max": 0.3432,
+     "median": 0.0322,
+     "signed_median": -0.0092,
+     "excl_gt2mm": {
+      "rms": 0.0494,
+      "p95": 0.1057,
+      "max": 0.3432,
+      "median": 0.0322
+     }
+    },
+    "bore": {
+     "n": 435,
+     "rms": 0.0196,
+     "p95": 0.0369,
+     "max": 0.0538,
+     "median": 0.0129,
+     "signed_median": -0.0084,
+     "excl_gt2mm": {
+      "rms": 0.0196,
+      "p95": 0.0369,
+      "max": 0.0538,
+      "median": 0.0129
+     }
+    },
+    "backface": {
+     "n": 2784,
+     "rms": 0.0814,
+     "p95": 0.1033,
+     "max": 0.4642,
+     "median": 0.0394,
+     "signed_median": 0.0391,
+     "excl_gt2mm": {
+      "rms": 0.0814,
+      "p95": 0.1033,
+      "max": 0.4642,
+      "median": 0.0394
+     }
+    }
+   }
+  }
+ },
+ "pipeline": {
+  "input": "mesh.stl scaled 0.1, generic prep (60k faces, 7 open edges, 1 shell)",
+  "code": "before consolidate (commit 15a6fa6)",
+  "status": "failed",
+  "failure": "analytic solid construction failed (local_trim: 26 regions produced no trimmed face; 1083 free (unsewn) edges - shell not closed; 37 shells after sewing). No STEP written.",
+  "tol_mm": 0.3607072358747473,
+  "noise_sigma_mm": 0.08015716352772162,
+  "regions_after_segmentation": 177,
+  "unassigned_area_frac": 0.03724352293685009,
+  "freeform": {
+   "candidates": 9,
+   "accepted": 3,
+   "regions_after": 171
+  },
+  "build": {
+   "regions_without_piece": 26,
+   "free_edges": 1083,
+   "shells": 37,
+   "seconds": 794.4084918498993
+  },
+  "stage_times_s": {
+   "load_repair": 0.0,
+   "segmentation": 3.08,
+   "coaxial_refit": 258.62,
+   "threads": 258.86,
+   "freeform": 258.94,
+   "snapping": 269.59,
+   "blends": 269.81,
+   "fit_stats": 270.01,
+   "build": 270.05,
+   "deviation": 1064.46,
+   "preview": 1064.51,
+   "done": 1066.0
+  },
+  "verdict": "expected fail: 15 blades segment into many small analytic regions, freeform accepted 3 of 9 clusters; this is the M5 case"
+ },
+ "m5_mapping": {
+  "user_approach": "one blade modelled as B-spline faces on an analytic hub, then a circular pattern N=15 (brep_v1: hub + 15 separate blade solids; circ_pattern: patterned and combined but BRepCheck-invalid; solid_body: 15 overlapping copies of hub+blade, never combined)",
+  "m5_plan_equivalent": [
+   "detect the N-fold symmetry axis and N from the scan (angular autocorrelation of the blade zone); N=15, no splitters, open (no shroud)",
+   "hub, backface, bore, eye: analytic primitives (cylinders/planes/cones/tori) fitted on ALL N sectors at once (rotationally averaged), snapped to the axis",
+   "blade: fold the N blade point sets into one sector (rotate by -k*360/N), fit ONE pressure/suction/tip/LE/TE B-spline set to the stacked points (N x more samples, noise down ~sqrt(N))",
+   "pattern the blade surfaces N times about the axis and trim against the hub as ONE boolean (fuse hub + N blades), then check validity; this is the step where the user's circ_pattern went invalid and solid_body stayed uncombined",
+   "acceptance per zone (blades / hub / bore / backface) against the scan, as in this baseline: blades rms 0.10-0.19 mm is the bar the user's models set"
+  ],
+  "lessons_from_user_models": [
+   "circ_pattern is invalid (BRepCheck) with poles far outside the part (OCC bbox 226.7 vs OD 166): the B-spline control net needs a bounded/clamped fit",
+   "solid_body is 15 identical overlapping bodies (sum volume 2.83x): M5 must union, and report the single-solid volume",
+   "the models omit the scan's \u00d824.3 x 13 mm stub and flat back cap and add a 6.4 mm back boss: per-zone reporting must separate scan-only geometry from fit error"
+  ],
+  "status": "plan only; M5 (patterned freeform) is not implemented, the current pipeline fits each blade separately"
+ },
+ "model_roles": {
+  "solid_body": "FINAL model (user's final design, good metrology) - the reference for scan comparison",
+  "brep_v1": "draft (earlier iteration)",
+  "circ_pattern": "draft (earlier iteration; BRepCheck invalid)"
+ },
+ "balance_cuts": {
+  "method": "meshsolid/balance.py + scripts/stg1_balance.py. Search only the two balance planes: BACK face outer band (r >= 0.70 R_out) and FRONT hub/eye face inner band (bore+1 mm .. outer edge of the front hub face). A cut = compact patch where the scan is inside the nominal by > 0.15 mm after removing a per-ring offset and a face tilt (runout); area >= 8 mm2, radial width >= 1 mm, angular span <= 60 deg, not elongated (arc/width <= 12, width/arc <= 4), not an evenly spaced N>=6 pattern. Plane tag from axial position and nominal normal direction. Mask = cut + 1 mm margin. Scan-only geometry also masked: stub beyond the model's axial extent / inside the bore, flat cap across the back plane inside the model's back-face annulus. Default thresholds, identical for all three models (no per-part tuning).",
+  "zone_note": "zones by nearest model point: frontface = axial-normal within 2 mm of the front hub face plane; backface = axial-normal at/behind the back plane; blades = tangential normal; bore = r < r_bore+1; hub = rest",
+  "consistency": "the same 5 back-face cuts are found against all three models (constant angular offset per model frame: brep_v1 +83.5 deg, circ_pattern +11.2 deg vs solid_body), matching the user's marks on stg1_scan_vs_models.png. A 6th, shallow (0.38 mm) one at 129 deg appears only against solid_body. No cut deeper than 0.15 mm was found on the front hub face against any model: the scan's front face only shows a once-around tilt of about +/-0.2 mm (2.8k scan points there after masking).",
+  "angles": "deg, atan2(y,x) in each model's top view (same axes as the previews)",
+  "models": {
+   "solid_body": {
+    "before": {
+     "overall": {
+      "n": 300000,
+      "rms": 1.2432,
+      "p95": 0.3302,
+      "median": 0.0665,
+      "max": 13.4057
+     },
+     "zones": {
+      "blades": {
+       "n": 159126,
+       "rms": 0.277,
+       "p95": 0.2418,
+       "median": 0.0543,
+       "max": 6.5711
+      },
+      "hub": {
+       "n": 93644,
+       "rms": 0.189,
+       "p95": 0.2003,
+       "median": 0.0612,
+       "max": 6.1602
+      },
+      "frontface": {
+       "n": 7053,
+       "rms": 5.9381,
+       "p95": 11.219,
+       "median": 2.1672,
+       "max": 11.259
+      },
+      "backface": {
+       "n": 38688,
+       "rms": 0.4451,
+       "p95": 0.3542,
+       "median": 0.1564,
+       "max": 6.6064
+      },
+      "bore": {
+       "n": 1489,
+       "rms": 11.348,
+       "p95": 13.3622,
+       "median": 11.235,
+       "max": 13.4057
+      }
+     }
+    },
+    "after_masking": {
+     "overall": {
+      "n": 291256,
+      "rms": 0.1467,
+      "p95": 0.2325,
+      "median": 0.0641,
+      "max": 2.087
+     },
+     "zones": {
+      "blades": {
+       "n": 158364,
+       "rms": 0.1232,
+       "p95": 0.229,
+       "median": 0.054,
+       "max": 1.8682
+      },
+      "hub": {
+       "n": 93501,
+       "rms": 0.1368,
+       "p95": 0.1986,
+       "median": 0.0611,
+       "max": 2.082
+      },
+      "frontface": {
+       "n": 2783,
+       "rms": 0.1364,
+       "p95": 0.3066,
+       "median": 0.0725,
+       "max": 0.5425
+      },
+      "backface": {
+       "n": 36601,
+       "rms": 0.2371,
+       "p95": 0.264,
+       "median": 0.1534,
+       "max": 2.087
+      },
+      "bore": {
+       "n": 7,
+       "rms": 0.3467,
+       "p95": 0.611,
+       "median": 0.1768,
+       "max": 0.6547
+      }
+     }
+    },
+    "excluded_points": {
+     "balance_cuts": 1985,
+     "stub": 5756,
+     "flat_cap": 1016,
+     "total": 8744
+    },
+    "balance_cuts": {
+     "count": 6,
+     "by_plane": {
+      "back": {
+       "count": 6,
+       "cuts": [
+        {
+         "plane": "back",
+         "angle_deg": -76.3,
+         "radius_mm": 81.69,
+         "z_mm": 205.66,
+         "depth_mm": 0.257,
+         "depth_max_mm": 0.298,
+         "area_mm2": 9.8,
+         "span_deg": 3.8,
+         "radial_width_mm": 1.92,
+         "n_points": 37
+        },
+        {
+         "plane": "back",
+         "angle_deg": -63.6,
+         "radius_mm": 81.15,
+         "z_mm": 205.34,
+         "depth_mm": 1.255,
+         "depth_max_mm": 1.523,
+         "area_mm2": 13.7,
+         "span_deg": 9.2,
+         "radial_width_mm": 1.17,
+         "n_points": 117
+        },
+        {
+         "plane": "back",
+         "angle_deg": -44.1,
+         "radius_mm": 76.11,
+         "z_mm": 205.01,
+         "depth_mm": 1.513,
+         "depth_max_mm": 1.636,
+         "area_mm2": 36.3,
+         "span_deg": 17.3,
+         "radial_width_mm": 7.13,
+         "n_points": 313
+        },
+        {
+         "plane": "back",
+         "angle_deg": -16.5,
+         "radius_mm": 79.71,
+         "z_mm": 204.8,
+         "depth_mm": 1.383,
+         "depth_max_mm": 1.463,
+         "area_mm2": 54.9,
+         "span_deg": 15.3,
+         "radial_width_mm": 3.65,
+         "n_points": 367
+        },
+        {
+         "plane": "back",
+         "angle_deg": 51.5,
+         "radius_mm": 79.88,
+         "z_mm": 205.31,
+         "depth_mm": 0.969,
+         "depth_max_mm": 1.026,
+         "area_mm2": 63.2,
+         "span_deg": 15.2,
+         "radial_width_mm": 4.02,
+         "n_points": 321
+        },
+        {
+         "plane": "back",
+         "angle_deg": 129.0,
+         "radius_mm": 81.81,
+         "z_mm": 205.83,
+         "depth_mm": 0.381,
+         "depth_max_mm": 0.517,
+         "area_mm2": 16.7,
+         "span_deg": 9.0,
+         "radial_width_mm": 1.17,
+         "n_points": 48
+        }
+       ]
+      },
+      "front": {
+       "count": 0,
+       "cuts": []
+      }
+     }
+    },
+    "search_zones": {
+     "back": {
+      "points": 38284,
+      "r_range": [
+       58.03,
+       82.54
+      ],
+      "residual_p1": -1.04,
+      "candidates": 1546
+     },
+     "front": {
+      "points": 3410,
+      "r_range": [
+       11.65,
+       35.04
+      ],
+      "residual_p1": -0.796,
+      "candidates": 450
+     }
+    },
+    "faces_model_frame": {
+     "z_back": 206.281,
+     "z_front": 151.733,
+     "back_sign": 1.0,
+     "r_front_out": 35.047,
+     "r_back_in": 59.145
+    }
+   },
+   "brep_v1": {
+    "before": {
+     "overall": {
+      "n": 300000,
+      "rms": 1.2077,
+      "p95": 0.3629,
+      "median": 0.0866,
+      "max": 13.3109
+     },
+     "zones": {
+      "blades": {
+       "n": 154314,
+       "rms": 0.1693,
+       "p95": 0.2056,
+       "median": 0.053,
+       "max": 5.8943
+      },
+      "hub": {
+       "n": 98144,
+       "rms": 0.3346,
+       "p95": 0.3983,
+       "median": 0.1282,
+       "max": 6.5041
+      },
+      "frontface": {
+       "n": 6645,
+       "rms": 6.0534,
+       "p95": 11.1292,
+       "median": 2.6363,
+       "max": 11.1711
+      },
+      "backface": {
+       "n": 39408,
+       "rms": 0.7197,
+       "p95": 0.4466,
+       "median": 0.2065,
+       "max": 6.6485
+      },
+      "bore": {
+       "n": 1489,
+       "rms": 10.3083,
+       "p95": 13.2526,
+       "median": 11.1329,
+       "max": 13.3109
+      }
+     }
+    },
+    "after_masking": {
+     "overall": {
+      "n": 292087,
+      "rms": 0.3406,
+      "p95": 0.3076,
+      "median": 0.0835,
+      "max": 6.6485
+     },
+     "zones": {
+      "blades": {
+       "n": 154314,
+       "rms": 0.1693,
+       "p95": 0.2056,
+       "median": 0.053,
+       "max": 5.8943
+      },
+      "hub": {
+       "n": 98097,
+       "rms": 0.3337,
+       "p95": 0.3972,
+       "median": 0.1282,
+       "max": 6.5041
+      },
+      "frontface": {
+       "n": 2419,
+       "rms": 0.1402,
+       "p95": 0.2896,
+       "median": 0.079,
+       "max": 0.5208
+      },
+      "backface": {
+       "n": 37249,
+       "rms": 0.7044,
+       "p95": 0.3432,
+       "median": 0.2025,
+       "max": 6.6485
+      },
+      "bore": {
+       "n": 8,
+       "rms": 0.517,
+       "p95": 0.9532,
+       "median": 0.1341,
+       "max": 0.9534
+      }
+     }
+    },
+    "excluded_points": {
+     "balance_cuts": 2203,
+     "stub": 5710,
+     "flat_cap": 12,
+     "total": 7913
+    },
+    "balance_cuts": {
+     "count": 5,
+     "by_plane": {
+      "back": {
+       "count": 5,
+       "cuts": [
+        {
+         "plane": "back",
+         "angle_deg": 7.2,
+         "radius_mm": 81.71,
+         "z_mm": 65.48,
+         "depth_mm": 0.249,
+         "depth_max_mm": 0.281,
+         "area_mm2": 8.3,
+         "span_deg": 3.2,
+         "radial_width_mm": 1.81,
+         "n_points": 35
+        },
+        {
+         "plane": "back",
+         "angle_deg": 19.4,
+         "radius_mm": 81.21,
+         "z_mm": 65.18,
+         "depth_mm": 1.184,
+         "depth_max_mm": 1.443,
+         "area_mm2": 12.2,
+         "span_deg": 8.4,
+         "radial_width_mm": 1.06,
+         "n_points": 110
+        },
+        {
+         "plane": "back",
+         "angle_deg": 40.4,
+         "radius_mm": 77.1,
+         "z_mm": 64.39,
+         "depth_mm": 1.891,
+         "depth_max_mm": 1.956,
+         "area_mm2": 87.2,
+         "span_deg": 19.9,
+         "radial_width_mm": 7.13,
+         "n_points": 556
+        },
+        {
+         "plane": "back",
+         "angle_deg": 66.8,
+         "radius_mm": 79.79,
+         "z_mm": 64.6,
+         "depth_mm": 1.389,
+         "depth_max_mm": 1.462,
+         "area_mm2": 55.9,
+         "span_deg": 15.6,
+         "radial_width_mm": 3.69,
+         "n_points": 374
+        },
+        {
+         "plane": "back",
+         "angle_deg": 134.7,
+         "radius_mm": 79.86,
+         "z_mm": 64.87,
+         "depth_mm": 0.986,
+         "depth_max_mm": 1.038,
+         "area_mm2": 62.2,
+         "span_deg": 15.5,
+         "radial_width_mm": 4.13,
+         "n_points": 321
+        }
+       ]
+      },
+      "front": {
+       "count": 0,
+       "cuts": []
+      }
+     }
+    },
+    "search_zones": {
+     "back": {
+      "points": 38911,
+      "r_range": [
+       58.19,
+       82.55
+      ],
+      "residual_p1": -1.326,
+      "candidates": 1766
+     },
+     "front": {
+      "points": 3081,
+      "r_range": [
+       11.5,
+       35.12
+      ],
+      "residual_p1": -0.863,
+      "candidates": 515
+     }
+    },
+    "faces_model_frame": {
+     "z_back": 65.803,
+     "z_front": 11.261,
+     "back_sign": 1.0,
+     "r_front_out": 35.119,
+     "r_back_in": 9.402
+    }
+   },
+   "circ_pattern": {
+    "before": {
+     "overall": {
+      "n": 300000,
+      "rms": 0.5945,
+      "p95": 0.4738,
+      "median": 0.1463,
+      "max": 13.4457
+     },
+     "zones": {
+      "blades": {
+       "n": 150379,
+       "rms": 0.3291,
+       "p95": 0.3547,
+       "median": 0.1016,
+       "max": 8.5457
+      },
+      "hub": {
+       "n": 105719,
+       "rms": 0.6981,
+       "p95": 0.6174,
+       "median": 0.1517,
+       "max": 10.9378
+      },
+      "frontface": {
+       "n": 3096,
+       "rms": 0.1275,
+       "p95": 0.2442,
+       "median": 0.0948,
+       "max": 0.3653
+      },
+      "backface": {
+       "n": 39115,
+       "rms": 0.4444,
+       "p95": 0.4434,
+       "median": 0.2455,
+       "max": 6.6873
+      },
+      "bore": {
+       "n": 1691,
+       "rms": 4.2431,
+       "p95": 6.3378,
+       "median": 3.645,
+       "max": 13.4457
+      }
+     }
+    },
+    "after_masking": {
+     "overall": {
+      "n": 292229,
+      "rms": 0.3992,
+      "p95": 0.3749,
+      "median": 0.1422,
+      "max": 10.9378
+     },
+     "zones": {
+      "blades": {
+       "n": 150379,
+       "rms": 0.3291,
+       "p95": 0.3547,
+       "median": 0.1016,
+       "max": 8.5457
+      },
+      "hub": {
+       "n": 101622,
+       "rms": 0.4864,
+       "p95": 0.4281,
+       "median": 0.1473,
+       "max": 10.9378
+      },
+      "frontface": {
+       "n": 3096,
+       "rms": 0.1275,
+       "p95": 0.2442,
+       "median": 0.0948,
+       "max": 0.3653
+      },
+      "backface": {
+       "n": 37126,
+       "rms": 0.4082,
+       "p95": 0.3551,
+       "median": 0.2426,
+       "max": 6.6873
+      },
+      "bore": {
+       "n": 6,
+       "rms": 0.281,
+       "p95": 0.4478,
+       "median": 0.2376,
+       "max": 0.514
+      }
+     }
+    },
+    "excluded_points": {
+     "balance_cuts": 1989,
+     "stub": 5782,
+     "flat_cap": 14,
+     "total": 7771
+    },
+    "balance_cuts": {
+     "count": 5,
+     "by_plane": {
+      "back": {
+       "count": 5,
+       "cuts": [
+        {
+         "plane": "back",
+         "angle_deg": -65.1,
+         "radius_mm": 81.73,
+         "z_mm": 65.18,
+         "depth_mm": 0.241,
+         "depth_max_mm": 0.271,
+         "area_mm2": 9.3,
+         "span_deg": 3.1,
+         "radial_width_mm": 1.84,
+         "n_points": 32
+        },
+        {
+         "plane": "back",
+         "angle_deg": -52.8,
+         "radius_mm": 81.19,
+         "z_mm": 64.94,
+         "depth_mm": 1.197,
+         "depth_max_mm": 1.464,
+         "area_mm2": 13.7,
+         "span_deg": 9.0,
+         "radial_width_mm": 1.1,
+         "n_points": 114
+        },
+        {
+         "plane": "back",
+         "angle_deg": -31.9,
+         "radius_mm": 76.61,
+         "z_mm": 64.61,
+         "depth_mm": 1.522,
+         "depth_max_mm": 1.678,
+         "area_mm2": 45.6,
+         "span_deg": 19.9,
+         "radial_width_mm": 7.57,
+         "n_points": 359
+        },
+        {
+         "plane": "back",
+         "angle_deg": -5.4,
+         "radius_mm": 79.72,
+         "z_mm": 64.39,
+         "depth_mm": 1.414,
+         "depth_max_mm": 1.502,
+         "area_mm2": 55.4,
+         "span_deg": 16.3,
+         "radial_width_mm": 3.8,
+         "n_points": 381
+        },
+        {
+         "plane": "back",
+         "angle_deg": 62.5,
+         "radius_mm": 79.87,
+         "z_mm": 64.86,
+         "depth_mm": 0.987,
+         "depth_max_mm": 1.038,
+         "area_mm2": 65.7,
+         "span_deg": 16.6,
+         "radial_width_mm": 4.34,
+         "n_points": 339
+        }
+       ]
+      },
+      "front": {
+       "count": 0,
+       "cuts": []
+      }
+     }
+    },
+    "search_zones": {
+     "back": {
+      "points": 38686,
+      "r_range": [
+       58.11,
+       82.54
+      ],
+      "residual_p1": -1.071,
+      "candidates": 1559
+     },
+     "front": {
+      "points": 3015,
+      "r_range": [
+       12.71,
+       35.5
+      ],
+      "residual_p1": -0.291,
+      "candidates": 284
+     }
+    },
+    "faces_model_frame": {
+     "z_back": 65.857,
+     "z_front": 13.033,
+     "back_sign": 1.0,
+     "r_front_out": 35.499,
+     "r_back_in": 9.413
+    }
+   }
+  },
+  "preview": "stg1_balance_masked.png"
+ },
+ "scan_vs_models_note": "the raw numbers in scan_vs_models are 'before'; balance_cuts.models.*.after_masking excludes balance cuts, stub and flat cap",
+ "metrology_scanned_surfaces": {
+  "note": "Scanned surfaces only: blades + hub + front hub face. Excluded: the whole back-face zone (solid_body's back face was modelled as an extrusion from physical measurements because the scan of the back was poor, so it does not measure reverse-engineering accuracy), the bore zone, the balance cuts, the scan-only stub and the flat cap. Unsigned scan->model distance in mm; the zones are as in balance_cuts.zone_note. The earlier numbers (scan_vs_models, balance_cuts.models.*.after_masking) are kept unchanged.",
+  "models": {
+   "solid_body": {
+    "overall": {
+     "n": 254648,
+     "rms": 0.1285,
+     "p95": 0.2156,
+     "median": 0.0567,
+     "max": 2.082
+    },
+    "zones": {
+     "blades": {
+      "n": 158364,
+      "rms": 0.1232,
+      "p95": 0.229,
+      "median": 0.054,
+      "max": 1.8682
+     },
+     "hub": {
+      "n": 93501,
+      "rms": 0.1368,
+      "p95": 0.1986,
+      "median": 0.0611,
+      "max": 2.082
+     },
+     "frontface": {
+      "n": 2783,
+      "rms": 0.1364,
+      "p95": 0.3066,
+      "median": 0.0725,
+      "max": 0.5425
+     }
+    }
+   },
+   "brep_v1": {
+    "overall": {
+     "n": 254830,
+     "rms": 0.2458,
+     "p95": 0.2855,
+     "median": 0.0753,
+     "max": 6.5041
+    },
+    "zones": {
+     "blades": {
+      "n": 154314,
+      "rms": 0.1693,
+      "p95": 0.2056,
+      "median": 0.053,
+      "max": 5.8943
+     },
+     "hub": {
+      "n": 98097,
+      "rms": 0.3337,
+      "p95": 0.3972,
+      "median": 0.1282,
+      "max": 6.5041
+     },
+     "frontface": {
+      "n": 2419,
+      "rms": 0.1402,
+      "p95": 0.2896,
+      "median": 0.079,
+      "max": 0.5208
+     }
+    }
+   },
+   "circ_pattern": {
+    "overall": {
+     "n": 255097,
+     "rms": 0.3979,
+     "p95": 0.3809,
+     "median": 0.1233,
+     "max": 10.9378
+    },
+    "zones": {
+     "blades": {
+      "n": 150379,
+      "rms": 0.3291,
+      "p95": 0.3547,
+      "median": 0.1016,
+      "max": 8.5457
+     },
+     "hub": {
+      "n": 101622,
+      "rms": 0.4864,
+      "p95": 0.4281,
+      "median": 0.1473,
+      "max": 10.9378
+     },
+     "frontface": {
+      "n": 3096,
+      "rms": 0.1275,
+      "p95": 0.2442,
+      "median": 0.0948,
+      "max": 0.3653
+     }
+    }
+   }
+  }
+ }
+}

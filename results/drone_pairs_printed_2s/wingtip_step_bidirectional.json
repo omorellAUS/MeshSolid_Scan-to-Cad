@@ -1,0 +1,460 @@
+{
+  "WINGTIP L 2": {
+    "stl": "WINGTIP L 2",
+    "rc": 0,
+    "wall_s": 21.4,
+    "status": "ok",
+    "build_method": "section_loft",
+    "loft_skin": {
+      "tried": true,
+      "accepted": true,
+      "ok": true,
+      "reason": "",
+      "seconds": 19.13,
+      "vol_ratio": 1.0005,
+      "method": "section_loft"
+    },
+    "deviation": {
+      "basis": "section loft self_check; accuracy-class gates",
+      "rms_limit": 0.05,
+      "p95_limit": 0.1,
+      "solid_to_mesh_p95_limit": 0.10767,
+      "passed": true,
+      "accuracy": "printed"
+    },
+    "step": "results/drone_pairs_printed_2s/runs/wingtip_l_2.step",
+    "truth_step": "01M6F7PKEE4TWW5Z2H5XD2C489.step",
+    "truth_solid": 0,
+    "pair_mirrored": true,
+    "bidirectional": {
+      "rebuilt_to_truth": {
+        "status": null,
+        "hausdorff": 0.30472,
+        "t2r_rms": 0.01089,
+        "r2t_rms": 0.01283,
+        "align_med": 0.25984
+      },
+      "truth_to_rebuilt": {
+        "status": null,
+        "hausdorff": 0.40807,
+        "t2r_rms": 0.02577,
+        "r2t_rms": 0.02264,
+        "align_med": 0.26101
+      },
+      "full_r2t": {
+        "test": "results/drone_pairs_printed_2s/runs/wingtip_l_2.step",
+        "ref": "results/drone_pairs_printed_2s/runs/wingtip_l_2_truth.step",
+        "test_kind": "step",
+        "ref_kind": "step",
+        "samples": 60000,
+        "alignment": {
+          "transform": [
+            [
+              -1.0,
+              2.6e-05,
+              -6e-06,
+              1000.004375
+            ],
+            [
+              2.6e-05,
+              1.0,
+              5.6e-05,
+              -18.802595
+            ],
+            [
+              -6e-06,
+              -5.6e-05,
+              1.0,
+              -0.050263
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "median_residual_mm": 0.25984,
+          "mirrored": true
+        },
+        "test_to_ref": {
+          "rms": 0.01089,
+          "p95": 0.01271,
+          "max": 0.27256,
+          "mean_signed": -0.00287,
+          "n": 60000
+        },
+        "ref_to_test": {
+          "rms": 0.01283,
+          "p95": 0.01311,
+          "max": 0.30472,
+          "mean_signed": 0.00589,
+          "n": 60000
+        },
+        "signed": {
+          "test_to_ref": true,
+          "ref_to_test": false
+        },
+        "hausdorff": 0.30472,
+        "bands": {
+          "<= 0.02 mm": 0.9792,
+          "<= 0.05 mm": 0.991,
+          "<= 0.1 mm": 0.998,
+          "<= 0.2 mm": 0.9998,
+          "<= 0.5 mm": 1.0
+        },
+        "zones": {
+          "planar": {
+            "rms": 0.01674,
+            "p95": 0.01502,
+            "max": 0.27256,
+            "mean_signed": -0.0012,
+            "n": 8476
+          },
+          "freeform": {
+            "rms": 0.0096,
+            "p95": 0.01264,
+            "max": 0.23962,
+            "mean_signed": -0.00315,
+            "n": 51524
+          },
+          "edges": {
+            "rms": 0.03058,
+            "p95": 0.07026,
+            "max": 0.27256,
+            "mean_signed": -0.0092,
+            "n": 4635,
+            "within_mm": 1.109
+          },
+          "away_from_edges": {
+            "rms": 0.0071,
+            "p95": 0.01153,
+            "max": 0.17063,
+            "mean_signed": -0.00235,
+            "n": 55365
+          }
+        },
+        "volume": null,
+        "seconds": 14.14
+      },
+      "full_t2r": {
+        "test": "results/drone_pairs_printed_2s/runs/wingtip_l_2_truth.step",
+        "ref": "results/drone_pairs_printed_2s/runs/wingtip_l_2.step",
+        "test_kind": "step",
+        "ref_kind": "step",
+        "samples": 60000,
+        "alignment": {
+          "transform": [
+            [
+              -1.0,
+              0.000166,
+              0.000108,
+              999.929374
+            ],
+            [
+              0.000166,
+              1.0,
+              -0.000373,
+              18.895203
+            ],
+            [
+              0.000108,
+              0.000372,
+              1.0,
+              0.175859
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "median_residual_mm": 0.26101,
+          "mirrored": true
+        },
+        "test_to_ref": {
+          "rms": 0.02577,
+          "p95": 0.04131,
+          "max": 0.40807,
+          "mean_signed": 0.01731,
+          "n": 60000
+        },
+        "ref_to_test": {
+          "rms": 0.02264,
+          "p95": 0.03979,
+          "max": 0.28747,
+          "mean_signed": -0.00272,
+          "n": 60000
+        },
+        "signed": {
+          "test_to_ref": false,
+          "ref_to_test": true
+        },
+        "hausdorff": 0.40807,
+        "bands": {
+          "<= 0.02 mm": 0.721,
+          "<= 0.05 mm": 0.9628,
+          "<= 0.1 mm": 0.9929,
+          "<= 0.2 mm": 0.9975,
+          "<= 0.5 mm": 1.0
+        },
+        "zones": {
+          "freeform": {
+            "rms": 0.02577,
+            "p95": 0.04131,
+            "max": 0.40807,
+            "mean_signed": 0.01731,
+            "n": 60000
+          },
+          "edges": {
+            "rms": 0.0555,
+            "p95": 0.12805,
+            "max": 0.40807,
+            "mean_signed": 0.03037,
+            "n": 5708,
+            "within_mm": 1.107
+          },
+          "away_from_edges": {
+            "rms": 0.02025,
+            "p95": 0.03725,
+            "max": 0.22795,
+            "mean_signed": 0.01594,
+            "n": 54292
+          }
+        },
+        "volume": null,
+        "seconds": 16.45
+      }
+    }
+  },
+  "WINGTIP R 2": {
+    "stl": "WINGTIP R 2",
+    "rc": 0,
+    "wall_s": 21.6,
+    "status": "ok",
+    "build_method": "section_loft",
+    "loft_skin": {
+      "tried": true,
+      "accepted": true,
+      "ok": true,
+      "reason": "",
+      "seconds": 19.47,
+      "vol_ratio": 1.0,
+      "method": "section_loft"
+    },
+    "deviation": {
+      "basis": "section loft self_check; accuracy-class gates",
+      "rms_limit": 0.05,
+      "p95_limit": 0.1,
+      "solid_to_mesh_p95_limit": 0.10812,
+      "passed": true,
+      "accuracy": "printed"
+    },
+    "step": "results/drone_pairs_printed_2s/runs/wingtip_r_2.step",
+    "truth_step": "01M6F7PKEE4TWW5Z2H5XD2C489.step",
+    "truth_solid": 0,
+    "pair_mirrored": false,
+    "bidirectional": {
+      "rebuilt_to_truth": {
+        "status": null,
+        "hausdorff": 0.25219,
+        "t2r_rms": 0.01217,
+        "r2t_rms": 0.01471,
+        "align_med": 0.26041
+      },
+      "truth_to_rebuilt": {
+        "status": null,
+        "hausdorff": 0.277,
+        "t2r_rms": 0.02576,
+        "r2t_rms": 0.02608,
+        "align_med": 0.26084
+      },
+      "full_r2t": {
+        "test": "results/drone_pairs_printed_2s/runs/wingtip_r_2.step",
+        "ref": "results/drone_pairs_printed_2s/runs/wingtip_r_2_truth.step",
+        "test_kind": "step",
+        "ref_kind": "step",
+        "samples": 60000,
+        "alignment": {
+          "transform": [
+            [
+              1.0,
+              -6.3e-05,
+              5e-06,
+              0.005909
+            ],
+            [
+              6.3e-05,
+              1.0,
+              -4.2e-05,
+              -18.757899
+            ],
+            [
+              -5e-06,
+              4.2e-05,
+              1.0,
+              0.081297
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "median_residual_mm": 0.26041,
+          "mirrored": false
+        },
+        "test_to_ref": {
+          "rms": 0.01217,
+          "p95": 0.02195,
+          "max": 0.25219,
+          "mean_signed": -0.00274,
+          "n": 60000
+        },
+        "ref_to_test": {
+          "rms": 0.01471,
+          "p95": 0.0234,
+          "max": 0.23997,
+          "mean_signed": 0.00766,
+          "n": 60000
+        },
+        "signed": {
+          "test_to_ref": true,
+          "ref_to_test": false
+        },
+        "hausdorff": 0.25219,
+        "bands": {
+          "<= 0.02 mm": 0.9427,
+          "<= 0.05 mm": 0.9917,
+          "<= 0.1 mm": 0.9982,
+          "<= 0.2 mm": 1.0,
+          "<= 0.5 mm": 1.0
+        },
+        "zones": {
+          "planar": {
+            "rms": 0.01675,
+            "p95": 0.01669,
+            "max": 0.2183,
+            "mean_signed": -0.00755,
+            "n": 8334
+          },
+          "freeform": {
+            "rms": 0.01127,
+            "p95": 0.02235,
+            "max": 0.25219,
+            "mean_signed": -0.00197,
+            "n": 51666
+          },
+          "edges": {
+            "rms": 0.02948,
+            "p95": 0.07525,
+            "max": 0.25219,
+            "mean_signed": -0.006,
+            "n": 4692,
+            "within_mm": 1.109
+          },
+          "away_from_edges": {
+            "rms": 0.00933,
+            "p95": 0.01922,
+            "max": 0.12612,
+            "mean_signed": -0.00247,
+            "n": 55308
+          }
+        },
+        "volume": null,
+        "seconds": 8.06
+      },
+      "full_t2r": {
+        "test": "results/drone_pairs_printed_2s/runs/wingtip_r_2_truth.step",
+        "ref": "results/drone_pairs_printed_2s/runs/wingtip_r_2.step",
+        "test_kind": "step",
+        "ref_kind": "step",
+        "samples": 60000,
+        "alignment": {
+          "transform": [
+            [
+              1.0,
+              0.000213,
+              0.000112,
+              -0.084562
+            ],
+            [
+              -0.000213,
+              1.0,
+              0.000309,
+              18.672896
+            ],
+            [
+              -0.000112,
+              -0.000309,
+              1.0,
+              -0.175429
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "median_residual_mm": 0.26084,
+          "mirrored": false
+        },
+        "test_to_ref": {
+          "rms": 0.02576,
+          "p95": 0.04946,
+          "max": 0.27606,
+          "mean_signed": 0.01739,
+          "n": 60000
+        },
+        "ref_to_test": {
+          "rms": 0.02608,
+          "p95": 0.04846,
+          "max": 0.277,
+          "mean_signed": -0.00267,
+          "n": 60000
+        },
+        "signed": {
+          "test_to_ref": false,
+          "ref_to_test": true
+        },
+        "hausdorff": 0.277,
+        "bands": {
+          "<= 0.02 mm": 0.7446,
+          "<= 0.05 mm": 0.9506,
+          "<= 0.1 mm": 0.9933,
+          "<= 0.2 mm": 0.9986,
+          "<= 0.5 mm": 1.0
+        },
+        "zones": {
+          "freeform": {
+            "rms": 0.02576,
+            "p95": 0.04946,
+            "max": 0.27606,
+            "mean_signed": 0.01739,
+            "n": 60000
+          },
+          "edges": {
+            "rms": 0.0486,
+            "p95": 0.11141,
+            "max": 0.27606,
+            "mean_signed": 0.02933,
+            "n": 5555,
+            "within_mm": 1.107
+          },
+          "away_from_edges": {
+            "rms": 0.02214,
+            "p95": 0.04559,
+            "max": 0.27569,
+            "mean_signed": 0.01617,
+            "n": 54445
+          }
+        },
+        "volume": null,
+        "seconds": 9.39
+      }
+    }
+  }
+}

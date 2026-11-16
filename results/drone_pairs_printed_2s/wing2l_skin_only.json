@@ -1,0 +1,77 @@
+{
+  "base_rms": 0.535139860834036,
+  "after_rms": 0.5281689954038977,
+  "skin_rms": 0.3309002112692631,
+  "feat_rms": 0.8093072123712702,
+  "n_feat": 1659,
+  "log": [
+    {
+      "ok": true,
+      "n_faces": 160,
+      "n_floor": 53,
+      "n_walls": 107,
+      "n_wall_planes": 6,
+      "rim_n": 64,
+      "rim_src": "boundary",
+      "tool_mode": "prism+obb",
+      "depth": 1.9503,
+      "depth_use": 2.4003,
+      "depth_floor": 2.2944,
+      "depth_mesh": 1.2498,
+      "thick_min": 18.6455,
+      "thick_use": 18.6455,
+      "mean_side": 0.2258,
+      "floor_normal": [
+        0.5844,
+        -0.79657,
+        -0.15476
+      ],
+      "floor_rms": 0.00029,
+      "centroid": [
+        352.6,
+        18.12,
+        467.71
+      ],
+      "i": 0,
+      "attempt": 0,
+      "n_seed": 811,
+      "n_region_faces": 160,
+      "n_solids": 1,
+      "vol_ratio": 1.0124
+    },
+    {
+      "ok": true,
+      "n_faces": 160,
+      "n_floor": 60,
+      "n_walls": 100,
+      "n_wall_planes": 5,
+      "rim_n": 64,
+      "rim_src": "boundary",
+      "tool_mode": "prism+obb",
+      "depth": 2.1996,
+      "depth_use": 2.6496,
+      "depth_floor": 2.5878,
+      "depth_mesh": 1.3044,
+      "thick_min": 14.0437,
+      "thick_use": 14.0437,
+      "mean_side": 0.2457,
+      "floor_normal": [
+        0.51468,
+        -0.85207,
+        -0.09527
+      ],
+      "floor_rms": 0.0002,
+      "centroid": [
+        369.65,
+        18.29,
+        508.95
+      ],
+      "i": 1,
+      "attempt": 0,
+      "n_seed": 705,
+      "n_region_faces": 160,
+      "n_solids": 1,
+      "vol_ratio": 1.0124
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "WINGTIP L 2": {
+    "ok": false,
+    "tol": 0.011505,
+    "vol_ratio": 1.0019603821099423,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 0.1205,
+      "rms": 0.06453,
+      "solid_to_mesh_p95": 0.01412,
+      "hausdorff": 2.46733,
+      "faceted": true,
+      "facet_sag_p90": 0.00767,
+      "solid_to_mesh_p95_limit": 0.04219
+    },
+    "seconds": 12.67025089263916,
+    "slabs": [
+      {
+        "from": 465.027,
+        "to": 682.6966,
+        "sections": 80,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false
+      }
+    ],
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.06453 / p95 0.1205, solid->mesh p95 0.01412 (tol 0.0115, lim_s2m 0.04219)",
+    "gates": {
+      "rms": 0.0172575,
+      "p95": 0.034515
+    }
+  },
+  "WINGTIP R 2": {
+    "ok": false,
+    "tol": 0.01218,
+    "vol_ratio": 1.001589797906781,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 0.13111,
+      "rms": 0.06616,
+      "solid_to_mesh_p95": 0.01424,
+      "hausdorff": 1.85267,
+      "faceted": true,
+      "facet_sag_p90": 0.00812,
+      "solid_to_mesh_p95_limit": 0.04466
+    },
+    "seconds": 10.572525978088379,
+    "slabs": [
+      {
+        "from": 503.6679,
+        "to": 721.3375,
+        "sections": 80,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false
+      }
+    ],
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.06616 / p95 0.1311, solid->mesh p95 0.01424 (tol 0.01218, lim_s2m 0.04466)",
+    "gates": {
+      "rms": 0.01827,
+      "p95": 0.03654
+    }
+  },
+  "WING 2 L": {
+    "ok": false,
+    "tol": 0.01653,
+    "vol_ratio": 1.0094068167645889,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 1.7412,
+      "rms": 0.82561,
+      "solid_to_mesh_p95": 0.34934,
+      "hausdorff": 9.63298,
+      "faceted": true,
+      "facet_sag_p90": 0.01102,
+      "solid_to_mesh_p95_limit": 0.06061
+    },
+    "seconds": 33.55480694770813,
+    "slabs": [
+      {
+        "from": -395.0,
+        "to": -290.0,
+        "sections": 41,
+        "loops": 1,
+        "corners": [
+          0
+        ],
+        "edges_per_loop": [
+          1
+        ],
+        "lines": 0,
+        "prismatic": false
+      }
+    ],
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.8256 / p95 1.741, solid->mesh p95 0.3493 (tol 0.01653, lim_s2m 0.06061)",
+    "gates": {
+      "rms": 0.024794999999999998,
+      "p95": 0.049589999999999995
+    }
+  },
+  "_summary": {
+    "wingtip_l2_rms_before": 0.158,
+    "wingtip_l2_rms_after": 0.06453,
+    "s2m_now_passes": true,
+    "vertex_self_check_green": false,
+    "pipeline_wire": false
+  }
+}

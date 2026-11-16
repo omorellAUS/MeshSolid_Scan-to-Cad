@@ -1,0 +1,398 @@
+{
+ "male_4": {
+  "status": "ok",
+  "seconds": 95.2,
+  "detected": true,
+  "kind": "screw_compressor_rotor",
+  "valid": true,
+  "solids": 1,
+  "faces": 7,
+  "found": {
+   "lobes": 4,
+   "hand": "right",
+   "lead_mm": 300.002,
+   "tip_d": 79.9917,
+   "root_d": 48.0803,
+   "length": 120.001,
+   "wrap_deg": 144.0,
+   "profile_fit_rms": 0.0227
+  },
+  "truth": {
+   "lobes": 4,
+   "hand": "right",
+   "lead": 300.0,
+   "tip": 80.0,
+   "root": 48.0,
+   "length": 120.0,
+   "wrap": 144.0
+  },
+  "deviation_zones": {
+   "rotor_flanks": {
+    "n": 90106,
+    "rms": 0.0305,
+    "p95": 0.06,
+    "median_abs": 0.0206,
+    "max": 0.1462
+   },
+   "rotor_end_edges": {
+    "n": 13079,
+    "rms": 0.033,
+    "p95": 0.0632,
+    "median_abs": 0.0208,
+    "max": 0.2519
+   },
+   "rest": {
+    "n": 39789,
+    "rms": 0.0883,
+    "p95": 0.2412,
+    "median_abs": 0.0288,
+    "max": 0.4467
+   },
+   "basis": "scan vertices -> solid; rotor_end_edges = 1.5 mm at each rotor end (the scan rounds the sharp lobe/end-face edges: reported, not a model error)"
+  },
+  "truth_surface_to_solid": {
+   "rms": 0.0079,
+   "p95": 0.0118,
+   "max": 0.0528
+  },
+  "volume": {
+   "solid": 449725.0,
+   "truth": 449742.4,
+   "rel_err": -3.9e-05
+  },
+  "scan_deviation": {
+   "mesh_to_solid": {
+    "max": 0.35182383418298485,
+    "mean": 0.019132696883964517,
+    "rms": 0.029375310161885278,
+    "p95": 0.046353842654940094,
+    "n": 30000
+   },
+   "solid_to_mesh": {
+    "max": 0.458494480450522,
+    "mean": 0.019812992469786884,
+    "rms": 0.034191862518775665,
+    "p95": 0.04607449408623799,
+    "n": 30000
+   }
+  }
+ },
+ "female_6": {
+  "status": "ok",
+  "seconds": 97.6,
+  "detected": true,
+  "kind": "screw_compressor_rotor",
+  "valid": true,
+  "solids": 1,
+  "faces": 12,
+  "found": {
+   "lobes": 6,
+   "hand": "left",
+   "lead_mm": 450.003,
+   "tip_d": 111.8876,
+   "root_d": 80.0104,
+   "length": 120.0,
+   "wrap_deg": 96.0,
+   "profile_fit_rms": 0.0229
+  },
+  "truth": {
+   "lobes": 6,
+   "hand": "left",
+   "lead": 450.0,
+   "tip": null,
+   "root": 80.0,
+   "length": 120.0,
+   "wrap": 96.0
+  },
+  "deviation_zones": {
+   "rotor_flanks": {
+    "n": 139077,
+    "rms": 0.0307,
+    "p95": 0.0602,
+    "median_abs": 0.0206,
+    "max": 0.1868
+   },
+   "rotor_end_edges": {
+    "n": 16610,
+    "rms": 0.0346,
+    "p95": 0.0637,
+    "median_abs": 0.0213,
+    "max": 0.2568
+   },
+   "rest": {
+    "n": 71989,
+    "rms": 0.0913,
+    "p95": 0.2592,
+    "median_abs": 0.0268,
+    "max": 0.4676
+   },
+   "basis": "scan vertices -> solid; rotor_end_edges = 1.5 mm at each rotor end (the scan rounds the sharp lobe/end-face edges: reported, not a model error)"
+  },
+  "truth_surface_to_solid": {
+   "rms": 0.0061,
+   "p95": 0.0105,
+   "max": 0.0475
+  },
+  "volume": {
+   "solid": 908765.0,
+   "truth": 908728.1,
+   "rel_err": 4.1e-05
+  },
+  "scan_deviation": {
+   "mesh_to_solid": {
+    "max": 0.41042345771318434,
+    "mean": 0.020162162126802385,
+    "rms": 0.03294715250914741,
+    "p95": 0.048543589880006933,
+    "n": 30000
+   },
+   "solid_to_mesh": {
+    "max": 0.5534201011022504,
+    "mean": 0.020704226932414017,
+    "rms": 0.03704005151004936,
+    "p95": 0.048689861139090206,
+    "n": 30000
+   }
+  }
+ },
+ "pump_twin": {
+  "status": "ok",
+  "seconds": 55.3,
+  "detected": true,
+  "kind": "screw_pump_screw",
+  "valid": true,
+  "solids": 1,
+  "faces": 12,
+  "found": {
+   "lobes": 2,
+   "hand": "right",
+   "lead_mm": 40.0,
+   "tip_d": 44.0007,
+   "root_d": 27.9899,
+   "length": 99.998,
+   "wrap_deg": 899.98,
+   "profile_fit_rms": 0.0416
+  },
+  "truth": {
+   "lobes": 2,
+   "hand": "right",
+   "lead": 40.0,
+   "tip": 44.0,
+   "root": 28.0,
+   "length": 100.0,
+   "wrap": 900.0
+  },
+  "deviation_zones": {
+   "rotor_flanks": {
+    "n": 54189,
+    "rms": 0.0355,
+    "p95": 0.0696,
+    "median_abs": 0.0218,
+    "max": 0.2252
+   },
+   "rotor_end_edges": {
+    "n": 4198,
+    "rms": 0.0355,
+    "p95": 0.0696,
+    "median_abs": 0.0213,
+    "max": 0.2703
+   },
+   "rest": {
+    "n": 23017,
+    "rms": 0.0766,
+    "p95": 0.1893,
+    "median_abs": 0.0327,
+    "max": 0.3484
+   },
+   "basis": "scan vertices -> solid; rotor_end_edges = 1.5 mm at each rotor end (the scan rounds the sharp lobe/end-face edges: reported, not a model error)"
+  },
+  "truth_surface_to_solid": {
+   "rms": 0.0216,
+   "p95": 0.0298,
+   "max": 0.2919
+  },
+  "volume": {
+   "solid": 114850.9,
+   "truth": 114925.0,
+   "rel_err": -0.000645
+  },
+  "scan_deviation": {
+   "mesh_to_solid": {
+    "max": 0.29316436229024007,
+    "mean": 0.02240295844263927,
+    "rms": 0.034820171290732865,
+    "p95": 0.06378730030555053,
+    "n": 30000
+   },
+   "solid_to_mesh": {
+    "max": 0.7041564556588243,
+    "mean": 0.024111104826673068,
+    "rms": 0.04184789517711987,
+    "p95": 0.07307815339403118,
+    "n": 30000
+   }
+  }
+ },
+ "pump_triple": {
+  "status": "ok",
+  "seconds": 45.4,
+  "detected": true,
+  "kind": "screw_pump_screw",
+  "valid": true,
+  "solids": 1,
+  "faces": 8,
+  "found": {
+   "lobes": 2,
+   "hand": "left",
+   "lead_mm": 36.0,
+   "tip_d": 33.987,
+   "root_d": 20.0084,
+   "length": 89.998,
+   "wrap_deg": 899.98,
+   "profile_fit_rms": 0.033
+  },
+  "truth": {
+   "lobes": 2,
+   "hand": "left",
+   "lead": 36.0,
+   "tip": 34.0,
+   "root": 20.0,
+   "length": 90.0,
+   "wrap": 900.0
+  },
+  "deviation_zones": {
+   "rotor_flanks": {
+    "n": 33437,
+    "rms": 0.0358,
+    "p95": 0.0703,
+    "median_abs": 0.0229,
+    "max": 0.1991
+   },
+   "rotor_end_edges": {
+    "n": 2913,
+    "rms": 0.0408,
+    "p95": 0.0741,
+    "median_abs": 0.0224,
+    "max": 0.2406
+   },
+   "rest": {
+    "n": 18752,
+    "rms": 0.0685,
+    "p95": 0.127,
+    "median_abs": 0.0341,
+    "max": 0.3372
+   },
+   "basis": "scan vertices -> solid; rotor_end_edges = 1.5 mm at each rotor end (the scan rounds the sharp lobe/end-face edges: reported, not a model error)"
+  },
+  "truth_surface_to_solid": {
+   "rms": 0.0156,
+   "p95": 0.0303,
+   "max": 0.1249
+  },
+  "volume": {
+   "solid": 60985.3,
+   "truth": 60959.5,
+   "rel_err": 0.000424
+  },
+  "scan_deviation": {
+   "mesh_to_solid": {
+    "max": 0.2909534923778876,
+    "mean": 0.021823278252089927,
+    "rms": 0.03319080045612713,
+    "p95": 0.058601258356778506,
+    "n": 30000
+   },
+   "solid_to_mesh": {
+    "max": 0.7047705546669504,
+    "mean": 0.022441984763080153,
+    "rms": 0.03839203199997872,
+    "p95": 0.05777617726862812,
+    "n": 30000
+   }
+  }
+ },
+ "variable_pitch": {
+  "status": "ok",
+  "seconds": 52.3,
+  "detected": true,
+  "kind": "variable_pitch_screw",
+  "valid": true,
+  "solids": 1,
+  "faces": 9,
+  "found": {
+   "lobes": 1,
+   "hand": "right",
+   "lead_mm": [
+    49.993,
+    30.002
+   ],
+   "tip_d": 36.0042,
+   "root_d": 23.9864,
+   "length": 119.998,
+   "wrap_deg": 1151.99,
+   "profile_fit_rms": 0.0362
+  },
+  "truth": {
+   "lobes": 1,
+   "hand": "right",
+   "lead": [
+    30.0,
+    50.0
+   ],
+   "tip": 36.0,
+   "root": 24.0,
+   "length": 120.0,
+   "wrap": 1152.0
+  },
+  "deviation_zones": {
+   "rotor_flanks": {
+    "n": 42482,
+    "rms": 0.0352,
+    "p95": 0.069,
+    "median_abs": 0.0219,
+    "max": 0.2149
+   },
+   "rotor_end_edges": {
+    "n": 2233,
+    "rms": 0.0412,
+    "p95": 0.0794,
+    "median_abs": 0.0234,
+    "max": 0.2729
+   },
+   "rest": {
+    "n": 21420,
+    "rms": 0.0782,
+    "p95": 0.1855,
+    "median_abs": 0.0343,
+    "max": 0.3729
+   },
+   "basis": "scan vertices -> solid; rotor_end_edges = 1.5 mm at each rotor end (the scan rounds the sharp lobe/end-face edges: reported, not a model error)"
+  },
+  "truth_surface_to_solid": {
+   "rms": 0.0181,
+   "p95": 0.0202,
+   "max": 0.3398
+  },
+  "volume": {
+   "solid": 86880.5,
+   "truth": 86919.0,
+   "rel_err": -0.000443
+  },
+  "scan_deviation": {
+   "mesh_to_solid": {
+    "max": 0.35793616143453777,
+    "mean": 0.022503363974945605,
+    "rms": 0.03512088490207012,
+    "p95": 0.06308545044795216,
+    "n": 30000
+   },
+   "solid_to_mesh": {
+    "max": 0.6829072035244836,
+    "mean": 0.023503161029944236,
+    "rms": 0.0404313573891587,
+    "p95": 0.06580648961287268,
+    "n": 30000
+   }
+  }
+ }
+}

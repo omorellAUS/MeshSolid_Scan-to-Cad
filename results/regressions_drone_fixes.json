@@ -1,0 +1,178 @@
+{
+ "run": "r14 after drone/VTOL fixes (faceted-CAD mode + fine-tessellation guard, budgets/watchdog, crash fixes, gear gate, 2.5D extrusion builder, multi-body split, seam repair)",
+ "date": "2026-11-03",
+ "code": "85694fb..7e0e799 (M3 at 68f8448; coupling/s04/s05 at 69d9a30; p01 at 1cbf88e; screw rotors at 85694fb)",
+ "parts": {
+  "m3/bolt_circle_flange": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01961,
+    0.03839,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01961, 0.03839, False, False",
+   "verdict": "SAME"
+  },
+  "m3/chamfer_fillet_block": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01992,
+    0.0391,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01992, 0.0391, False, False",
+   "verdict": "SAME"
+  },
+  "m3/chamfered_block": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01982,
+    0.0386,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01982, 0.0386, False, False",
+   "verdict": "SAME"
+  },
+  "m3/counterbore_plate": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01968,
+    0.03852,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01968, 0.03852, False, False",
+   "verdict": "SAME"
+  },
+  "m3/countersunk_plate": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01985,
+    0.03871,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01985, 0.03871, False, False",
+   "verdict": "SAME"
+  },
+  "m3/drafted_block": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01988,
+    0.03894,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01988, 0.03894, False, False",
+   "verdict": "SAME"
+  },
+  "m3/pipe_elbow": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.02092,
+    0.04073,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.02092, 0.04073, False, False",
+   "verdict": "SAME"
+  },
+  "m3/pocket_plate": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01975,
+    0.0385,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01972, 0.03865, False, False",
+   "verdict": "DIFF"
+  },
+  "m3/slotted_plate": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.01976,
+    0.03867,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.01976, 0.03867, False, False",
+   "verdict": "SAME"
+  },
+  "m3/threaded_stud": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.5758,
+    0.96024,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.5758, 0.96024, False, False",
+   "verdict": "SAME"
+  },
+  "coupling": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.00048,
+    0.00095,
+    "local_trim+maker_volume",
+    []
+   ],
+   "r13": "'ok', 0.00048, 0.00095, False, False",
+   "verdict": "SAME"
+  },
+  "s04": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.12785,
+    0.12934,
+    "revolve_profile",
+    []
+   ],
+   "r13": "'ok', 0.12785, 0.12934, False, False",
+   "verdict": "SAME"
+  },
+  "s05": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.12228,
+    0.13456,
+    "revolve_profile",
+    []
+   ],
+   "r13": "'ok', 0.12228, 0.13456, False, False",
+   "verdict": "SAME"
+  },
+  "s06": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.1226,
+    0.1334,
+    "revolve_profile",
+    []
+   ],
+   "r13": "'ok', 0.1226, 0.1334, False, False",
+   "verdict": "SAME"
+  },
+  "p01": {
+   "r14(status,rms,p95,method)": [
+    "ok",
+    0.2217,
+    0.12832,
+    "revolve_profile",
+    null
+   ],
+   "r13": "'ok', 0.2217, 0.12832, False, False",
+   "verdict": "SAME"
+  }
+ },
+ "screw_rotors": "screw_pipeline_check 5/5 ok, every value in results/m8_screw_rotors.json unchanged except run seconds (file not rewritten)",
+ "impellers": "stg1/s07/s09 not rebuilt (15-40 min each). Their inputs now resolve to exactly the r13 tolerance (stg1 0.1220, s07 0.00877, s09 0.00594: fine-tessellation guard) and the impeller path code is unchanged",
+ "notes": [
+  "pocket_plate 0.01975/0.0385 = the M5 baseline value (it alternates with 0.01972/0.03865 between runs, seen since r12)",
+  "regressions found and fixed on the way: s05 (strict torus check now CAD-only), coupling (faceted mode now only for coarse tessellations), p01 (multi-body split only for CAD exports; gear ring-cover gate 0.9 -> 0.75)"
+ ]
+}

@@ -1,0 +1,112 @@
+{
+ "run": "r13 on c6a6f95/0919552 (screw corner fit, splines, rolling elements)",
+ "date": "2026-11-03",
+ "pytest": "full suite at b9596c2: 69 passed, 5 skipped, 0 failed; then test_spline 6 + test_addin 13 passed, test_bearing_seal 6 passed on c6a6f95/0919552",
+ "parts": {
+  "m3/bolt_circle_flange": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01961, 0.03839, False, False",
+   "baseline_m5_final": "'ok', 0.01961, 0.03839",
+   "verdict": "SAME"
+  },
+  "m3/chamfer_fillet_block": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01992, 0.0391, False, False",
+   "baseline_m5_final": "'ok', 0.01992, 0.0391",
+   "verdict": "SAME"
+  },
+  "m3/chamfered_block": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01982, 0.0386, False, False",
+   "baseline_m5_final": "'ok', 0.01982, 0.0386",
+   "verdict": "SAME"
+  },
+  "m3/counterbore_plate": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01968, 0.03852, False, False",
+   "baseline_m5_final": "'ok', 0.01968, 0.03852",
+   "verdict": "SAME"
+  },
+  "m3/countersunk_plate": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01985, 0.03871, False, False",
+   "baseline_m5_final": "'ok', 0.01985, 0.03871",
+   "verdict": "SAME"
+  },
+  "m3/drafted_block": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01988, 0.03894, False, False",
+   "baseline_m5_final": "'ok', 0.01988, 0.03894",
+   "verdict": "SAME"
+  },
+  "m3/pipe_elbow": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.02092, 0.04073, False, False",
+   "baseline_m5_final": "'ok', 0.02023, 0.03978",
+   "verdict": "DIFF"
+  },
+  "m3/pocket_plate": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01972, 0.03865, False, False",
+   "baseline_m5_final": "'ok', 0.01975, 0.0385",
+   "verdict": "DIFF"
+  },
+  "m3/slotted_plate": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.01976, 0.03867, False, False",
+   "baseline_m5_final": "'ok', 0.01976, 0.03867",
+   "verdict": "SAME"
+  },
+  "m3/threaded_stud": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.5758, 0.96024, False, False",
+   "baseline_m5_final": "'ok', 0.5758, 0.96024",
+   "verdict": "SAME"
+  },
+  "coupling": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.00048, 0.00095, False, False",
+   "baseline_m5_final": "'ok', 0.00048, 0.00095",
+   "verdict": "SAME"
+  },
+  "s04": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.12785, 0.12934, False, False",
+   "baseline_m5_final": "'ok', 0.12785, 0.12934",
+   "verdict": "SAME"
+  },
+  "s05": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.12228, 0.13456, False, False",
+   "baseline_m5_final": "'ok', 0.12228, 0.13456",
+   "verdict": "SAME"
+  },
+  "s06": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.1226, 0.1334, False, False",
+   "baseline_m5_final": "'ok', 0.1226, 0.1334",
+   "verdict": "SAME"
+  },
+  "p01": {
+   "now(status,rms,p95,spline_reported,bearing_reported)": "'ok', 0.2217, 0.12832, False, False",
+   "baseline_m5_final": "'ok', 0.22144, 0.12731",
+   "verdict": "DIFF"
+  }
+ },
+ "screw_rotors_truth_rms_p95": {
+  "male_4": [
+   0.0079,
+   0.0118
+  ],
+  "female_6": [
+   0.0061,
+   0.0105
+  ],
+  "pump_twin": [
+   0.0216,
+   0.0298
+  ],
+  "pump_triple": [
+   0.0156,
+   0.0303
+  ],
+  "variable_pitch": [
+   0.0181,
+   0.0202
+  ]
+ },
+ "notes": [
+  "no spline / bearing false positives on M3, coupling, s04-s06, p01",
+  "pipe_elbow alternates 0.02023 / 0.02092 between runs (seen in r11 and r12 too): pre-existing, not from this change",
+  "pocket_plate and p01 equal to r12 (sub-micron change from the 73d555b revolve fix)",
+  "screw rotors: pump_twin truth rms 0.0395->0.0216, p95 0.105->0.030; variable_pitch 0.031->0.018; female_6 0.011->0.006",
+  "stg1 not re-run (40 min; impeller path unchanged)",
+  "known gap: iso_shaft_8x32 spline part is recognised but the general builder fails (local_trim free edges; revolve coaxial area 51%)"
+ ]
+}

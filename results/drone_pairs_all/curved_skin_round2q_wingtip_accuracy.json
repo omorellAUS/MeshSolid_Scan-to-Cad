@@ -1,0 +1,72 @@
+{
+  "WINGTIP L 2": {
+    "tol": 0.0115,
+    "vol_ratio": 0.9988,
+    "rms": 0.05968,
+    "p95": 0.10767,
+    "machined": {
+      "rms_limit": 0.0172575,
+      "p95_limit": 0.034515,
+      "pass_rms": false,
+      "pass_p95": false
+    },
+    "printed": {
+      "rms_limit": 0.05,
+      "p95_limit": 0.1,
+      "pass_rms": false,
+      "pass_p95": false
+    },
+    "self_check_printed_ok": false,
+    "self_check_printed_reason": "loft deviates from the mesh: vertices->solid rms 0.05855 / p95 0.1021, solid->mesh p95 0.01394 (accuracy=printed, rms\u22640.05, p95\u22640.1, lim_s2m 0.1077)",
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 0.1021,
+      "rms": 0.05855,
+      "solid_to_mesh_p95": 0.01394,
+      "hausdorff": 0.34946,
+      "faceted": true,
+      "facet_sag_p90": 0.00767,
+      "solid_to_mesh_p95_limit": 0.10767,
+      "accuracy": "printed",
+      "rms_limit": 0.05,
+      "p95_limit": 0.1
+    },
+    "regression_floor_0p059": true,
+    "t": 20.63,
+    "self_check_rms": 0.05855
+  },
+  "WINGTIP R 2": {
+    "tol": 0.01218,
+    "vol_ratio": 0.9993,
+    "rms": 0.06169,
+    "p95": 0.11387,
+    "machined": {
+      "rms_limit": 0.01827,
+      "p95_limit": 0.03654,
+      "pass_rms": false,
+      "pass_p95": false
+    },
+    "printed": {
+      "rms_limit": 0.05,
+      "p95_limit": 0.1,
+      "pass_rms": false,
+      "pass_p95": false
+    },
+    "self_check_printed_ok": false,
+    "self_check_printed_reason": "loft deviates from the mesh: vertices->solid rms 0.06036 / p95 0.1075, solid->mesh p95 0.01335 (accuracy=printed, rms\u22640.05, p95\u22640.1, lim_s2m 0.1081)",
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 0.10751,
+      "rms": 0.06036,
+      "solid_to_mesh_p95": 0.01335,
+      "hausdorff": 0.40051,
+      "faceted": true,
+      "facet_sag_p90": 0.00812,
+      "solid_to_mesh_p95_limit": 0.10812,
+      "accuracy": "printed",
+      "rms_limit": 0.05,
+      "p95_limit": 0.1
+    },
+    "regression_floor_0p059": false,
+    "t": 19.77,
+    "self_check_rms": 0.06036
+  }
+}

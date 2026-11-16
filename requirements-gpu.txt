@@ -1,0 +1,2 @@
+# optional GPU acceleration (M8b): NVIDIA Warp (CUDA kernels JIT-compiled; needs an NVIDIA driver, no CUDA toolkit)
+warp-lang>=1.9

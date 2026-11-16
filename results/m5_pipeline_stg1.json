@@ -1,0 +1,150 @@
+{
+ "what": "end-to-end pipeline on stg1: python -m meshsolid mesh_mm.stl --measure bore_d=14.29 --note 'unscanned: ...'",
+ "code": "1abad68",
+ "finished": "2026-10-31 07:12 AWST",
+ "status": "ok",
+ "step_written": true,
+ "build": {
+  "valid": true,
+  "n_solids": 1,
+  "n_faces": 276,
+  "volume": 273924.91061474226,
+  "seconds": 2402.8
+ },
+ "le_round_flag": {
+  "rounded": true,
+  "method": "post_trim",
+  "rho_mm": 0.66
+ },
+ "notes": [
+  "unscanned: the user's model has a 6.4 mm boss r15-55"
+ ],
+ "balance_cuts": {
+  "count": 5,
+  "modelled_as": "not modelled: the solid is built to the nominal surfaces; cuts are listed here"
+ },
+ "gate": {
+  "basis": "mesh vertices -> solid rms/p95, scan-only stub/cap and balance cuts excluded",
+  "rms_limit": 0.10905000000000001,
+  "p95_limit": 0.23085,
+  "limits_basis": "1.5 x the blade-to-blade scatter of the folded side fits (rms 0.0727, p95 0.1539 mm): an N-fold model cannot fit closer; noise tolerance 0.0122",
+  "passed": true
+ },
+ "deviation_excl": {
+  "max": 2.0375040702410203,
+  "mean": 0.05723806681072271,
+  "rms": 0.09331470066272694,
+  "p95": 0.15935734046710445,
+  "n": 650175
+ },
+ "excluded_from_gate": {
+  "scan_only_faces": 24578,
+  "balance_cut_faces": 9916
+ },
+ "first_run_05_16": {
+  "code": "fc30b34 minus gate change",
+  "gate": "failed with noise limits 0.0183/0.0366",
+  "deviation_excl": {
+   "rms": 0.0893,
+   "p95": 0.1484
+  }
+ },
+ "final_pipe4": {
+  "code": "f1614ff",
+  "status": "ok",
+  "step_written": true,
+  "gate": {
+   "basis": "mesh vertices -> solid rms/p95, scan-only stub/cap and balance cuts excluded",
+   "rms_limit": 0.10905000000000001,
+   "p95_limit": 0.2304,
+   "limits_basis": "1.5 x the blade-to-blade scatter of the folded side fits (rms 0.0727, p95 0.1536 mm): an N-fold model cannot fit closer; noise tolerance 0.0122",
+   "passed": true
+  },
+  "deviation_excl": {
+   "max": 2.0373188993484788,
+   "mean": 0.05489264479574898,
+   "rms": 0.08948016930208247,
+   "p95": 0.14854191243627365,
+   "n": 650174
+  },
+  "le_round_flag": {
+   "rounded": true,
+   "method": "post_trim",
+   "rho_mm": 0.65
+  },
+  "build": {
+   "valid": true,
+   "n_solids": 1,
+   "n_faces": 276,
+   "volume": 273783.5088170859,
+   "seconds": 3133.8
+  },
+  "metrology_refined": {
+   "pipe4": {
+    "overall": {
+     "n": 254563,
+     "rms": 0.0944,
+     "p95": 0.15,
+     "median": 0.0358,
+     "max": 2.0337
+    },
+    "zones": {
+     "blades": {
+      "n": 158404,
+      "rms": 0.0718,
+      "p95": 0.1401,
+      "median": 0.0317,
+      "max": 2.0122
+     },
+     "hub": {
+      "n": 93426,
+      "rms": 0.1235,
+      "p95": 0.1606,
+      "median": 0.0437,
+      "max": 2.0337
+     },
+     "frontface": {
+      "n": 2733,
+      "rms": 0.1001,
+      "p95": 0.1997,
+      "median": 0.0678,
+      "max": 0.3587
+     }
+    }
+   },
+   "solid_body": {
+    "overall": {
+     "n": 254563,
+     "rms": 0.1312,
+     "p95": 0.2232,
+     "median": 0.0592,
+     "max": 2.0808
+    },
+    "zones": {
+     "blades": {
+      "n": 158404,
+      "rms": 0.1243,
+      "p95": 0.2338,
+      "median": 0.0552,
+      "max": 1.9917
+     },
+     "hub": {
+      "n": 93426,
+      "rms": 0.1421,
+      "p95": 0.2113,
+      "median": 0.0665,
+      "max": 2.0808
+     },
+     "frontface": {
+      "n": 2733,
+      "rms": 0.1343,
+      "p95": 0.3079,
+      "median": 0.0693,
+      "max": 0.5285
+     }
+    }
+   }
+  },
+  "note": "beats m5_v8 and solid_body on every zone (rms, p95, median)"
+ }
+}

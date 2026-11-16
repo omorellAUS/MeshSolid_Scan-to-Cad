@@ -1,0 +1,87 @@
+{
+ "run": "r12, after 73d555b (revolve overlap/segment fix) and f88bad0",
+ "date": "2026-11-03",
+ "parts": {
+  "m3/bolt_circle_flange": {
+   "now": "'ok', 0.01961, 0.03839, True, False",
+   "baseline_m5_final": "'ok', 0.01961, 0.03839",
+   "verdict": "SAME"
+  },
+  "m3/chamfer_fillet_block": {
+   "now": "'ok', 0.01992, 0.0391, True, False",
+   "baseline_m5_final": "'ok', 0.01992, 0.0391",
+   "verdict": "SAME"
+  },
+  "m3/chamfered_block": {
+   "now": "'ok', 0.01982, 0.0386, True, False",
+   "baseline_m5_final": "'ok', 0.01982, 0.0386",
+   "verdict": "SAME"
+  },
+  "m3/counterbore_plate": {
+   "now": "'ok', 0.01968, 0.03852, True, False",
+   "baseline_m5_final": "'ok', 0.01968, 0.03852",
+   "verdict": "SAME"
+  },
+  "m3/countersunk_plate": {
+   "now": "'ok', 0.01985, 0.03871, True, False",
+   "baseline_m5_final": "'ok', 0.01985, 0.03871",
+   "verdict": "SAME"
+  },
+  "m3/drafted_block": {
+   "now": "'ok', 0.01988, 0.03894, True, False",
+   "baseline_m5_final": "'ok', 0.01988, 0.03894",
+   "verdict": "SAME"
+  },
+  "m3/pipe_elbow": {
+   "now": "'ok', 0.02023, 0.03978, True, False",
+   "baseline_m5_final": "'ok', 0.02023, 0.03978",
+   "verdict": "SAME"
+  },
+  "m3/pocket_plate": {
+   "now": "'ok', 0.01972, 0.03865, True, False",
+   "baseline_m5_final": "'ok', 0.01975, 0.0385",
+   "verdict": "DIFF"
+  },
+  "m3/slotted_plate": {
+   "now": "'ok', 0.01976, 0.03867, True, None",
+   "baseline_m5_final": "'ok', 0.01976, 0.03867",
+   "verdict": "SAME"
+  },
+  "m3/threaded_stud": {
+   "now": "'ok', 0.5758, 0.96024, True, False",
+   "baseline_m5_final": "'ok', 0.5758, 0.96024",
+   "verdict": "SAME"
+  },
+  "coupling": {
+   "now": "'ok', 0.00048, 0.00095, True, False",
+   "baseline_m5_final": "'ok', 0.00048, 0.00095",
+   "verdict": "SAME"
+  },
+  "s04": {
+   "now": "'ok', 0.12785, 0.12934, True, False",
+   "baseline_m5_final": "'ok', 0.12785, 0.12934",
+   "verdict": "SAME"
+  },
+  "s05": {
+   "now": "'ok', 0.12228, 0.13456, True, False",
+   "baseline_m5_final": "'ok', 0.12228, 0.13456",
+   "verdict": "SAME"
+  },
+  "s06": {
+   "now": "'ok', 0.1226, 0.1334, True, False",
+   "baseline_m5_final": "'ok', 0.1226, 0.1334",
+   "verdict": "SAME"
+  },
+  "p01": {
+   "now": "'ok', 0.2217, 0.12832, True, None",
+   "baseline_m5_final": "'ok', 0.22144, 0.12731",
+   "verdict": "DIFF"
+  }
+ },
+ "pytest": "full run before 73d555b: 65 passed, 2 failed (test_screw pump_twin, variable_pitch build accuracy at 0.8 mm edge; never green since 4a29e56, now xfail). After f88bad0: test_bearing_seal 4 passed, test_addin 12 passed, test_screw 5 passed + 2 known failures",
+ "notes": [
+  "pocket_plate rms 0.01975->0.01972, p95 0.0385->0.03865: revolve segment split change, within noise",
+  "p01 rms 0.22144->0.2217, p95 0.12731->0.12832: same cause, under 1 micron rms",
+  "stg1 not re-run in r12 (impeller path unchanged since r11)"
+ ]
+}

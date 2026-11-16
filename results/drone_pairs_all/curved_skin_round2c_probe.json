@@ -1,0 +1,47 @@
+{
+  "WINGTIP L 2": {
+    "ok": false,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.8924 / p95 1.892, solid->mesh p95 1.789 (tol 0.0115)",
+    "solids": 1,
+    "vol_ratio": 0.9984753014184332,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 1.89193,
+      "rms": 0.89243,
+      "solid_to_mesh_p95": 1.78878,
+      "hausdorff": 9.63106
+    },
+    "tol": 0.011505,
+    "faces": 66,
+    "seconds": 1.7473208904266357
+  },
+  "WINGTIP R 2": {
+    "ok": false,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.8909 / p95 1.871, solid->mesh p95 1.956 (tol 0.01218)",
+    "solids": 1,
+    "vol_ratio": 0.9985254362325646,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 1.87106,
+      "rms": 0.89093,
+      "solid_to_mesh_p95": 1.95585,
+      "hausdorff": 9.49663
+    },
+    "tol": 0.01218,
+    "faces": 66,
+    "seconds": 1.6827037334442139
+  },
+  "WING 2 L": {
+    "ok": false,
+    "reason": "loft deviates from the mesh: vertices->solid rms 1.406 / p95 2.98, solid->mesh p95 0.7384 (tol 0.01653)",
+    "solids": 1,
+    "vol_ratio": 0.9983389343470782,
+    "self_check": {
+      "mesh_vertices_to_solid_p95": 2.97977,
+      "rms": 1.40584,
+      "solid_to_mesh_p95": 0.73839,
+      "hausdorff": 9.63709
+    },
+    "tol": 0.01653,
+    "faces": 682,
+    "seconds": 2.298267364501953
+  }
+}

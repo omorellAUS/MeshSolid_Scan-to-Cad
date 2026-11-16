@@ -1,0 +1,412 @@
+{
+ "s04": {
+  "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026); 142.8 OD x 57.2 long, \u00d8100 bore, \u00d892.1 bearing seat (lip)",
+  "prep": {
+   "open_edges": 786,
+   "shells": 1,
+   "out_faces": 60034,
+   "steps": [
+    "merge vertices <1e-3 mm, remove duplicate faces, remove shells < 1% of faces",
+    "close holes <= 1000 edges and mean width <= 2% of bbox diagonal (53 patches, 1014 faces of oversized patches removed again)",
+    "quadric decimation to 60000 faces",
+    "post-decimation close holes, same rule (13 patches, 742 faces removed again)"
+   ]
+  },
+  "status": "failed",
+  "seconds": 82,
+  "last_stage": "done",
+  "tol_mm": 0.067,
+  "noise_sigma_mm": 0.014885654125931172,
+  "mesh_faces": 60048,
+  "regions_segmented": 50,
+  "unassigned_area_pct_after_segmentation": 6.37,
+  "regions_final": 50,
+  "threads_found": 0,
+  "freeform_accepted_of_candidates": [
+   0,
+   0
+  ],
+  "solid_built": false,
+  "local_trim": {
+   "regions_without_piece": 13,
+   "free_edges": 136,
+   "n_shells": 6,
+   "reason": "13 regions produced no trimmed face; 136 free (unsewn) edges - shell not closed; 6 shells after sewing"
+  },
+  "deviation": null,
+  "failure": "analytic solid construction failed (local_trim: 13 regions produced no trimmed face; 136 free (unsewn) edges - shell not closed; 6 shells after sewing). No STEP written."
+ },
+ "s04_v1prep": {
+  "note": "first run, prep had capped the bore with a flat membrane (hole fill, since fixed in eac0953); kept for comparison",
+  "prep": {
+   "open_edges": 46,
+   "shells": 1
+  },
+  "status": "failed",
+  "seconds": 342,
+  "last_stage": "done",
+  "tol_mm": 0.0612,
+  "noise_sigma_mm": 0.013592590233593334,
+  "mesh_faces": 60037,
+  "regions_segmented": 19,
+  "unassigned_area_pct_after_segmentation": 27.37,
+  "regions_final": 19,
+  "threads_found": 0,
+  "freeform_accepted_of_candidates": [
+   0,
+   0
+  ],
+  "solid_built": false,
+  "local_trim": {
+   "regions_without_piece": 3,
+   "free_edges": 22,
+   "n_shells": 3,
+   "reason": "3 regions produced no trimmed face; 22 free (unsewn) edges - shell not closed; 3 shells after sewing"
+  },
+  "deviation": null,
+  "failure": "analytic solid construction failed (local_trim: 3 regions produced no trimmed face; 22 free (unsewn) edges - shell not closed; 3 shells after sewing; cell_decomposition: cell decomposition exceeded its 240 s budget after classifying 45 of 171 cells). No STEP written.",
+  "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026); 142.8 OD x 57.2 long, \u00d8100 bore, \u00d892.1 bearing seat (lip)"
+ },
+ "s01": {
+  "part": "Cummins KTA38 turbocharger compressor wheel, 140 mm, 8+8",
+  "prep": {
+   "open_edges": 66,
+   "shells": 11,
+   "out_faces": 60042
+  },
+  "status": "failed",
+  "seconds": 456,
+  "last_stage": "done",
+  "tol_mm": 1.3256,
+  "noise_sigma_mm": 0.29456957059727423,
+  "mesh_faces": 60112,
+  "regions_segmented": 167,
+  "unassigned_area_pct_after_segmentation": 2.35,
+  "regions_final": 167,
+  "threads_found": 0,
+  "freeform_accepted_of_candidates": [
+   0,
+   8
+  ],
+  "solid_built": false,
+  "local_trim": {
+   "regions_without_piece": 23,
+   "free_edges": 518,
+   "n_shells": 28,
+   "reason": "23 regions produced no trimmed face; 518 free (unsewn) edges - shell not closed; 28 shells after sewing"
+  },
+  "deviation": null,
+  "failure": "analytic solid construction failed: 23 regions produced no trimmed face; 518 free (unsewn) edges - shell not closed; 28 shells after sewing. No STEP written.",
+  "note": "input is an Autodesk-converted STL with overlapping shells; noise estimate 0.29 mm -> tol 1.33 mm, so fits are loose"
+ },
+ "p01": {
+  "part": "TA2000 low-speed pinion",
+  "prep": {
+   "open_edges": 11,
+   "shells": 3,
+   "out_faces": 59999
+  },
+  "status": "failed",
+  "seconds": 632,
+  "last_stage": "done",
+  "tol_mm": 0.1,
+  "noise_sigma_mm": 0.022213432999540247,
+  "mesh_faces": 60006,
+  "regions_segmented": 241,
+  "unassigned_area_pct_after_segmentation": 4.75,
+  "regions_final": 238,
+  "threads_found": 0,
+  "freeform_accepted_of_candidates": [
+   1,
+   1
+  ],
+  "solid_built": false,
+  "local_trim": {
+   "regions_without_piece": 66,
+   "free_edges": 1128,
+   "n_shells": 79,
+   "reason": "66 regions produced no trimmed face; 1128 free (unsewn) edges - shell not closed; 79 shells after sewing"
+  },
+  "deviation": null,
+  "failure": "analytic solid construction failed: 66 regions produced no trimmed face; 1128 free (unsewn) edges - shell not closed; 79 shells after sewing. No STEP written."
+ },
+ "s09": {
+  "part": "TA2000 3rd-stage impeller, 83 mm, 13 blades (CAD export 'Impellor_J03N20003 3RD')",
+  "prep": {
+   "open_edges": 710,
+   "shells": 42,
+   "out_faces": 60077
+  },
+  "status": "crashed",
+  "runs": [
+   "rc=139 (segfault) after 523 s",
+   "rc=139 after 543 s",
+   "hung > 560 s in build, killed by timeout (900 s)"
+  ],
+  "last_stage": "build",
+  "tol_mm": 0.0683,
+  "regions_segmented": 229,
+  "unassigned_area_pct_after_segmentation": 5.78,
+  "regions_final": 207,
+  "threads_found": 0,
+  "freeform_accepted_of_candidates": [
+   9,
+   13
+  ],
+  "solid_built": false,
+  "failure": "OCC BRepAlgoAPI_Splitter hangs or segfaults in local trim when splitting one accepted B-spline cluster face by its ~95 neighbouring tool faces (mostly tori and cylinders on the blades). Found by replaying the pickled pre-build state with a logging wrapper.",
+  "m5_observations": "13 full blades, no splitters, open; the blade surfaces segment into many tori/cylinders; freeform merged 9 of 13 smooth clusters (rms 0.019-0.030 mm) but a blade+hub cluster borders ~95 regions"
+ },
+ "s07": {
+  "part": "TA2000 3rd-stage impeller, raw scan (watertight)",
+  "prep": {
+   "open_edges": 0,
+   "shells": 1,
+   "out_faces": 59998
+  },
+  "status": "failed",
+  "seconds": 1724,
+  "runs": [
+   "timeout 900 s in build (x2)",
+   "1800 s cap: finished in 1726 s"
+  ],
+  "tol_mm": 0.0456,
+  "regions_segmented": 402,
+  "unassigned_area_pct_after_segmentation": 3.63,
+  "regions_final": 282,
+  "threads_found": 0,
+  "freeform_accepted_of_candidates": [
+   31,
+   44
+  ],
+  "build_seconds": 1235,
+  "solid_built": false,
+  "local_trim": {
+   "regions_without_piece": 29,
+   "free_edges": 2251,
+   "n_shells": 88
+  },
+  "failure": "analytic solid construction failed (local_trim: 29 regions produced no trimmed face; 2251 free (unsewn) edges - shell not closed; 88 shells after sewing). No STEP written.",
+  "stage_times": {
+   "load_repair": 0.0,
+   "segmentation": 2.83,
+   "coaxial_refit": 418.0,
+   "threads": 418.26,
+   "freeform": 418.4,
+   "snapping": 485.82,
+   "blends": 486.3,
+   "fit_stats": 487.39,
+   "build": 487.47,
+   "deviation": 1722.41,
+   "preview": 1722.49,
+   "done": 1723.92
+  }
+ },
+ "s04_consolidate": {
+  "code": "consolidate + faceless-release retries",
+  "status": "failed",
+  "consolidate": {
+   "regions_before": 50,
+   "regions_after": 35,
+   "ops": {
+    "absorbed_small": 6,
+    "degenerate_to_plane": 6,
+    "same_surface": 8,
+    "unassigned": 1
+   }
+  },
+  "attempts": [
+   {
+    "method": "local_trim",
+    "reason": "9 regions produced no trimmed face; 67 free (unsewn) edges - shell not closed; 3 shells after sewing",
+    "regions_without_piece": [
+     19,
+     25,
+     27,
+     29,
+     36,
+     38,
+     41,
+     42,
+     49
+    ],
+    "released_regions": null,
+    "free_edges": 67,
+    "n_shells": 3
+   },
+   {
+    "method": "local_trim_retry1",
+    "reason": "1 regions produced no trimmed face; 47 free (unsewn) edges - shell not closed; 4 shells after sewing",
+    "regions_without_piece": [
+     43
+    ],
+    "released_regions": [
+     19,
+     25,
+     27,
+     29,
+     36,
+     38,
+     41,
+     42,
+     49
+    ],
+    "free_edges": 47,
+    "n_shells": 4
+   },
+   {
+    "method": "local_trim_retry2",
+    "reason": "43 free (unsewn) edges - shell not closed; 4 shells after sewing",
+    "regions_without_piece": [],
+    "released_regions": [
+     43
+    ],
+    "free_edges": 43,
+    "n_shells": 4
+   }
+  ],
+  "free_edges_near_regions": {
+   "2": 11,
+   "7": 7,
+   "5": 5,
+   "31": 4,
+   "15": 3,
+   "47": 3,
+   "35": 2,
+   "45": 2,
+   "48": 2,
+   "28": 1,
+   "37": 1,
+   "40": 1,
+   "16": 1
+  },
+  "unfilled_hole_sizes_mm": [
+   8.572,
+   9.036,
+   11.449,
+   14.782,
+   14.795,
+   30.411,
+   43.898,
+   43.9,
+   82.926,
+   84.11,
+   142.552,
+   149.507
+  ],
+  "seconds": 91.46,
+  "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026); 142.8 OD x 57.2 long, \u00d8100 bore, \u00d892.1 bearing seat (lip)"
+ },
+ "s04_revolve": {
+  "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026)",
+  "code": "6278ae6",
+  "status": "ok",
+  "builder": "revolve_profile",
+  "n_solids": 1,
+  "volume": 449361.6,
+  "gate_vertices_rms_p95": [
+   0.0648,
+   0.1218
+  ],
+  "all_vertices_rms_p95": [
+   0.1278,
+   0.1293
+  ],
+  "solid_to_mesh_scanned_p95": 0.0693,
+  "scan_coverage": 0.9525,
+  "limits_rms_p95": [
+   0.1005,
+   0.201
+  ],
+  "excluded_from_gate": {
+   "thread_zone_faces": 0,
+   "hole_fill_artifact_faces": 281,
+   "balance_cut_faces": 0,
+   "unscanned_solid_frac": 0.0475
+  }
+ },
+ "s05_revolve": {
+  "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026)",
+  "code": "6278ae6",
+  "status": "ok",
+  "builder": "revolve_profile",
+  "n_solids": 1,
+  "volume": 449402.4,
+  "gate_vertices_rms_p95": [
+   0.0656,
+   0.1261
+  ],
+  "all_vertices_rms_p95": [
+   0.1223,
+   0.1346
+  ],
+  "solid_to_mesh_scanned_p95": 0.0685,
+  "scan_coverage": 0.953,
+  "limits_rms_p95": [
+   0.103,
+   0.2061
+  ],
+  "excluded_from_gate": {
+   "thread_zone_faces": 0,
+   "hole_fill_artifact_faces": 265,
+   "balance_cut_faces": 0,
+   "unscanned_solid_frac": 0.047
+  }
+ },
+ "s06_revolve": {
+  "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026)",
+  "code": "6278ae6",
+  "status": "ok",
+  "builder": "revolve_profile",
+  "n_solids": 1,
+  "volume": 449492.3,
+  "gate_vertices_rms_p95": [
+   0.073,
+   0.1264
+  ],
+  "all_vertices_rms_p95": [
+   0.1226,
+   0.1334
+  ],
+  "solid_to_mesh_scanned_p95": 0.0691,
+  "scan_coverage": 0.9528,
+  "limits_rms_p95": [
+   0.1072,
+   0.2143
+  ],
+  "excluded_from_gate": {
+   "thread_zone_faces": 0,
+   "hole_fill_artifact_faces": 215,
+   "balance_cut_faces": 0,
+   "unscanned_solid_frac": 0.0472
+  }
+ },
+ "p01_rerun_30oct": {
+  "part": "TA2000 low-speed pinion",
+  "code": "a780593",
+  "status": "failed",
+  "failure": "analytic solid construction failed (local_trim: 68 regions produced no trimmed face; 904 free (unsewn) edges - shell not closed; 79 shells after sewing; local_trim_retry1: 26 regions produced no trimmed face; 677 free (unsewn) edges - shell not closed; 38 shells after sewing; local_trim_retry2: 8 regions produced no trimmed face; 607 free (unsewn) edges - shell not closed; 38 shells after sewing; revolve_profile: not a turned part: coaxial area 66.6% < 85%). No STEP written.",
+  "attempts": [
+   {
+    "method": "local_trim",
+    "ok": false,
+    "reason": "68 regions produced no trimmed face; 904 free (unsewn) edges - shell not closed; 79 shells after sewing"
+   },
+   {
+    "method": "local_trim_retry1",
+    "ok": false,
+    "reason": "26 regions produced no trimmed face; 677 free (unsewn) edges - shell not closed; 38 shells after sewing"
+   },
+   {
+    "method": "local_trim_retry2",
+    "ok": false,
+    "reason": "8 regions produced no trimmed face; 607 free (unsewn) edges - shell not closed; 38 shells after sewing"
+   },
+   {
+    "method": "revolve_profile",
+    "ok": false,
+    "reason": "not a turned part: coaxial area 66.6% < 85%"
+   }
+  ]
+ }
+}

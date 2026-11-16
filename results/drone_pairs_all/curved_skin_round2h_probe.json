@@ -1,0 +1,47 @@
+{
+  "WINGTIP L 2": {
+    "ok": false,
+    "tol": 0.011505,
+    "vol_ratio": 0.99885,
+    "self_check": {
+      "rms": 0.05855,
+      "mesh_vertices_to_solid_p95": 0.1021,
+      "solid_to_mesh_p95": 0.01394
+    },
+    "gates": {
+      "rms": 0.01726,
+      "p95": 0.03452
+    },
+    "seconds": 12.2
+  },
+  "WINGTIP R 2": {
+    "ok": false,
+    "tol": 0.01218,
+    "vol_ratio": 0.99927,
+    "self_check": {
+      "rms": 0.06036,
+      "mesh_vertices_to_solid_p95": 0.10751,
+      "solid_to_mesh_p95": 0.01335
+    },
+    "gates": {
+      "rms": 0.01827,
+      "p95": 0.03654
+    },
+    "seconds": 11.2
+  },
+  "WING 2 L": {
+    "ok": false,
+    "note": "planar-cap; eval hung past time_budget this round; prior rms~0.83",
+    "self_check": {
+      "rms": 0.83
+    }
+  },
+  "bspline_compare": {
+    "thru_sections_L2_rms": 0.05855,
+    "ul_open_ls_vert_rms": 0.156,
+    "vert_periodic_ls_sampler_rms": 0.182,
+    "verdict": "ThruSections remains better; B-spline LS (section param + UL / periodic) does not reach vertex gate and is worse than loft"
+  },
+  "pipeline_wire": false,
+  "vertex_self_check_green": false
+}

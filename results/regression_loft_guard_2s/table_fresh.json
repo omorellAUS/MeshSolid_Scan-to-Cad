@@ -1,0 +1,259 @@
+{
+  "coupling_pytest": {
+    "status": "ok",
+    "note": "1 passed (-m slow -o addopts=); local mechanical STL restored"
+  },
+  "coupling": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.00048278025324105566,
+    "gate": true,
+    "failure": "",
+    "volume": 37390.46070221676,
+    "device": "cpu",
+    "seconds": 100.47066807746887
+  },
+  "s04": {
+    "status": "failed",
+    "build_method": "cell_decomposition",
+    "routed_to_loft": false,
+    "rms": null,
+    "gate": null,
+    "failure": "analytic solid construction failed (local_trim: no trimmed faces; revolve_profile: profile collapsed; cell_decomposition: no cell classified",
+    "volume": 0.0,
+    "device": "cpu",
+    "seconds": 45.54458165168762
+  },
+  "s05": {
+    "status": "failed",
+    "build_method": "revolve_profile",
+    "routed_to_loft": false,
+    "rms": 6.467511625562271,
+    "gate": false,
+    "failure": "solid is valid but deviates from the mesh beyond acceptance limits; STEP not written (likely missing/incorrect surfaces)",
+    "volume": 368636.84768429724,
+    "device": "cpu",
+    "seconds": 74.6948413848877
+  },
+  "s06": {
+    "status": "failed",
+    "build_method": "revolve_profile",
+    "routed_to_loft": false,
+    "rms": 2.7214373246641874,
+    "gate": false,
+    "failure": "solid is valid but deviates from the mesh beyond acceptance limits; STEP not written (likely missing/incorrect surfaces)",
+    "volume": 466433.72287455533,
+    "device": "cpu",
+    "seconds": 70.40368723869324
+  },
+  "p01": {
+    "status": "failed",
+    "build_method": "revolve_profile",
+    "routed_to_loft": false,
+    "rms": null,
+    "gate": null,
+    "failure": "analytic solid construction failed (revolve_profile: not a turned part: coaxial area 79.5% < 85%). No STEP written.",
+    "volume": 0.0,
+    "device": "cpu",
+    "seconds": 188.25641131401062
+  },
+  "s07": {
+    "status": "failed",
+    "build_method": "impeller",
+    "routed_to_loft": false,
+    "rms": 1.1581442139326663,
+    "gate": false,
+    "failure": "impeller solid is valid but deviates beyond the acceptance limits; STEP not written",
+    "volume": 37162.052449552335,
+    "device": "cpu",
+    "seconds": 940.5222470760345
+  },
+  "s09": {
+    "status": "failed",
+    "build_method": "impeller",
+    "routed_to_loft": false,
+    "rms": 0.1054578013005837,
+    "gate": false,
+    "failure": "impeller solid is valid but deviates beyond the acceptance limits; STEP not written",
+    "volume": 38370.35116048811,
+    "device": "cpu",
+    "seconds": 978.973397731781
+  },
+  "stg1": {
+    "status": "incomplete",
+    "build_method": null,
+    "routed_to_loft": false,
+    "rms": null,
+    "gate": null,
+    "failure": "process ended during stage 'impeller' (crash or kill)",
+    "volume": null,
+    "device": "cpu",
+    "seconds": null
+  },
+  "s04_prepped": {
+    "status": "ok",
+    "build_method": "revolve_profile",
+    "routed_to_loft": false,
+    "rms": 0.1278484021417583,
+    "gate": true,
+    "failure": "",
+    "volume": 449361.64087638154,
+    "device": "cpu",
+    "seconds": 188.38194227218628
+  },
+  "s05_prepped": {
+    "status": "ok",
+    "build_method": "revolve_profile",
+    "routed_to_loft": false,
+    "rms": 0.12227724663370809,
+    "gate": true,
+    "failure": "",
+    "volume": 449402.395316587,
+    "device": "cpu",
+    "seconds": 127.01334810256958
+  },
+  "s06_prepped": {
+    "status": "ok",
+    "build_method": "revolve_profile",
+    "routed_to_loft": false,
+    "rms": 0.12260192772200144,
+    "gate": true,
+    "failure": "",
+    "volume": 449492.2613496728,
+    "device": "cpu",
+    "seconds": 88.12051200866699
+  },
+  "m3/bolt_circle_flange.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.019606168171429916,
+    "gate": true,
+    "failure": "",
+    "volume": 18749.02495662389,
+    "device": "cpu",
+    "seconds": 7.7104456424713135
+  },
+  "m3/chamfer_fillet_block.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.019920884250688897,
+    "gate": true,
+    "failure": "",
+    "volume": 23721.000459721,
+    "device": "cpu",
+    "seconds": 32.90172219276428
+  },
+  "m3/chamfered_block.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.019819338639993255,
+    "gate": true,
+    "failure": "",
+    "volume": 21431.279020851616,
+    "device": "cpu",
+    "seconds": 12.827770471572876
+  },
+  "m3/counterbore_plate.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.019683194196115146,
+    "gate": true,
+    "failure": "",
+    "volume": 21074.07511702252,
+    "device": "cpu",
+    "seconds": 11.983853101730347
+  },
+  "m3/countersunk_plate.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.0198502536314294,
+    "gate": true,
+    "failure": "",
+    "volume": 11742.459909525951,
+    "device": "cpu",
+    "seconds": 11.408762216567993
+  },
+  "m3/drafted_block.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.019879825621863367,
+    "gate": true,
+    "failure": "",
+    "volume": 21630.90002063901,
+    "device": "cpu",
+    "seconds": 14.616747379302979
+  },
+  "m3/pipe_elbow.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.020920969978274626,
+    "gate": true,
+    "failure": "",
+    "volume": 22817.00257884416,
+    "device": "cpu",
+    "seconds": 51.30585336685181
+  },
+  "m3/pocket_plate.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.019716257934788727,
+    "gate": true,
+    "failure": "",
+    "volume": 24130.40682012128,
+    "device": "cpu",
+    "seconds": 18.549132585525513
+  },
+  "m3/slotted_plate.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.01976254676101615,
+    "gate": true,
+    "failure": "",
+    "volume": 18030.008337601615,
+    "device": "cpu",
+    "seconds": 15.394467830657959
+  },
+  "m3/threaded_stud.report": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.5758023879800915,
+    "gate": true,
+    "failure": "",
+    "volume": 4184.601416153702,
+    "device": "cpu",
+    "seconds": 125.10308313369751
+  },
+  "smoke_tip2L": {
+    "status": "ok",
+    "build_method": "section_loft",
+    "routed_to_loft": true,
+    "rms": 0.04229,
+    "gate": true,
+    "failure": "",
+    "volume": 61152.56410969256,
+    "device": "cpu",
+    "seconds": 21.62473702430725
+  },
+  "smoke_coupling": {
+    "status": "ok",
+    "build_method": "local_trim+maker_volume",
+    "routed_to_loft": false,
+    "rms": 0.00048278025324105566,
+    "gate": true,
+    "failure": "",
+    "volume": 37390.46070221676,
+    "device": "cpu",
+    "seconds": 83.86854982376099
+  }
+}

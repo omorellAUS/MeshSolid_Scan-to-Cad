@@ -1,0 +1,73 @@
+# GUI flow of the MeshSolid workbench under a real FreeCAD event loop (run with xvfb-run freecad).
+# Event-driven: a watcher timer steps through: run -> review -> import; failure run; cancel run.
+import json, os, time
+import FreeCAD, FreeCADGui, Mesh
+from PySide import QtCore
+
+RES = os.environ["MS_FC_RESULT"]; MESH = os.environ["MS_FC_MESH"]
+out = {"steps": []}
+def done():
+    open(RES, "w").write(json.dumps(out, default=str)); os._exit(0)
+try:
+    FreeCADGui.activateWorkbench("MeshSolidWorkbench")
+    from freecad_meshsolid import gui
+    msgs = []; gui._msg = lambda t, x, *a: msgs.append((t, x))
+    doc = FreeCAD.newDocument("flow")
+    m = doc.addObject("Mesh::Feature", "scan"); m.Mesh = Mesh.Mesh(MESH); doc.recompute()
+    FreeCADGui.Selection.clearSelection(); FreeCADGui.Selection.addSelection(m)
+    FreeCADGui.runCommand("MeshSolid_MeshToSolid")
+    rp = gui._last_run
+    out["source_label"] = rp.src.text()
+    rp.accept(); out["steps"].append("run started")
+except Exception as e:  # noqa: BLE001
+    import traceback; out["error"] = traceback.format_exc(); done()
+
+st = {"phase": "wait_review", "t0": time.time()}
+def step():
+    try:
+        ph = st["phase"]
+        if any(t == "add-in error" for t, _ in msgs):
+            out["error"] = f"add-in error: {msgs}"; done()
+        if time.time() - st["t0"] > 280:
+            out["error"] = f"timeout in phase {ph}; msgs {msgs}"; done()
+        if ph == "wait_review" and gui._last_review is None:
+            try:
+                st["last_status"] = rp.status.text()
+            except RuntimeError:
+                pass
+        if ph == "wait_review" and gui._last_review is not None:
+            rv = gui._last_review
+            out["review_groups"] = {g: cb.isChecked() for g, cb in rv.boxes.items()}
+            out["progress_text"] = st.get("last_status")
+            rv.boxes and [cb.setChecked(True) for cb in rv.boxes.values()]
+            rv.accept()
+            sol = [o for o in doc.Objects if o.TypeId == "Part::Feature"]
+            sh = doc.getObject("MeshSolidParams")
+            out["solids"] = [(o.Name, len(o.Shape.Solids), o.Shape.isValid(), round(o.Shape.Volume, 1)) for o in sol]
+            out["sheet_rows"] = [[sh.getContents(f"{c}{r}") for c in "ABCDE"] for r in range(1, 4)] if sh else None
+            out["alias_value"] = str(sh.get("ms_D1")) if sh else None
+            out["import_msg"] = msgs[-1] if msgs else None
+            out["steps"].append("imported")
+            # failure path: a file that is not a mesh
+            bad = os.path.join(os.path.dirname(RES), "bad.stl"); open(bad, "wb").write(b"not a mesh")
+            FreeCADGui.Selection.clearSelection()
+            st["rp2"] = gui.RunPanel(); FreeCADGui.Control.showDialog(st["rp2"])
+            st["rp2"].file.setText(bad); st["nmsg"] = len(msgs); st["rp2"].accept()
+            st["phase"] = "wait_fail"
+        elif ph == "wait_fail" and len(msgs) > st["nmsg"]:
+            out["failure_msg"] = msgs[-1]
+            out["steps"].append("failure reported")
+            st["rp3"] = gui.RunPanel(); FreeCADGui.Control.showDialog(st["rp3"])
+            st["rp3"].file.setText(MESH); st["nmsg"] = len(msgs); st["rp3"].accept(); st["tc"] = time.time()
+            st["phase"] = "cancel"
+        elif ph == "cancel" and time.time() - st["tc"] > 1.5:
+            st["rp3"].reject(); st["phase"] = "wait_cancel"
+        elif ph == "wait_cancel" and len(msgs) > st["nmsg"]:
+            out["cancel_msg"] = msgs[-1]; out["steps"].append("cancel reported")
+            out["dialog_open_at_end"] = bool(FreeCADGui.Control.activeDialog())
+            done()
+    except Exception:  # noqa: BLE001
+        import traceback; out["error"] = traceback.format_exc(); done()
+
+T = QtCore.QTimer(); T.timeout.connect(step); T.start(300)
+FreeCADGui._ms_test_timer = T

@@ -1,0 +1,47 @@
+{
+  "full_rms": 0.57274,
+  "skin_rms_excl_top_pockets": 0.18811,
+  "n_feat_excluded": 212,
+  "sse_feat_frac": 0.9178,
+  "skin_rms_d_lt_0p5": 0.17604,
+  "prism_cuts": [
+    {
+      "centroid": [
+        353.06,
+        17.25,
+        467.8
+      ],
+      "extents": [
+        10.52,
+        9.52,
+        12.82
+      ],
+      "n": 111,
+      "ok": true,
+      "vol_ratio": 1.0094
+    },
+    {
+      "centroid": [
+        369.92,
+        17.73,
+        508.83
+      ],
+      "extents": [
+        8.47,
+        9.2,
+        7.49
+      ],
+      "n": 97,
+      "ok": true,
+      "vol_ratio": 1.0082
+    }
+  ],
+  "after_prism_cuts_rms": 0.58643,
+  "envelope_loft_rms": 3.20524,
+  "plan": [
+    "1. Loft outer skin from feature-suppressed sections (bridge pocket arcs or convex envelope on high-corner stations).",
+    "2. Segment residual clusters as primitives (OBB prism / cylinder) via fit.py.",
+    "3. BRepAlgoAPI_Cut (pockets/slots) or Fuse (bosses) onto skin solid \u2014 reuse build_local cut pattern.",
+    "4. Score skin-only and full; keep wingtip floors."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "autodeskProduct": "Fusion",
+  "type": "addin",
+  "id": "cfbd9e8b-dd9d-4562-9b46-8b86febf90d1",
+  "author": "Olly Ross",
+  "description": {
+    "": "Mesh body or STL/OBJ file -> one solid body via the meshsolid engine (personal use)"
+  },
+  "version": "1.0.2",
+  "runOnStartup": false,
+  "supportedOS": "windows",
+  "editEnabled": true
+}

@@ -1,0 +1,272 @@
+{
+ "part": "TA2000 bull gear drive end (DE) bearing casing (s04; s05/s06 are the same part scanned differently)",
+ "run": "current code (commits a780593, 3202c44), CLI python -m meshsolid s04_prep.stl; out/user/r6",
+ "status": "ok",
+ "builder": "revolve_profile (after local trim and 2 retries failed: 43 free edges, 4 shells)",
+ "solid": {
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "n_faces": 35,
+  "volume_mm3": 449361.6
+ },
+ "why_local_trim_failed": "the scan has no data on the lower face of the internal groove, and the groove bottom is covered only in patches (fitted by duplicate cylinder/sphere/torus regions); sewing cannot close a face that has no data",
+ "what_fixed_it": [
+  "revolve builder: coaxial surfaces -> 2D (r,z) profile -> chain, synthesising the unscanned groove face; revolve 360 deg",
+  "fillet-aware overlap suppression + joint insertion keeps edge rounds",
+  "profile line offsets refit on all scan vertices near them",
+  "holes: concave non-coaxial cylinders cut, axis snapped parallel within 3 deg, rotational copies found by matching the hole wall on the scan",
+  "bosses: protrusions outside the solid modelled as radial/axial cylinder bosses (hollow if the scan shows a bore), kept only if they bring their own scan points closer"
+ ],
+ "deviation": {
+  "limits": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95); hole-fill artefact faces excluded (scan surface across a hole bore with the hole wall continuing past it); solid->mesh over the scanned part of the solid only (open scan: solid surface nearest to the scan's open boundary was not scanned)",
+   "rms_limit": 0.1004781653500354,
+   "p95_limit": 0.2009563307000708,
+   "solid_to_mesh_p95_limit": 0.24118550791016882,
+   "facet_sag_p95": 0.04022917721009802,
+   "passed": true
+  },
+  "mesh_vertices_to_solid_all": {
+   "max": 4.041413199995483,
+   "mean": 0.04042312617063372,
+   "rms": 0.1278484021634269,
+   "p95": 0.1293418688783034,
+   "n": 30398
+  },
+  "mesh_vertices_to_solid_gate": {
+   "max": 0.7959361626508523,
+   "mean": 0.033850532847861194,
+   "rms": 0.06483203655238579,
+   "p95": 0.12179675830133799,
+   "n": 30185
+  },
+  "solid_to_mesh_all": {
+   "max": 6.190818453419998,
+   "mean": 0.16483685698513648,
+   "rms": 0.699045348018631,
+   "p95": 0.8619191517760793,
+   "n": 30000
+  },
+  "solid_to_mesh_scanned": {
+   "max": 6.079968309811377,
+   "mean": 0.048862121847981166,
+   "rms": 0.319396998931067,
+   "p95": 0.06928845178382952,
+   "n": 28574
+  },
+  "scan_coverage": {
+   "covered_frac": 0.9524666666666667,
+   "open_boundary_edges": 772
+  }
+ },
+ "excluded_from_gate": {
+  "thread_zone_faces": 0,
+  "hole_fill_artifact_faces": 281,
+  "balance_cut_faces": 0,
+  "hole_fill_artifacts": [
+   {
+    "hole_region": 37,
+    "pattern_angle_deg": 0.0,
+    "faces": 53,
+    "area_mm2": 21.93,
+    "hole_cross_section_mm2": 23.76,
+    "wall_beyond_cap_mm": 2.12,
+    "why": "surface across the hole bore with hole wall continuing past it"
+   },
+   {
+    "hole_region": 37,
+    "pattern_angle_deg": 89.9,
+    "faces": 45,
+    "area_mm2": 19.06,
+    "hole_cross_section_mm2": 23.76,
+    "wall_beyond_cap_mm": 3.06,
+    "why": "surface across the hole bore with hole wall continuing past it"
+   },
+   {
+    "hole_region": 37,
+    "pattern_angle_deg": 180.1,
+    "faces": 44,
+    "area_mm2": 20.61,
+    "hole_cross_section_mm2": 23.76,
+    "wall_beyond_cap_mm": 2.44,
+    "why": "surface across the hole bore with hole wall continuing past it"
+   },
+   {
+    "hole_region": 37,
+    "pattern_angle_deg": 270.1,
+    "faces": 44,
+    "area_mm2": 19.12,
+    "hole_cross_section_mm2": 23.76,
+    "wall_beyond_cap_mm": 2.37,
+    "why": "surface across the hole bore with hole wall continuing past it"
+   },
+   {
+    "hole_region": 38,
+    "pattern_angle_deg": 0.0,
+    "faces": 95,
+    "area_mm2": 78.23,
+    "hole_cross_section_mm2": 95.03,
+    "wall_beyond_cap_mm": 3.33,
+    "why": "surface across the hole bore with hole wall continuing past it"
+   }
+  ],
+  "unscanned_solid_frac": 0.0475
+ },
+ "hole_fill_verification": "the caps exist in the user's ORIGINAL s04.stl (cap centroids 0.000-0.007 mm from the original surface; not made by our prep), their triangles are 2.4-3.4x the scan's median size, and the hole wall continues 2.1-3.3 mm past each cap, which a real hole floor cannot do: scanner-software hole fill",
+ "dimensions": [
+  {
+   "feature": "OD (main)",
+   "measured_mm": 142.826,
+   "design_intent_mm": 142.8,
+   "delta_mm": -0.026,
+   "note": "|delta| < tol"
+  },
+  {
+   "feature": "Bore",
+   "measured_mm": 100.026,
+   "design_intent_mm": 100.0,
+   "delta_mm": -0.026,
+   "flag": "check fit",
+   "note": "snapped (|delta| 0.026 < tol); confirm whether this bore is fit-critical"
+  },
+  {
+   "feature": "Bearing seat bore (lip ID; the user's 91.8 bore)",
+   "measured_mm": 92.103,
+   "flag": "bearing seat - fit/clearance to be confirmed against the bearing OD",
+   "note": "bearing seat: kept at the measured size, not snapped. It measures 0.30 mm larger than the user's 91.8, which is 4.5x the 0.067 mm tolerance: worn/oversize seat, measured at a different depth, or a different reference. Confirm with a bore gauge."
+  },
+  {
+   "feature": "Overall length",
+   "measured_mm": 57.206,
+   "design_intent_mm": 57.2,
+   "delta_mm": -0.006
+  },
+  {
+   "feature": "Bearing-seat lip depth (top face to lip shoulder)",
+   "measured_mm": 9.233,
+   "note": "kept measured"
+  },
+  {
+   "feature": "Internal groove diameter (likely oil groove)",
+   "measured_mm": 115.838,
+   "note": "refit on all scan vertices (cylinder fit 115.40 was pulled low by sparse data); kept measured"
+  },
+  {
+   "feature": "Internal groove width (axial)",
+   "measured_mm": 8.045,
+   "design_intent_mm": 8.0,
+   "delta_mm": -0.045,
+   "note": "lower face not scanned - synthesised at the end of the groove-bottom data, so the width is a lower bound"
+  },
+  {
+   "feature": "Internal groove: upper face from top face",
+   "measured_mm": 35.11
+  },
+  {
+   "feature": "OD groove diameter (likely O-ring / oil groove)",
+   "measured_mm": 137.279,
+   "note": "kept measured; groove depth 2.77 mm radial"
+  },
+  {
+   "feature": "OD groove width",
+   "measured_mm": 4.731,
+   "note": "kept measured; O-ring groove widths are standardised - check against the O-ring section"
+  },
+  {
+   "feature": "OD groove: lower flank from bottom face",
+   "measured_mm": 20.625
+  },
+  {
+   "feature": "4x blind holes (likely oil feed / locating) diameter",
+   "measured_mm": 5.481,
+   "design_intent_mm": 5.5,
+   "delta_mm": 0.019,
+   "note": "4 off at 90 deg (pattern found from 1 fitted hole, copies verified on the scan), depth 6.53 to the end of the wall data, axis snapped parallel to the part axis (fit was 2.3 deg off); depth is the end of the scanned wall (4.8-7.3 across s04/s05/s06), so it is a lower bound"
+  },
+  {
+   "feature": "4x blind holes PCD",
+   "measured_mm": 126.94,
+   "design_intent_mm": 127.0,
+   "delta_mm": 0.06
+  },
+  {
+   "feature": "Blind hole top face diameter",
+   "measured_mm": 11.002,
+   "design_intent_mm": 11.0,
+   "delta_mm": -0.002,
+   "note": "1 off, depth 4.66, at 45.0 deg from the 4-hole pattern, PCD 119.1"
+  },
+  {
+   "feature": "Radial hollow pin / lug (likely anti-rotation feature) OD",
+   "measured_mm": 6.349,
+   "note": "protrudes 4.33 mm from the OD, bore 3.92 x 2.84 deep, 8.55 mm below the top face, at 49 deg from a 4-hole position; kept measured (possible 6.35 = 1/4 in)"
+  },
+  {
+   "feature": "Edge rounds",
+   "measured_mm": null,
+   "note": "OD top R1.23, OD bottom R1.23, OD groove edges R0.46/R0.50, bore bottom R0.63, groove fillet R1.09, seat lip R0.82"
+  }
+ ],
+ "tolerance_mm": 0.06698544356669027,
+ "remaining_local_deviation": "edge breaks at the hole mouths (~R1.2, not modelled), seat lip top edge, and a small local feature on the lip top at about 0-30 deg (regions 31/48); unmodelled small regions listed in the report",
+ "feature_roles_user": {
+  "bearing seat": "the user's 91.8 bore = lip ID, measured \u00d892.10, kept at measured size with a fit/clearance flag",
+  "OD groove \u00d8137.3 x 4.73": "likely O-ring or oil groove (design feature)",
+  "internal groove \u00d8115.8": "likely oil groove (design feature)",
+  "4x \u00d85.5 blind on PCD 127 at 90 deg + 1x \u00d811 at 45 deg": "likely oil feed / locating holes (design features)",
+  "radial hollow pin OD 6.35 / ID 3.92, 4.33 proud": "likely anti-rotation feature (design feature)"
+ },
+ "cross_check_s05_s06": {
+  "status": {
+   "s04": "ok",
+   "s05": "ok",
+   "s06": "ok"
+  },
+  "gate_rms_p95": {
+   "s04": [
+    0.065,
+    0.122
+   ],
+   "s05": [
+    0.066,
+    0.126
+   ],
+   "s06": [
+    0.073,
+    0.126
+   ]
+  },
+  "solid_to_mesh_scanned_p95": {
+   "s04": 0.069,
+   "s05": 0.068,
+   "s06": 0.069
+  },
+  "OD": [
+   142.826,
+   142.826,
+   142.824
+  ],
+  "bore": [
+   100.0,
+   100.0,
+   100.0
+  ],
+  "bearing_seat": [
+   92.102,
+   92.102,
+   92.104
+  ],
+  "internal_groove_d": [
+   115.838,
+   115.888,
+   115.84
+  ],
+  "length": [
+   57.206,
+   57.204,
+   57.203
+  ],
+  "holes": "s04: 4x \u00d85.5 from a fitted hole + pattern, \u00d811 fitted; s05: all 5 from unfitted scan clusters (\u00d85.36-5.51, \u00d810.94, centre radius 63.42-63.48 / 59.55); s06: 4x \u00d85.5 pattern + \u00d811 from a cluster",
+  "pin": "OD 6.349 / ID 3.919 / 4.33 proud in all three"
+ }
+}

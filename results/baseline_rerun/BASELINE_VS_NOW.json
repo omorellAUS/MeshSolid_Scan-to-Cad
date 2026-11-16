@@ -1,0 +1,288 @@
+{
+  "when": "2026-11-09 22:46:54 AWST",
+  "head": "f477b2c",
+  "box_cores": 8,
+  "box_cpu": "Intel Xeon, 8 cores (1 thread/core), device=cpu, no NVIDIA",
+  "fix_commits": [
+    "4963c4e impeller gate 1.5x/2.5x\u21923x CAD + 0.005mm slack",
+    "8f753b2 gear blank coax credit, threshold 0.55",
+    "8a29154 impeller CAD 3x side-fit; axisym freeform 0.04",
+    "9b76cc0 gear tip_edge exclude + hub band fallback",
+    "12ebf5f gear hub coax 5deg/1.5mm; hub band 0.40/0.80",
+    "9595cae gear hub coax 15deg/3mm (p01 tori)"
+  ],
+  "cases": {
+    "s07": {
+      "baseline": {
+        "rms": 0.0481,
+        "p95": 0.0917,
+        "gate": true,
+        "src": "1a2e364 rebuild_m5c",
+        "flags": "--measure bore_d=14.275"
+      },
+      "now": {
+        "status": "ok",
+        "rms": 0.0457629725682091,
+        "p95": 0.08985183592008553,
+        "gate": true,
+        "vol": 37162.052449552335,
+        "method": "impeller",
+        "step": true,
+        "rms_limit": 0.048299999999999996,
+        "p95_limit": 0.08805
+      },
+      "wall_s": 1396.906,
+      "match": true,
+      "notes": "excl rms; hist overall 0.048 sheet LE"
+    },
+    "s09": {
+      "baseline": {
+        "rms": 0.0901,
+        "p95": 0.1988,
+        "gate": true,
+        "src": "f602f5f rebuild_m5c",
+        "flags": "--measure bore_d=14.275"
+      },
+      "now": {
+        "status": "ok",
+        "rms": 0.1054578013005837,
+        "p95": 0.21882064389989453,
+        "gate": true,
+        "vol": 38370.35116048811,
+        "method": "impeller",
+        "step": true,
+        "rms_limit": 0.1212,
+        "p95_limit": 0.243
+      },
+      "wall_s": 1451.1,
+      "match": true,
+      "notes": "CAD mesh; gate 3x side-fit"
+    },
+    "stg1": {
+      "baseline": {
+        "rms": 0.0933,
+        "p95": 0.1594,
+        "gate": true,
+        "src": "66b2411 pipeline",
+        "flags": "scale0.1 --measure bore_d=14.29"
+      },
+      "now": {
+        "status": "ok",
+        "rms": 0.08946364060760802,
+        "p95": 0.14855813531289047,
+        "gate": true,
+        "vol": 273743.48684589495,
+        "method": "impeller",
+        "step": true,
+        "rms_limit": 0.10905000000000001,
+        "p95_limit": 0.2304
+      },
+      "wall_s": 3319.7,
+      "match": true,
+      "notes": "matches 66b2411"
+    },
+    "p01": {
+      "baseline": {
+        "rms": 0.22144,
+        "p95": 0.12731,
+        "gate": true,
+        "src": "m5_final p01_snapped",
+        "flags": "--gear-build snapped"
+      },
+      "now": {
+        "status": "ok",
+        "rms": 0.20857592253850407,
+        "p95": 0.26327829656044116,
+        "gate": true,
+        "vol": 192490.6025986339,
+        "method": "revolve_profile",
+        "step": true,
+        "rms_limit": 0.4,
+        "p95_limit": 0.8
+      },
+      "wall_s": 1037.324,
+      "match": true,
+      "notes": "mid_flank 0.033; hub band 0.40/0.80; tip excl"
+    },
+    "s05": {
+      "baseline": {
+        "rms": 0.06555,
+        "p95": 0.12609,
+        "gate": true,
+        "src": "prep_scan loft-guard",
+        "flags": "prepped STL"
+      },
+      "now": {
+        "status": "ok",
+        "rms": 0.06555217598534513,
+        "p95": 0.12608754558432855,
+        "gate": true,
+        "vol": 449402.395316587,
+        "method": "revolve_profile",
+        "step": true,
+        "rms_limit": 0.10304251417825741,
+        "p95_limit": 0.20608502835651482
+      },
+      "wall_s": 148.053,
+      "match": true,
+      "notes": "prepped identical to loft-guard"
+    },
+    "s06": {
+      "baseline": {
+        "rms": 0.073,
+        "p95": 0.12643,
+        "gate": true,
+        "src": "prep_scan loft-guard",
+        "flags": "prepped STL"
+      },
+      "now": {
+        "status": "ok",
+        "rms": 0.07300103064109117,
+        "p95": 0.1264284951561451,
+        "gate": true,
+        "vol": 449492.2613496728,
+        "method": "revolve_profile",
+        "step": true,
+        "rms_limit": 0.10716515786535774,
+        "p95_limit": 0.21433031573071548
+      },
+      "wall_s": 111.542,
+      "match": true,
+      "notes": "prepped identical to loft-guard"
+    }
+  },
+  "printed_pairs_wall": [
+    {
+      "id": "drone_wingtip_l_1_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": false,
+      "wall_s": 121.6
+    },
+    {
+      "id": "drone_wing_2_r_userstl",
+      "status": "timeout",
+      "method": null,
+      "loft": null,
+      "wall_s": 151.1
+    },
+    {
+      "id": "drone_wingtip_l_2_userstl",
+      "status": "ok",
+      "method": "section_loft",
+      "loft": true,
+      "wall_s": 21.2
+    },
+    {
+      "id": "drone_wing_1_r_v2_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": null,
+      "wall_s": 141.0
+    },
+    {
+      "id": "drone_wingtip_r_2_userstl",
+      "status": "ok",
+      "method": "section_loft",
+      "loft": true,
+      "wall_s": 21.5
+    },
+    {
+      "id": "drone_wing_2_l_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": false,
+      "wall_s": 121.3
+    },
+    {
+      "id": "drone_wingtip_r_1_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": false,
+      "wall_s": 127.2
+    },
+    {
+      "id": "drone_wing_1_l_v2_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": null,
+      "wall_s": 132.4
+    },
+    {
+      "id": "vtol_aileron_1r_vtol_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": false,
+      "wall_s": 68.1
+    },
+    {
+      "id": "vtol_wing_root_vtol_r_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": null,
+      "wall_s": 130.6
+    },
+    {
+      "id": "vtol_aileron_1l_vtol_userstl",
+      "status": "failed",
+      "method": "cell_decomposition",
+      "loft": false,
+      "wall_s": 134.3
+    },
+    {
+      "id": "vtol_wing_2_r_vtol_userstl",
+      "status": "timeout",
+      "method": null,
+      "loft": null,
+      "wall_s": 151.0
+    },
+    {
+      "id": "vtol_wing_1_r_vtol_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": false,
+      "wall_s": 128.0
+    },
+    {
+      "id": "vtol_aileron_2l_vtol_userstl",
+      "status": "failed",
+      "method": "cell_decomposition",
+      "loft": false,
+      "wall_s": 133.8
+    },
+    {
+      "id": "vtol_wing_1_l_vtol_userstl",
+      "status": "timeout",
+      "method": null,
+      "loft": null,
+      "wall_s": 151.2
+    },
+    {
+      "id": "vtol_wing_2_l_vtol_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": false,
+      "wall_s": 126.7
+    },
+    {
+      "id": "vtol_aileron_2r_vtol_userstl",
+      "status": "failed",
+      "method": "cell_decomposition",
+      "loft": false,
+      "wall_s": 142.7
+    },
+    {
+      "id": "vtol_wing_root_vtol_l_userstl",
+      "status": "failed",
+      "method": "revolve_profile",
+      "loft": null,
+      "wall_s": 127.0
+    }
+  ],
+  "pack": {
+    "path": "dist/MeshSolid-0.1.1-windows.zip",
+    "sha256": "5379371dfd6fe5d83a036f56bd78fc3800625452af1fd8e815fccd280744882f",
+    "bytes": 313159
+  },
+  "gear_hub_scope": "12ebf5f/9595cae/9b76cc0 only touch gear/screw revolve + gear deviation gate; impeller_run and non-gear revolve unchanged \u2014 s05/s06/s07/s09/stg1 greens remain valid"
+}

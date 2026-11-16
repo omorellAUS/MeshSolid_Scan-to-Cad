@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-03",
+ "code": "0f0094c..04c309c (M8 screw rotors, M8b device layer, M9 keyways)",
+ "basis": "mesh vertices -> solid rms/p95 vs results/regressions_m5_final.json",
+ "parts": {
+  "m3/bolt_circle_flange": "SAME",
+  "m3/chamfer_fillet_block": "SAME",
+  "m3/chamfered_block": "SAME",
+  "m3/counterbore_plate": "SAME",
+  "m3/countersunk_plate": "SAME",
+  "m3/drafted_block": "SAME",
+  "m3/pipe_elbow": "DIFF",
+  "m3/pocket_plate": "SAME",
+  "m3/slotted_plate": "SAME",
+  "m3/threaded_stud": "SAME",
+  "coupling": "SAME",
+  "s04": "SAME",
+  "s05": "SAME",
+  "s06": "SAME",
+  "p01": "SAME"
+ },
+ "pipe_elbow_note": "rms 0.02092 / p95 0.04073 vs 0.02023 / 0.03978 on 31 Oct; the pre-M8 commit 63d2505 gives the same 0.0209 / 0.0407, so the change predates M8 (between the M5 run and M7), status ok and gate passed",
+ "stg1": "not re-run: the impeller path returns before gear/screw detection; its only shared change is the device layer, which resolves to the unchanged CPU path on this box",
+ "pytest": "see commit message"
+}

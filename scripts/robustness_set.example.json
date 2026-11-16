@@ -1,0 +1,8 @@
+{"cases": [
+  {"case": "kkk_stg1_16blade", "input": "%LOCALAPPDATA%/meshsolid/jobs/20261111-212816/mesh_body.stl",
+   "was": "ValueError: no crossing in impeller.analyse (hub never reaches the LE plane; tip end slope bends away from rim)"},
+  {"case": "cummins_140_8plus8", "input": "%LOCALAPPDATA%/meshsolid/jobs/20261115-084633/mesh_body.stl",
+   "was": "probe rejected (votes 8/16/16/16); general path local_trim 14 regions no face, cell decomposition budget"},
+  {"case": "cummins_165_15blade", "input": "%LOCALAPPDATA%/meshsolid/jobs/20261115-085346/mesh_body.stl",
+   "was": "ValueError: no crossing in impeller.analyse (shroud t_at_z: tip curve 0.07 mm under the LE plane)"}
+]}

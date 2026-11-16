@@ -1,0 +1,566 @@
+{
+ "files": {
+  "mesh": "p01.stl (5df8e148...)",
+  "stepA": "p01_stepA.step (fcd70123...)",
+  "stepB": "p01_stepB.step (efadb718...)"
+ },
+ "a_steps": {
+  "A": {
+   "file": "p01_stepA.step",
+   "valid": true,
+   "n_solids": 36,
+   "n_faces": 424,
+   "face_types": {
+    "cylinder": 47,
+    "torus": 6,
+    "cone": 19,
+    "plane": 84,
+    "bspline": 268
+   },
+   "volume": 197234.94,
+   "area": 51408.74,
+   "bbox": [
+    278.142,
+    57.472,
+    57.472
+   ],
+   "bbox_min": [
+    46.35,
+    -28.736,
+    -28.736
+   ],
+   "tess_triangles": 1107552,
+   "seconds": 24.9
+  },
+  "B": {
+   "file": "p01_stepB.step",
+   "valid": true,
+   "n_solids": 36,
+   "n_faces": 436,
+   "face_types": {
+    "cylinder": 50,
+    "plane": 91,
+    "cone": 17,
+    "torus": 12,
+    "bspline": 266
+   },
+   "volume": 199556.5,
+   "area": 48745.19,
+   "bbox": [
+    278.158,
+    57.488,
+    57.488
+   ],
+   "bbox_min": [
+    46.342,
+    -28.744,
+    -28.744
+   ],
+   "tess_triangles": 1133390,
+   "seconds": 24.5
+  },
+  "A_vs_B_point_to_surface": {
+   "b_to_a": {
+    "rms": 0.8986,
+    "p95": 0.4082,
+    "p99": 5.4162,
+    "max": 11.1756,
+    "median": 0.0
+   },
+   "a_to_b": {
+    "rms": 0.0641,
+    "p95": 0.0823,
+    "p99": 0.2132,
+    "max": 2.7559,
+    "median": 0.0
+   },
+   "hausdorff_sampled": 11.1756,
+   "area_a": 49140.8,
+   "area_b": 48125.6,
+   "b_to_a_gt0.1mm_by_5mm": {
+    "46": 310,
+    "51": 120,
+    "96": 5161,
+    "181": 7051
+   },
+   "a_to_b_gt0.1mm_by_5mm": {
+    "46": 160,
+    "96": 531,
+    "116": 2910,
+    "161": 2979,
+    "181": 1938
+   }
+  },
+  "A_solids": {
+   "n": 36,
+   "sum_volume": 197229.0,
+   "note": "1 main body + 33 separate tooth bodies (191.3 mm3 each) + 2 small rings (150.7 mm3) at the collar inner faces; bodies not combined, so BRep volume = sum"
+  },
+  "B_solids": {
+   "n": 36,
+   "sum_volume": 199551.75,
+   "note": "1 main body + 33 tooth bodies + 2 rings of 1496 mm3 at x 95.3-99.6 and 181.2-185.5 (neck/undercut fill)"
+  },
+  "verdict": "Two physical spare pinions from different machines, made to the same drawing (user, 25 Oct 2026). A = original size (seat d22.20). B = the pinion reground after shaft damage from the factory impeller removal (seat d22.10). Geometric comparison: same frame, bbox within 0.016 mm, A->B median 0.000, p95 0.082 mm. Other modelled differences: B has a centre hole at the x=46 end, necks beside the collars modelled with tori R13.31/r2.2 and R14.78/r4.54 and extra planes at 96.17/99.61/181.23/184.67, simpler collar relief cones."
+ },
+ "b_step_vs_scan": {
+  "A": {
+   "alignment": {
+    "rotation_deg": 92.117,
+    "proper_rotation": true
+   },
+   "scan_to_model": {
+    "rms": 0.3656,
+    "p95": 0.2567,
+    "max": 10.9977,
+    "median": 0.0354
+   },
+   "signed_mean": -0.0224,
+   "zones": {
+    "left journal 46-96": {
+     "n": 10206,
+     "rms": 0.138,
+     "p95": 0.343,
+     "max": 0.879,
+     "signed_median": -0.0
+    },
+    "neck + collar L 96-117": {
+     "n": 9942,
+     "rms": 1.127,
+     "p95": 1.821,
+     "max": 10.998,
+     "signed_median": -0.019
+    },
+    "gear teeth 117-164": {
+     "n": 49552,
+     "rms": 0.097,
+     "p95": 0.253,
+     "max": 0.708,
+     "signed_median": 0.01
+    },
+    "collar R + neck 164-185": {
+     "n": 11628,
+     "rms": 0.122,
+     "p95": 0.285,
+     "max": 0.461,
+     "signed_median": -0.026
+    },
+    "journal 185-223": {
+     "n": 4283,
+     "rms": 0.022,
+     "p95": 0.043,
+     "max": 0.099,
+     "signed_median": 0.0
+    },
+    "seat 223-233": {
+     "n": 1199,
+     "rms": 0.05,
+     "p95": 0.072,
+     "max": 0.1,
+     "signed_median": -0.05
+    },
+    "233-249 (groove 241.7-243.7)": {
+     "n": 3133,
+     "rms": 0.093,
+     "p95": 0.214,
+     "max": 0.422,
+     "signed_median": 0.001
+    },
+    "D18.41 249-268": {
+     "n": 3162,
+     "rms": 0.075,
+     "p95": 0.176,
+     "max": 0.324,
+     "signed_median": 0.014
+    },
+    "D14.46 end 268-325": {
+     "n": 8759,
+     "rms": 0.104,
+     "p95": 0.172,
+     "max": 2.142,
+     "signed_median": 0.016
+    }
+   }
+  },
+  "B": {
+   "alignment": {
+    "rotation_deg": 92.034,
+    "proper_rotation": true
+   },
+   "scan_to_model": {
+    "rms": 0.1546,
+    "p95": 0.2655,
+    "max": 2.6044,
+    "median": 0.0392
+   },
+   "signed_mean": 0.011,
+   "zones": {
+    "left journal 46-96": {
+     "n": 10210,
+     "rms": 0.142,
+     "p95": 0.315,
+     "max": 2.604,
+     "signed_median": 0.0
+    },
+    "neck + collar L 96-117": {
+     "n": 10039,
+     "rms": 0.368,
+     "p95": 1.212,
+     "max": 1.718,
+     "signed_median": -0.02
+    },
+    "gear teeth 117-164": {
+     "n": 49514,
+     "rms": 0.109,
+     "p95": 0.285,
+     "max": 0.678,
+     "signed_median": 0.018
+    },
+    "collar R + neck 164-185": {
+     "n": 11567,
+     "rms": 0.111,
+     "p95": 0.258,
+     "max": 0.484,
+     "signed_median": -0.031
+    },
+    "journal 185-223": {
+     "n": 4282,
+     "rms": 0.022,
+     "p95": 0.043,
+     "max": 0.097,
+     "signed_median": -0.001
+    },
+    "seat 223-233": {
+     "n": 1208,
+     "rms": 0.018,
+     "p95": 0.036,
+     "max": 0.1,
+     "signed_median": -0.004
+    },
+    "233-249 (groove 241.7-243.7)": {
+     "n": 3142,
+     "rms": 0.089,
+     "p95": 0.207,
+     "max": 0.396,
+     "signed_median": 0.001
+    },
+    "D18.41 249-268": {
+     "n": 3157,
+     "rms": 0.069,
+     "p95": 0.162,
+     "max": 0.304,
+     "signed_median": 0.013
+    },
+    "D14.46 end 268-325": {
+     "n": 8745,
+     "rms": 0.102,
+     "p95": 0.162,
+     "max": 2.132,
+     "signed_median": 0.017
+    }
+   }
+  }
+ },
+ "b_note": "distances = scan vertices (101,864) to model surface, point-to-plane on a 3M-point oriented sample. Colour PLYs (not in git): out/user/pinion/scan_vs_stepA|B.deviation.ply, +-0.2 mm",
+ "c_pipeline": {
+  "status": "failed",
+  "seconds": 632,
+  "tol": 0.09996044849793112,
+  "regions_seg": 241,
+  "regions_final": 238,
+  "unassigned_area_pct": 4.75,
+  "threads_found": 0,
+  "freeform_accepted": 1,
+  "build": {
+   "method": "local_trim",
+   "free_edges": 1128,
+   "n_shells": 79,
+   "reason": "66 regions produced no trimmed face; 1128 free (unsewn) edges - shell not closed; 79 shells after sewing"
+  },
+  "large_cylinders_fitted(d,area)": [
+   [
+    22.204,
+    4013
+   ],
+   [
+    22.237,
+    3360
+   ],
+   [
+    57.44,
+    2425
+   ],
+   [
+    57.5,
+    2395
+   ],
+   [
+    14.5,
+    2202
+   ],
+   [
+    18.431,
+    995
+   ],
+   [
+    22.145,
+    312
+   ]
+  ],
+  "failure": "analytic solid construction failed: 66 regions produced no trimmed face; 1128 free (unsewn) edges - shell not closed; 79 shells after sewing. No STEP written."
+ },
+ "d_gear": {
+  "scan": {
+   "tooth_count": 33,
+   "toothed_z": [
+    -66.03,
+    -24.53
+   ],
+   "face_width_incl_chamfers": 41.5,
+   "tip_diameter": 39.287,
+   "root_diameter_approx": 33.736,
+   "tooth_depth": 2.775,
+   "helix": {
+    "hand": "left",
+    "dtheta_dz_deg_per_mm": -1.1226,
+    "lead_mm": 320.7,
+    "beta_at_tip_deg": 21.05,
+    "beta_at_est_pitch_deg": 20.01
+   },
+   "est_standard": {
+    "normal_module_mm": 1.0584,
+    "transverse_module_mm": 1.1264,
+    "normal_DP": 23.999,
+    "pitch_diameter_mm": 37.17,
+    "whole_depth_ratio_h_over_mn": 2.622,
+    "note": "assumes standard addendum = 1 mn; not snapped"
+   }
+  },
+  "stepA": {
+   "tooth_count": 33,
+   "toothed_z": [
+    24.43,
+    65.43
+   ],
+   "face_width_incl_chamfers": 41.0,
+   "tip_diameter": 39.121,
+   "root_diameter_approx": 33.847,
+   "tooth_depth": 2.637,
+   "helix": {
+    "hand": "left",
+    "dtheta_dz_deg_per_mm": -1.12648,
+    "lead_mm": 319.6,
+    "beta_at_tip_deg": 21.04,
+    "beta_at_est_pitch_deg": 19.99
+   },
+   "est_standard": {
+    "normal_module_mm": 1.054,
+    "transverse_module_mm": 1.1216,
+    "normal_DP": 24.099,
+    "pitch_diameter_mm": 37.013,
+    "whole_depth_ratio_h_over_mn": 2.502,
+    "note": "assumes standard addendum = 1 mn; not snapped"
+   }
+  },
+  "stepB": {
+   "tooth_count": 33,
+   "toothed_z": [
+    24.43,
+    65.43
+   ],
+   "face_width_incl_chamfers": 41.0,
+   "tip_diameter": 39.123,
+   "root_diameter_approx": 33.847,
+   "tooth_depth": 2.638,
+   "helix": {
+    "hand": "left",
+    "dtheta_dz_deg_per_mm": -1.1271,
+    "lead_mm": 319.4,
+    "beta_at_tip_deg": 21.05,
+    "beta_at_est_pitch_deg": 20.01
+   },
+   "est_standard": {
+    "normal_module_mm": 1.054,
+    "transverse_module_mm": 1.1217,
+    "normal_DP": 24.099,
+    "pitch_diameter_mm": 37.015,
+    "whole_depth_ratio_h_over_mn": 2.503,
+    "note": "assumes standard addendum = 1 mn; not snapped"
+   }
+  },
+  "scan_cylinders": [
+   {
+    "z_from": -139.03,
+    "z_to": -88.03,
+    "length": 51.0,
+    "diameter_median": 22.217,
+    "diameter_spread": 0.446
+   },
+   {
+    "z_from": -83.53,
+    "z_to": -69.03,
+    "length": 14.5,
+    "diameter_median": 57.44,
+    "diameter_spread": 0.314
+   },
+   {
+    "z_from": -21.53,
+    "z_to": -7.03,
+    "length": 14.5,
+    "diameter_median": 57.456,
+    "diameter_spread": 0.365
+   },
+   {
+    "z_from": -2.53,
+    "z_to": 56.47,
+    "length": 59.0,
+    "diameter_median": 22.202,
+    "diameter_spread": 0.606
+   },
+   {
+    "z_from": 57.97,
+    "z_to": 63.47,
+    "length": 5.5,
+    "diameter_median": 22.141,
+    "diameter_spread": 0.307
+   },
+   {
+    "z_from": 63.97,
+    "z_to": 82.47,
+    "length": 18.5,
+    "diameter_median": 18.412,
+    "diameter_spread": 0.327
+   },
+   {
+    "z_from": 82.97,
+    "z_to": 137.97,
+    "length": 55.0,
+    "diameter_median": 14.469,
+    "diameter_spread": 0.383
+   }
+  ],
+  "tooth_sections_vs_step": {
+   "A": [
+    {
+     "x": 125.0,
+     "clocking_residual_deg": 0.077,
+     "radial_rms_as_aligned": 0.1204,
+     "radial_rms_best_clocking": 0.111,
+     "radial_p95_best_clocking": 0.2387,
+     "tip_r_scan_p95": 19.598,
+     "tip_r_step_p95": 19.565,
+     "root_r_scan_p3": 16.919,
+     "root_r_step_p3": 16.932
+    },
+    {
+     "x": 132.5,
+     "clocking_residual_deg": 0.005,
+     "radial_rms_as_aligned": 0.0925,
+     "radial_rms_best_clocking": 0.0923,
+     "radial_p95_best_clocking": 0.1941,
+     "tip_r_scan_p95": 19.59,
+     "tip_r_step_p95": 19.546,
+     "root_r_scan_p3": 16.919,
+     "root_r_step_p3": 16.931
+    },
+    {
+     "x": 140.0,
+     "clocking_residual_deg": 0.059,
+     "radial_rms_as_aligned": 0.1126,
+     "radial_rms_best_clocking": 0.1062,
+     "radial_p95_best_clocking": 0.2023,
+     "tip_r_scan_p95": 19.594,
+     "tip_r_step_p95": 19.558,
+     "root_r_scan_p3": 16.91,
+     "root_r_step_p3": 16.929
+    },
+    {
+     "x": 147.5,
+     "clocking_residual_deg": 0.164,
+     "radial_rms_as_aligned": 0.1513,
+     "radial_rms_best_clocking": 0.1165,
+     "radial_p95_best_clocking": 0.259,
+     "tip_r_scan_p95": 19.593,
+     "tip_r_step_p95": 19.549,
+     "root_r_scan_p3": 16.909,
+     "root_r_step_p3": 16.931
+    },
+    {
+     "x": 155.0,
+     "clocking_residual_deg": 0.059,
+     "radial_rms_as_aligned": 0.1108,
+     "radial_rms_best_clocking": 0.1057,
+     "radial_p95_best_clocking": 0.2275,
+     "tip_r_scan_p95": 19.594,
+     "tip_r_step_p95": 19.556,
+     "root_r_scan_p3": 16.918,
+     "root_r_step_p3": 16.932
+    }
+   ],
+   "B": [
+    {
+     "x": 125.0,
+     "clocking_residual_deg": 0.032,
+     "radial_rms_as_aligned": 0.1113,
+     "radial_rms_best_clocking": 0.1095,
+     "radial_p95_best_clocking": 0.2408,
+     "tip_r_scan_p95": 19.597,
+     "tip_r_step_p95": 19.565,
+     "root_r_scan_p3": 16.922,
+     "root_r_step_p3": 16.932
+    },
+    {
+     "x": 132.5,
+     "clocking_residual_deg": -0.045,
+     "radial_rms_as_aligned": 0.0974,
+     "radial_rms_best_clocking": 0.0935,
+     "radial_p95_best_clocking": 0.1959,
+     "tip_r_scan_p95": 19.591,
+     "tip_r_step_p95": 19.546,
+     "root_r_scan_p3": 16.92,
+     "root_r_step_p3": 16.931
+    },
+    {
+     "x": 140.0,
+     "clocking_residual_deg": 0.014,
+     "radial_rms_as_aligned": 0.1072,
+     "radial_rms_best_clocking": 0.1067,
+     "radial_p95_best_clocking": 0.2027,
+     "tip_r_scan_p95": 19.592,
+     "tip_r_step_p95": 19.558,
+     "root_r_scan_p3": 16.913,
+     "root_r_step_p3": 16.929
+    },
+    {
+     "x": 147.5,
+     "clocking_residual_deg": 0.114,
+     "radial_rms_as_aligned": 0.1334,
+     "radial_rms_best_clocking": 0.1152,
+     "radial_p95_best_clocking": 0.2521,
+     "tip_r_scan_p95": 19.595,
+     "tip_r_step_p95": 19.55,
+     "root_r_scan_p3": 16.91,
+     "root_r_step_p3": 16.931
+    },
+    {
+     "x": 155.0,
+     "clocking_residual_deg": 0.0,
+     "radial_rms_as_aligned": 0.1047,
+     "radial_rms_best_clocking": 0.1047,
+     "radial_p95_best_clocking": 0.2192,
+     "tip_r_scan_p95": 19.596,
+     "tip_r_step_p95": 19.556,
+     "root_r_scan_p3": 16.919,
+     "root_r_step_p3": 16.932
+    }
+   ]
+  },
+  "design_intent_user": {
+   "system": "imperial, US-made",
+   "normal_DP": 24,
+   "normal_module_equiv_mm": 1.0583,
+   "helix": "left-hand, about 20 deg",
+   "note": "measured values above agree (mn 1.054-1.058 mm, beta 20.0 deg at pitch, LH); the future recognizer snaps to DP standards first"
+  }
+ }
+}

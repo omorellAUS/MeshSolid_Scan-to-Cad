@@ -1,0 +1,62 @@
+{
+  "gate_investigation": {
+    "conclusion": "vertex gates stay tight; s2m tessellation-aware (3*tol+sag_p90) for faceted CAD \u2014 pipeline-aligned, not tuned to pass wingtip",
+    "vert_to_STEP_rms": 0.02,
+    "vert_to_loft_rms": 0.158,
+    "loft_to_STEP_rms": 0.035,
+    "facet_sag_p90": 0.00767,
+    "why_not_loosen_vertices": "CAD verts lie on true surface (facets.py); empirically vert->STEP rms 0.020 << vert->loft 0.158; residual is real loft TE/LE/tip miss, not chord sag",
+    "bad_loft_still_rejected": {
+      "rms_0.89": "fails 1.5*tol",
+      "underfill_0.43": "fails volume 2% gate"
+    },
+    "wingtip_still_red": true
+  },
+  "WINGTIP L 2": {
+    "self_check_ok": false,
+    "rms": 0.15762,
+    "p95": 0.3325,
+    "s2m": 0.04676,
+    "lim_s2m": 0.04219,
+    "tol": 0.0115,
+    "vol_ratio": 0.9975,
+    "step": {
+      "test_to_ref_rms": 0.03564,
+      "p95": 0.04247,
+      "le_0.02": 0.8404,
+      "vol_rel": -0.003029
+    }
+  },
+  "WINGTIP R 2": {
+    "self_check_ok": false,
+    "rms": 0.15827,
+    "p95": 0.33294,
+    "s2m": 0.04509,
+    "lim_s2m": 0.04466,
+    "tol": 0.01218,
+    "vol_ratio": 0.9974,
+    "step": {
+      "test_to_ref_rms": 0.03531,
+      "p95": 0.04254,
+      "le_0.02": 0.8839,
+      "vol_rel": -0.003169
+    }
+  },
+  "WING 2 L": {
+    "self_check_ok": false,
+    "planar_caps": true,
+    "capf": 0.1027,
+    "tip_apex": false,
+    "rms": 0.926,
+    "rms_ms80": 0.721,
+    "truth_kinds": {
+      "Plane": 29,
+      "BSpline": 4,
+      "Cyl": 6,
+      "solids": 2
+    },
+    "note": "planar-cap path already selected; mid-skin ~1mm miss is construction, not tip closure"
+  },
+  "pipeline_wire": false,
+  "matched_pair_rerun": false
+}

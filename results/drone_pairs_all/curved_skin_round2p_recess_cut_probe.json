@@ -1,0 +1,20 @@
+{
+  "base_rms": 0.57274,
+  "after_recess_cut_rms": 0.59181,
+  "cuts": [
+    {
+      "i": 0,
+      "ok": false,
+      "reason": "invalid"
+    },
+    {
+      "i": 1,
+      "ok": true,
+      "vol_ratio": 1.0119,
+      "poly_n": 12,
+      "h0": -374.36444091796875,
+      "h1": -366.9786376953125
+    }
+  ],
+  "skin_rms_excl": 0.36945
+}

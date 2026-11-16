@@ -1,0 +1,873 @@
+{
+  "tool": "meshsolid",
+  "version": "0.1.0",
+  "input": "out/m3/threaded_stud.stl",
+  "params": {
+    "tol": null,
+    "sharp_deg": 30.0,
+    "round_tol": 0.03,
+    "do_round": true,
+    "snap_angle_deg": 2.0,
+    "accept_rms": null,
+    "accept_p95": null,
+    "max_tools": 80,
+    "builder": "auto",
+    "cell_fallback_max": 30,
+    "seed": 0,
+    "threads": true
+  },
+  "status": "ok",
+  "stages": {
+    "load_repair": {
+      "input_vertices": 154548,
+      "input_faces": 51516,
+      "merged_vertices": 128788,
+      "removed_degenerate": 0,
+      "removed_duplicate": 0,
+      "holes_found": 0,
+      "holes_filled": 0,
+      "holes_left_open": 0,
+      "non_manifold_edges": 0,
+      "watertight": true,
+      "winding_consistent": true,
+      "flipped_inside_out": false,
+      "notes": []
+    },
+    "segmentation": {
+      "sharp_edges": 7986,
+      "sharp_components": 24,
+      "small_regions_merged": 8,
+      "regions_simplified": 8,
+      "regions_absorbed": 1,
+      "unassigned_faces": 8251,
+      "unassigned_area_frac": 0.08844471935771371,
+      "regions": 83,
+      "seconds": 115.45886278152466
+    },
+    "coaxial_refit": [
+      {
+        "region": 1,
+        "coaxial_with": 56,
+        "accepted": false,
+        "rms_current": 0.040837712823906955,
+        "rms_coaxial_cone": 0.2616540726158846,
+        "normal_err_current": 7.237282282034235,
+        "normal_err_coaxial": 35.035442639949494,
+        "half_angle_deg": 22.50295231916324
+      },
+      {
+        "region": 4,
+        "coaxial_with": 56,
+        "accepted": false,
+        "rms_current": 0.04135590785148284,
+        "rms_coaxial_cone": 0.25203656795085677,
+        "normal_err_current": 7.65996699579123,
+        "normal_err_coaxial": 34.00001562382045,
+        "half_angle_deg": 23.475584864649043
+      },
+      {
+        "region": 5,
+        "coaxial_with": 54,
+        "accepted": false,
+        "rms_current": 0.03964076381703261,
+        "rms_coaxial_cone": 0.24518221629956327,
+        "normal_err_current": 7.746829177270133,
+        "normal_err_coaxial": 32.61566930956499,
+        "half_angle_deg": 24.818943544871786
+      },
+      {
+        "region": 6,
+        "coaxial_with": 52,
+        "accepted": false,
+        "rms_current": 0.038276962876810136,
+        "rms_coaxial_cone": 0.27863934039513666,
+        "normal_err_current": 7.443789714417579,
+        "normal_err_coaxial": 40.774636897822404,
+        "half_angle_deg": 15.685325291633784
+      },
+      {
+        "region": 7,
+        "coaxial_with": 69,
+        "accepted": false,
+        "rms_current": 0.039504228966858346,
+        "rms_coaxial_cone": 0.2377471590970054,
+        "normal_err_current": 7.727544043445218,
+        "normal_err_coaxial": 21.218460185744355,
+        "half_angle_deg": 34.40695293264933
+      },
+      {
+        "region": 8,
+        "coaxial_with": 40,
+        "accepted": false,
+        "rms_current": 0.04096717101128332,
+        "rms_coaxial_cone": 0.7155248243408979,
+        "normal_err_current": 7.466694350931405,
+        "normal_err_coaxial": 22.089264217513225,
+        "half_angle_deg": 30.066311578473552
+      },
+      {
+        "region": 9,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.04014663648817053,
+        "rms_coaxial_cone": 0.25336943815865054,
+        "normal_err_current": 7.266987733704094,
+        "normal_err_coaxial": 33.61577782334922,
+        "half_angle_deg": 24.27214668620857
+      },
+      {
+        "region": 10,
+        "coaxial_with": 79,
+        "accepted": false,
+        "rms_current": 0.03914439120550311,
+        "rms_coaxial_cone": 0.22390900256884133,
+        "normal_err_current": 7.2811700616044295,
+        "normal_err_coaxial": 31.65418607489754,
+        "half_angle_deg": 26.877365683404083
+      },
+      {
+        "region": 11,
+        "coaxial_with": 65,
+        "accepted": false,
+        "rms_current": 0.04114020855732613,
+        "rms_coaxial_cone": 0.2778138840017418,
+        "normal_err_current": 7.327579968188301,
+        "normal_err_coaxial": 38.60651328147511,
+        "half_angle_deg": 18.425767055867514
+      },
+      {
+        "region": 12,
+        "coaxial_with": 52,
+        "accepted": false,
+        "rms_current": 0.038123652573779934,
+        "rms_coaxial_cone": 0.24870593123011794,
+        "normal_err_current": 7.164635035300754,
+        "normal_err_coaxial": 33.3467330049777,
+        "half_angle_deg": 23.3163041900194
+      },
+      {
+        "region": 13,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.040544724988953076,
+        "rms_coaxial_cone": 0.2444531177212861,
+        "normal_err_current": 7.477027205390424,
+        "normal_err_coaxial": 33.277641903403286,
+        "half_angle_deg": 24.56478088127968
+      },
+      {
+        "region": 14,
+        "coaxial_with": 52,
+        "accepted": false,
+        "rms_current": 0.038387434738063934,
+        "rms_coaxial_cone": 0.32271968897805287,
+        "normal_err_current": 7.218870779992664,
+        "normal_err_coaxial": 50.030890406691086,
+        "half_angle_deg": 7.847462020077332
+      },
+      {
+        "region": 15,
+        "coaxial_with": 54,
+        "accepted": false,
+        "rms_current": 0.03616372318055849,
+        "rms_coaxial_cone": 0.24742389102580378,
+        "normal_err_current": 6.910062896746881,
+        "normal_err_coaxial": 33.78675201921516,
+        "half_angle_deg": 24.042227608766016
+      },
+      {
+        "region": 16,
+        "coaxial_with": 33,
+        "accepted": false,
+        "rms_current": 0.03847952121509728,
+        "rms_coaxial_cone": 0.5707544713243883,
+        "normal_err_current": 7.210573490872577,
+        "normal_err_coaxial": 19.440318529471195,
+        "half_angle_deg": 36.96882588957447
+      },
+      {
+        "region": 17,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.03896372289723224,
+        "rms_coaxial_cone": 0.25912687549456415,
+        "normal_err_current": 11.507338797181742,
+        "normal_err_coaxial": 32.874289362560646,
+        "half_angle_deg": 24.567642420839398
+      },
+      {
+        "region": 18,
+        "coaxial_with": 54,
+        "accepted": false,
+        "rms_current": 0.03991798740997174,
+        "rms_coaxial_cone": 0.24818889842007286,
+        "normal_err_current": 7.491644371713626,
+        "normal_err_coaxial": 32.713286539659514,
+        "half_angle_deg": 24.171343133840075
+      },
+      {
+        "region": 19,
+        "coaxial_with": 56,
+        "accepted": false,
+        "rms_current": 0.039773883753342204,
+        "rms_coaxial_cone": 0.25086568724449687,
+        "normal_err_current": 7.521620326075181,
+        "normal_err_coaxial": 33.62108614682663,
+        "half_angle_deg": 23.738089381990825
+      },
+      {
+        "region": 20,
+        "coaxial_with": 56,
+        "accepted": false,
+        "rms_current": 0.03943888352094091,
+        "rms_coaxial_cone": 0.25432883366118053,
+        "normal_err_current": 7.2674454758720755,
+        "normal_err_coaxial": 33.94388758652698,
+        "half_angle_deg": 23.044382295020974
+      },
+      {
+        "region": 22,
+        "coaxial_with": 68,
+        "accepted": false,
+        "rms_current": 0.040063669579026795,
+        "rms_coaxial_cone": 2.4908466841624706,
+        "normal_err_current": 7.840871787450382,
+        "normal_err_coaxial": 51.06931243232816,
+        "half_angle_deg": 24.557666074933568
+      },
+      {
+        "region": 23,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.038334885902876405,
+        "rms_coaxial_cone": 0.24097124272852447,
+        "normal_err_current": 7.358187708271951,
+        "normal_err_coaxial": 31.537423511563524,
+        "half_angle_deg": 25.528823973735104
+      },
+      {
+        "region": 26,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.03602152274540802,
+        "rms_coaxial_cone": 0.2441740564799761,
+        "normal_err_current": 7.307591484677797,
+        "normal_err_coaxial": 34.62500856842675,
+        "half_angle_deg": 23.191496656927136
+      },
+      {
+        "region": 30,
+        "coaxial_with": 55,
+        "accepted": false,
+        "rms_current": 0.03399193397970872,
+        "rms_coaxial_cone": 0.22850547066241936,
+        "normal_err_current": 7.012930744413628,
+        "normal_err_coaxial": 29.178190822012905,
+        "half_angle_deg": 28.08922264227499
+      },
+      {
+        "region": 42,
+        "coaxial_with": 55,
+        "accepted": false,
+        "rms_current": 0.026063066411430927,
+        "rms_coaxial_cone": 0.16538927543339185,
+        "normal_err_current": 6.181360183652652,
+        "normal_err_coaxial": 19.17118728554024,
+        "half_angle_deg": 40.2978131140986
+      },
+      {
+        "region": 43,
+        "coaxial_with": 67,
+        "accepted": false,
+        "rms_current": 0.021835087197515743,
+        "rms_coaxial_cone": 0.7835024721935979,
+        "normal_err_current": 7.7344526524201,
+        "normal_err_coaxial": 74.9664571244353,
+        "half_angle_deg": 28.154825959020965
+      },
+      {
+        "region": 45,
+        "coaxial_with": 56,
+        "accepted": false,
+        "rms_current": 0.03408117002141567,
+        "rms_coaxial_cone": 0.141006744589707,
+        "normal_err_current": 7.5609838556667,
+        "normal_err_coaxial": 15.043519262786797,
+        "half_angle_deg": 43.38353010038669
+      },
+      {
+        "region": 56,
+        "coaxial_with": 62,
+        "accepted": false,
+        "rms_current": 0.027159953520583518,
+        "rms_coaxial_cone": 0.5981312170333027,
+        "normal_err_current": 9.986726765679501,
+        "normal_err_coaxial": 73.10173550714785,
+        "half_angle_deg": 23.101375851947182
+      },
+      {
+        "region": 58,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.026777510008667255,
+        "rms_coaxial_cone": 0.07890301000086164,
+        "normal_err_current": 7.275605077496468,
+        "normal_err_coaxial": 9.045968910868853,
+        "half_angle_deg": 50.1570336634073
+      },
+      {
+        "region": 62,
+        "coaxial_with": 56,
+        "accepted": false,
+        "rms_current": 0.02489060680362437,
+        "rms_coaxial_cone": 0.060007584592730374,
+        "normal_err_current": 6.517820103429121,
+        "normal_err_coaxial": 8.241426880120128,
+        "half_angle_deg": 53.79978125054154
+      },
+      {
+        "region": 67,
+        "coaxial_with": 43,
+        "accepted": false,
+        "rms_current": 0.02544751954092124,
+        "rms_coaxial_cone": 0.06576972753529212,
+        "normal_err_current": 6.48912129154048,
+        "normal_err_coaxial": 9.100871800242814,
+        "half_angle_deg": 52.67723620486371
+      },
+      {
+        "region": 68,
+        "coaxial_with": 45,
+        "accepted": false,
+        "rms_current": 0.018122938989756424,
+        "rms_coaxial_cone": 0.07763880702689115,
+        "normal_err_current": 6.84690662262399,
+        "normal_err_coaxial": 57.28027877276747,
+        "half_angle_deg": 17.507717479394937
+      },
+      {
+        "region": 74,
+        "coaxial_with": 33,
+        "accepted": false,
+        "rms_current": 0.02005212065781713,
+        "rms_coaxial_cone": 0.12480787076701627,
+        "normal_err_current": 7.558222946442853,
+        "normal_err_coaxial": 54.5600943790113,
+        "half_angle_deg": 6.43025421674945
+      }
+    ],
+    "threads": {
+      "found": 1,
+      "seconds": 0.2016911506652832,
+      "regions_after": 3
+    },
+    "snapping": {
+      "frame": [
+        [
+          -6.0841195765722456e-05,
+          2.4886262148391416e-05,
+          0.9999999978395114
+        ]
+      ],
+      "direction_clusters": [
+        {
+          "dir": [
+            -6.0841195765722456e-05,
+            2.4886262148391416e-05,
+            0.9999999978395114
+          ],
+          "regions": [
+            0,
+            2,
+            1
+          ]
+        }
+      ],
+      "log": [
+        {
+          "op": "snap_direction",
+          "regions": [
+            0,
+            2,
+            1
+          ],
+          "angle_deg": 0.0
+        },
+        {
+          "op": "reject_direction_snap",
+          "region": 0,
+          "rms_old": 0.01973335906838374,
+          "rms_new": 0.3824739391057167
+        },
+        {
+          "op": "round_offset",
+          "region": 1,
+          "datum": 2,
+          "raw": 36.99926751628834,
+          "snapped": 37.0
+        },
+        {
+          "op": "round_diameter",
+          "region": 0,
+          "raw": 11.999679045199764,
+          "snapped": 12.0
+        }
+      ]
+    },
+    "blends": {
+      "pipes": 0,
+      "log": []
+    },
+    "coaxial_realign": [],
+    "build": {
+      "ok": true,
+      "method": "local_trim+maker_volume",
+      "reason": "",
+      "n_regions": 3,
+      "pieces_kept": 3,
+      "pieces_dropped": 4,
+      "pieces_degenerate": 0,
+      "regions_without_piece": [],
+      "split_failures": [],
+      "unify_failed": false,
+      "tangent_contacts": 0,
+      "no_piece_diag": {},
+      "kept_area": {
+        "0": 1394.3064855987718,
+        "1": 112.91556422435774,
+        "2": 112.91556422435772
+      },
+      "free_edge_info": [],
+      "holes_filled": 0,
+      "assembly_attempts": [
+        {
+          "fuzzy": 0.120498,
+          "n_volumes": 1,
+          "n_inside": 1,
+          "valid_before_unify": true,
+          "volume_before_unify": 4184.601,
+          "unify_valid": true,
+          "max_tol_fuzzy": 9.97682626737037e-05,
+          "max_tol_recomputed": 3.7001498871443295e-06,
+          "n_solids": 1,
+          "valid": true,
+          "volume": 4184.601
+        }
+      ],
+      "assembly_fuzzy": 0.12049840307463526,
+      "setback_corners": 0,
+      "setback_radius": 0.0,
+      "setback_patches": 0,
+      "setback_dropped": 0,
+      "setback_patch_stats": [],
+      "setback_free_info": [],
+      "setback_patch_failures": 0,
+      "setback_free_edges_before": -1,
+      "setback_free_edges_after": -1,
+      "wireframe_healed": false,
+      "faces_refixed": 0,
+      "invalid_pieces": [],
+      "valid_before_unify": false,
+      "volume_before_unify": 0.0,
+      "invalid_faces_before_unify": [],
+      "hole_fill_max_size": 0.0,
+      "holes_unfilled_sizes": [],
+      "free_edges_near_regions": {},
+      "free_edge_midpoints": [],
+      "free_edges": 0,
+      "multiple_edges": -1,
+      "n_shells": 1,
+      "n_solids": 1,
+      "n_faces": 3,
+      "brepcheck_valid": true,
+      "volume": 4184.601416153702,
+      "mesh_volume": 4206.782065220695,
+      "seconds": 0.9616837501525879,
+      "area_ratio": {
+        "0": 0.782,
+        "1": 1.43,
+        "2": 0.997
+      },
+      "max_shape_tolerance": 3.7001498871443295e-06,
+      "max_shape_tolerance_limit": 0.2190880055902459,
+      "attempts": [
+        {
+          "ok": true,
+          "method": "local_trim+maker_volume",
+          "reason": "",
+          "n_regions": 3,
+          "pieces_kept": 3,
+          "pieces_dropped": 4,
+          "pieces_degenerate": 0,
+          "regions_without_piece": [],
+          "split_failures": [],
+          "unify_failed": false,
+          "tangent_contacts": 0,
+          "no_piece_diag": {},
+          "kept_area": {
+            "0": 1394.3064855987718,
+            "1": 112.91556422435774,
+            "2": 112.91556422435772
+          },
+          "free_edge_info": [],
+          "holes_filled": 0,
+          "assembly_attempts": [
+            {
+              "fuzzy": 0.120498,
+              "n_volumes": 1,
+              "n_inside": 1,
+              "valid_before_unify": true,
+              "volume_before_unify": 4184.601,
+              "unify_valid": true,
+              "max_tol_fuzzy": 9.97682626737037e-05,
+              "max_tol_recomputed": 3.7001498871443295e-06,
+              "n_solids": 1,
+              "valid": true,
+              "volume": 4184.601
+            }
+          ],
+          "assembly_fuzzy": 0.12049840307463526,
+          "setback_corners": 0,
+          "setback_radius": 0.0,
+          "setback_patches": 0,
+          "setback_dropped": 0,
+          "setback_patch_stats": [],
+          "setback_free_info": [],
+          "setback_patch_failures": 0,
+          "setback_free_edges_before": -1,
+          "setback_free_edges_after": -1,
+          "wireframe_healed": false,
+          "faces_refixed": 0,
+          "invalid_pieces": [],
+          "valid_before_unify": false,
+          "volume_before_unify": 0.0,
+          "invalid_faces_before_unify": [],
+          "hole_fill_max_size": 0.0,
+          "holes_unfilled_sizes": [],
+          "free_edges_near_regions": {},
+          "free_edge_midpoints": [],
+          "free_edges": 0,
+          "multiple_edges": -1,
+          "n_shells": 1,
+          "n_solids": 1,
+          "n_faces": 3,
+          "brepcheck_valid": true,
+          "volume": 4184.601416153702,
+          "mesh_volume": 4206.782065220695,
+          "seconds": 0.9599213600158691,
+          "area_ratio": {
+            "0": 0.782,
+            "1": 1.43,
+            "2": 0.997
+          }
+        }
+      ]
+    }
+  },
+  "tolerance": {
+    "tol": 0.10954400279512296,
+    "noise_sigma_est": 0.024343111732249546,
+    "exact_mesh_detected": false,
+    "auto": true
+  },
+  "mesh": {
+    "vertices": 25760,
+    "faces": 51516,
+    "bounds": [
+      [
+        -6.0561676025390625,
+        -6.031135082244873,
+        -0.03578418120741844
+      ],
+      [
+        6.0557942390441895,
+        6.046343803405762,
+        37.05470275878906
+      ]
+    ],
+    "area": 1991.159687822218,
+    "volume": 3763.805220268249
+  },
+  "threads": [
+    {
+      "kind": "external",
+      "axis": [
+        0.0038699569734633728,
+        0.009356108546609716,
+        0.9999487420192535
+      ],
+      "axis_point": [
+        0.004490548072406236,
+        0.07174905350394808,
+        12.779961570155605
+      ],
+      "start": [
+        0.0129784140773608,
+        0.09226953892949104,
+        14.97312056191736
+      ],
+      "end": [
+        0.10440614757543298,
+        0.31330760334314556,
+        38.59690959212222
+      ],
+      "length": 23.625,
+      "major_d": 11.979078424655443,
+      "minor_d": 10.104016532761715,
+      "pitch": 1.75,
+      "turns": 13.5,
+      "hand": "right",
+      "taper_half_angle_deg": 0.0,
+      "tapered": false,
+      "phase_score": 0.8248019779695521,
+      "standard": {
+        "designation": "M12x1.75",
+        "nominal_major_d": 12.0,
+        "nominal_pitch": 1.75,
+        "standard": "metric",
+        "match_error": 0.058,
+        "match": "good"
+      },
+      "confidence": 0.687,
+      "modelled_as": "cylinder at major diameter",
+      "model_diameter": 12.0,
+      "model_diameter_source": "nominal (standard match good)",
+      "volume_delta_mm3": 442.9768449524456,
+      "region": 0,
+      "merged_into_existing_cylinder": true,
+      "runout_regions_absorbed": 9,
+      "end_chamfers_kept": 0
+    }
+  ],
+  "dimensions": [
+    {
+      "type": "diameter",
+      "regions": [
+        0
+      ],
+      "value": 12.0,
+      "name": "D1",
+      "units": "mm",
+      "fit_value": 11.999679045199764
+    },
+    {
+      "type": "distance",
+      "regions": [
+        2,
+        1
+      ],
+      "direction": [
+        -6.0841195765722456e-05,
+        2.4886262148391416e-05,
+        0.9999999978395114
+      ],
+      "value": 37.0,
+      "name": "D2",
+      "units": "mm",
+      "fit_value": 36.99926751628834
+    }
+  ],
+  "deviation": {
+    "mesh_vertices_to_solid": {
+      "max": 1.0160997887606407,
+      "mean": 0.43797807290783913,
+      "rms": 0.575802387980836,
+      "p95": 0.9602376273347455,
+      "n": 25760
+    },
+    "mesh_to_solid": {
+      "max": 0.9972356108643692,
+      "mean": 0.3053584303587264,
+      "rms": 0.45713402043004087,
+      "p95": 0.9403197375127846,
+      "n": 30000
+    },
+    "solid_to_mesh": {
+      "max": 0.9172292145437592,
+      "mean": 0.16483610522188627,
+      "rms": 0.26633229803066744,
+      "p95": 0.5944700753818672,
+      "n": 30000
+    },
+    "hausdorff": 0.9972356108643692,
+    "solid_tessellation": {
+      "triangles": 1048,
+      "linear_deflection": 0.002
+    },
+    "excluded_zones": {
+      "faces": 42830,
+      "area_frac": 0.6425510260646295
+    },
+    "mesh_vertices_to_solid_excl": {
+      "max": 0.9329943351754183,
+      "mean": 0.018660717485560713,
+      "rms": 0.04472082164127962,
+      "p95": 0.04044770831284645,
+      "n": 3878
+    },
+    "mesh_to_solid_excl": {
+      "max": 0.9742479126637376,
+      "mean": 0.01822705040121707,
+      "rms": 0.0728192356842097,
+      "p95": 0.03065538812540136,
+      "n": 10714
+    },
+    "solid_to_mesh_excl": {
+      "max": 0.9133270587670131,
+      "mean": 0.021678158889569026,
+      "rms": 0.07911730209954282,
+      "p95": 0.03235771678778415,
+      "n": 13279
+    },
+    "seconds": 16.21323537826538,
+    "acceptance": {
+      "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95); thread zones excluded (modelled by the thread spec, not by geometry)",
+      "rms_limit": 0.16431600419268444,
+      "p95_limit": 0.3286320083853689,
+      "solid_to_mesh_p95_limit": 0.35300289817939534,
+      "facet_sag_p95": 0.02437088979402646,
+      "passed": true
+    },
+    "unassigned_faces_max_dev": 1.0014170203426502
+  },
+  "deviation_map": {
+    "path": "out/m3/threaded_stud.deviation.ply",
+    "color_range_mm": [
+      -0.9777533099694277,
+      0.9777533099694277
+    ]
+  },
+  "step": "out/m3/threaded_stud.step",
+  "preview_png": "out/m3/threaded_stud.preview.png",
+  "regions": [
+    {
+      "id": 0,
+      "kind": "cylinder",
+      "n_faces": 50530,
+      "area": 1783.099064571355,
+      "params": {
+        "diameter": 12.0,
+        "axis_dir": [
+          -6.942317121477683e-05,
+          4.704780258069917e-05,
+          0.9999999964834638
+        ],
+        "axis_point": [
+          -9.353742472773324e-05,
+          2.9666451892560654e-05,
+          7.51540726012315
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 11.999679045199764,
+        "axis_dir": [
+          -6.942317121477683e-05,
+          4.704780258069917e-05,
+          0.9999999964834638
+        ],
+        "axis_point": [
+          -9.353742472773324e-05,
+          2.9666451892560654e-05,
+          7.51540726012315
+        ]
+      },
+      "fit": {
+        "rms": 0.5889657048383514,
+        "max": 1.0232752054963035,
+        "normal_err_deg": 42.683285981815374,
+        "rms_unsnapped": 0.01973335906838374
+      },
+      "deviation": {
+        "max": 0.9972356108643692,
+        "mean": 0.33627868276594974,
+        "rms": 0.4804513641058481,
+        "p95": 0.9423889355575317,
+        "n": 26920
+      },
+      "confidence": 0.0,
+      "flags": [
+        "thread_zone",
+        "high_fit_residual",
+        "high_deviation_vs_solid"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 1,
+      "kind": "plane",
+      "n_faces": 144,
+      "area": 78.97639142867078,
+      "params": {
+        "normal": [
+          -6.0841195765722456e-05,
+          2.4886262148391416e-05,
+          0.9999999978395114
+        ],
+        "offset": 37.001012446406904
+      },
+      "params_unsnapped": {
+        "normal": [
+          4.6273999769737574e-05,
+          -0.0003918130826375475,
+          0.9999999221706095
+        ],
+        "offset": 37.000276956525695
+      },
+      "fit": {
+        "rms": 0.01786317318317541,
+        "max": 0.059690070710158624,
+        "normal_err_deg": 3.359135810836344,
+        "rms_unsnapped": 0.017783652558593682
+      },
+      "deviation": {
+        "max": 0.050620557632852406,
+        "mean": 0.008112331985824919,
+        "rms": 0.011392073161550307,
+        "p95": 0.022983086468884105,
+        "n": 1163
+      },
+      "confidence": 0.696,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 2,
+      "kind": "plane",
+      "n_faces": 144,
+      "area": 113.28785084856014,
+      "params": {
+        "normal": [
+          6.0841195765722456e-05,
+          -2.4886262148391416e-05,
+          -0.9999999978395114
+        ],
+        "offset": -0.001012446406905854
+      },
+      "params_unsnapped": {
+        "normal": [
+          4.3806130872825354e-07,
+          3.3432539185573225e-05,
+          -0.9999999994410368
+        ],
+        "offset": -0.0010124520491958597
+      },
+      "fit": {
+        "rms": 0.012512449243101482,
+        "max": 0.03714776967984459,
+        "normal_err_deg": 2.2156404874503033,
+        "rms_unsnapped": 0.012507415150187214
+      },
+      "deviation": {
+        "max": 0.03181548790882112,
+        "mean": 0.00846842418804173,
+        "rms": 0.01001403458491867,
+        "p95": 0.016942081890102725,
+        "n": 1668
+      },
+      "confidence": 0.788,
+      "flags": [],
+      "low_confidence": false
+    }
+  ],
+  "seconds": 134.9634563922882
+}

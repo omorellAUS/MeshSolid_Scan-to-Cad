@@ -1,0 +1,52 @@
+pid 291422
+RESULT {
+  "status": "ok",
+  "rms": 0.20857592253850407,
+  "p95": 0.26327829656044116,
+  "gate": true,
+  "vol": 192490.6025986339,
+  "coax": 0.9146,
+  "wall": 1037.3,
+  "unmodelled": 26,
+  "top_um": [
+    {
+      "region": 11,
+      "kind": "torus",
+      "area": 354.9
+    },
+    {
+      "region": 17,
+      "kind": "torus",
+      "area": 339.58
+    },
+    {
+      "region": 189,
+      "kind": "bspline",
+      "area": 207.98
+    },
+    {
+      "region": 39,
+      "kind": "bspline",
+      "area": 150.56
+    },
+    {
+      "region": 177,
+      "kind": "sphere",
+      "area": 131.6
+    }
+  ],
+  "limits": [
+    0.4,
+    0.8
+  ],
+  "mid": {
+    "n": 4443,
+    "rms": 0.0331,
+    "p95": 0.0637,
+    "median_abs": 0.0227,
+    "max": 0.156
+  },
+  "step": true,
+  "fail": "",
+  "basis_tail": "excluded (scan rounds tip/end edges); gear: mid_flank vs noise gate + hub/rest vs historical pinion band (rms 0.4/p95 0.8); tip_edge_rounding excluded"
+}

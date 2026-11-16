@@ -1,0 +1,865 @@
+{
+  "tool": "meshsolid",
+  "version": "0.1.0",
+  "input": "tests/user_scans/s07.stl",
+  "params": {
+    "tol": null,
+    "sharp_deg": 30.0,
+    "round_tol": 0.03,
+    "do_round": true,
+    "snap_angle_deg": 2.0,
+    "accept_rms": null,
+    "accept_p95": null,
+    "accuracy": "machined",
+    "max_tools": 80,
+    "balance_cuts": "auto",
+    "gears": "auto",
+    "gear_build": "snapped",
+    "impeller": "auto",
+    "screws": "auto",
+    "splines": "auto",
+    "bearing_build": "full",
+    "notes": [
+      "baseline_rerun s07 bore_d=14.275 (1a2e364/0c0a7ba)"
+    ],
+    "builder": "auto",
+    "split_bodies": true,
+    "cell_fallback_max": 30,
+    "seed": 0,
+    "freeform": true,
+    "threads": true,
+    "drop_faceless_rounds": 2,
+    "drop_faceless_area_frac": 0.01,
+    "time_budget_s": 3600.0,
+    "consolidate": true
+  },
+  "status": "ok",
+  "stages": {
+    "load_repair": {
+      "input_vertices": 797184,
+      "input_faces": 265728,
+      "merged_vertices": 664322,
+      "removed_degenerate": 0,
+      "removed_duplicate": 0,
+      "removed_internal_walls": 0,
+      "holes_found": 1,
+      "holes_filled": 1,
+      "holes_left_open": 0,
+      "non_manifold_edges": 2,
+      "watertight": false,
+      "winding_consistent": true,
+      "flipped_inside_out": false,
+      "notes": [
+        "winding made consistent",
+        "2 non-manifold edges (>2 faces) - not repaired"
+      ]
+    },
+    "impeller_probe": {
+      "votes": [
+        13,
+        13,
+        13,
+        13
+      ],
+      "tangential_area_frac": 0.276,
+      "rim_radius": 41.28,
+      "reason": "N-fold blades at all radii",
+      "blades": 13,
+      "seconds": 0.3
+    },
+    "build": {
+      "method": "impeller",
+      "ok": true,
+      "volume": 37162.052449552335,
+      "seconds": 1332.4
+    }
+  },
+  "last_stage": "done",
+  "stage_times": {
+    "load_repair": 0.0,
+    "impeller_probe": 16.0,
+    "impeller": 16.3,
+    "done": 1374.5
+  },
+  "device": {
+    "requested": "cpu",
+    "used": "cpu",
+    "gpu": null,
+    "accelerated": []
+  },
+  "tolerance": {
+    "tol": 0.008767913893850895,
+    "noise_sigma_est": 0.0019484253097446433,
+    "exact_mesh_detected": false,
+    "auto": true,
+    "cad_tessellation": {
+      "edges": 398594,
+      "coplanar_len_frac": 0.0303,
+      "smooth_edge_len_frac": 0.9876,
+      "turning_smooth_len_frac": 0.7127,
+      "dihedral_turning_median_deg": 1.914,
+      "facet_width_median": 0.2015,
+      "sag_p50": 0.00086,
+      "sag_p90": 0.00211,
+      "cad_tessellation": false,
+      "faceted": false,
+      "fine_exact_tessellation": true
+    }
+  },
+  "accuracy": {
+    "class": "machined",
+    "rms_limit": 0.013151870840776342,
+    "p95_limit": 0.026303741681552684,
+    "tol": 0.008767913893850895,
+    "basis": "machined: vertex\u2192solid rms\u22641.5\u00b7tol, p95\u22643\u00b7tol (existing default)"
+  },
+  "mesh": {
+    "vertices": 132863,
+    "faces": 265734,
+    "bounds": [
+      [
+        -41.15243911743164,
+        -41.360233306884766,
+        5.842708587646484
+      ],
+      [
+        41.57780838012695,
+        41.29477310180664,
+        39.329586029052734
+      ]
+    ],
+    "area": 15758.807963198775,
+    "volume": null
+  },
+  "warnings": [
+    "mesh is not watertight after repair; inside/outside classification may be wrong"
+  ],
+  "notes": [
+    "baseline_rerun s07 bore_d=14.275 (1a2e364/0c0a7ba)"
+  ],
+  "impeller": {
+    "detected": true,
+    "blades": 13,
+    "probe": {
+      "votes": [
+        13,
+        13,
+        13,
+        13
+      ],
+      "tangential_area_frac": 0.276,
+      "rim_radius": 41.28,
+      "reason": "N-fold blades at all radii"
+    },
+    "analysis": {
+      "frame": {
+        "rim_radius": 41.28000022482574,
+        "rim_faces": 20299,
+        "back_faces": 8020
+      },
+      "axis_corrections": [
+        {
+          "shift_mm": [
+            -0.0111,
+            0.0013
+          ],
+          "tilt_mrad": [
+            1.0817,
+            0.8529
+          ]
+        },
+        {
+          "shift_mm": [
+            0.0011,
+            0.0045
+          ],
+          "tilt_mrad": [
+            0.6285,
+            -0.7395
+          ]
+        },
+        {
+          "shift_mm": [
+            0.0006,
+            -0.0013
+          ],
+          "tilt_mrad": [
+            -0.3388,
+            -0.4916
+          ]
+        },
+        {
+          "shift_mm": [
+            -0.002,
+            0.0001
+          ],
+          "tilt_mrad": [
+            -0.2975,
+            0.1245
+          ]
+        },
+        {
+          "shift_mm": [
+            0.0001,
+            0.0022
+          ],
+          "tilt_mrad": [
+            -0.0108,
+            0.1227
+          ]
+        },
+        {
+          "shift_mm": [
+            0.0019,
+            0.0002
+          ],
+          "tilt_mrad": [
+            -0.0125,
+            0.0465
+          ]
+        }
+      ],
+      "subdivided_to_mm": null,
+      "blade_count_votes": [
+        13,
+        13,
+        13,
+        13
+      ],
+      "eye_concentricity": {
+        "z_sep": 24.799785684538364,
+        "baseline_ecc": 0.0077,
+        "ecc": [
+          [
+            16.3,
+            0.0055
+          ],
+          [
+            16.8,
+            0.0077
+          ],
+          [
+            17.3,
+            0.0093
+          ],
+          [
+            17.8,
+            0.0027
+          ],
+          [
+            18.3,
+            0.0067
+          ],
+          [
+            18.8,
+            0.0047
+          ],
+          [
+            19.3,
+            0.0029
+          ],
+          [
+            19.8,
+            0.0091
+          ],
+          [
+            20.3,
+            0.005
+          ],
+          [
+            20.8,
+            0.0069
+          ],
+          [
+            21.3,
+            0.0131
+          ],
+          [
+            21.8,
+            0.0131
+          ],
+          [
+            22.3,
+            0.011
+          ],
+          [
+            22.8,
+            0.0112
+          ],
+          [
+            23.3,
+            0.0173
+          ],
+          [
+            23.8,
+            0.0246
+          ],
+          [
+            24.3,
+            0.0296
+          ],
+          [
+            24.8,
+            0.0295
+          ],
+          [
+            25.3,
+            0.0335
+          ],
+          [
+            25.8,
+            0.0404
+          ],
+          [
+            26.3,
+            0.0537
+          ],
+          [
+            26.8,
+            0.0568
+          ],
+          [
+            27.3,
+            0.0699
+          ],
+          [
+            27.8,
+            0.0705
+          ],
+          [
+            28.3,
+            0.0759
+          ],
+          [
+            28.8,
+            0.0695
+          ],
+          [
+            29.3,
+            0.0689
+          ],
+          [
+            29.8,
+            0.0729
+          ],
+          [
+            30.3,
+            0.0732
+          ],
+          [
+            30.8,
+            0.0629
+          ],
+          [
+            31.3,
+            0.052
+          ],
+          [
+            31.8,
+            0.0586
+          ],
+          [
+            32.3,
+            0.0478
+          ],
+          [
+            32.8,
+            0.0458
+          ]
+        ]
+      },
+      "le_round": {
+        "rho": 1.7100000000000002,
+        "half_t": 1.2293900665989876,
+        "plane_offset": -0.2,
+        "rms": 0.051244450092345205
+      },
+      "eye": {
+        "z_front": 24.799785684538364,
+        "r_cyl": null,
+        "kind": "separate_piece"
+      },
+      "hub_rms": 0.005114683289700302,
+      "shroud_rms": 0.00446854369853455,
+      "side_fit": {
+        "1": {
+          "n": 59721,
+          "rms_mm": 0.0322,
+          "p95_mm": 0.0587,
+          "empty_cells": 153,
+          "grid_fit_fallback": null
+        },
+        "-1": {
+          "n": 44862,
+          "rms_mm": 0.0243,
+          "p95_mm": 0.0488,
+          "empty_cells": 175,
+          "grid_fit_fallback": null
+        }
+      },
+      "rim_radius": 41.28000022482574,
+      "floor": {
+        "cells_with_floor": 1228,
+        "h_range": [
+          -0.05,
+          0.489
+        ]
+      },
+      "fuse_valid_before_unify": true
+    },
+    "bore": {
+      "d": 14.275,
+      "source": "measure bore_d"
+    },
+    "build": {
+      "valid": true,
+      "n_solids": 1,
+      "n_faces": 288,
+      "volume": 37162.052449552335,
+      "hub_volume": 30525.81509036683,
+      "blade_volume": 454.99339606668013,
+      "slab_valid": true,
+      "front_face": {
+        "z": 24.799785684538364,
+        "r_outer": 9.47668196096582
+      },
+      "rim_hub_z": 1.5292443205478925,
+      "bore_d": 14.275,
+      "le_round": {
+        "rho": 1.1064510599390889,
+        "ok": true,
+        "method": "sheet_round",
+        "rho_estimated": 1.1064510599390889,
+        "attempts": [
+          {
+            "stage": "post_trim",
+            "rho": 1.1064510599390889,
+            "edges": 2,
+            "ok": false
+          },
+          {
+            "stage": "post_trim",
+            "rho": 0.8298382949543166,
+            "edges": 2,
+            "ok": false
+          },
+          {
+            "stage": "post_trim",
+            "rho": 0.5532255299695444,
+            "edges": 2,
+            "ok": false
+          },
+          {
+            "stage": "sheet_round",
+            "rho": 1.1064510599390889,
+            "ok": true,
+            "volume": 454.99339606668013,
+            "volume_sharp": 456.26114748546684
+          }
+        ]
+      },
+      "floor": {
+        "delta": 0.4,
+        "slab_volume": 350.40761613273196,
+        "h_range": [
+          -0.05,
+          0.489
+        ]
+      },
+      "seconds": 1332.4
+    },
+    "le_round_flag": {
+      "rounded": true,
+      "method": "sheet_round",
+      "rho_mm": 1.1064510599390889
+    },
+    "blade_parameters": {
+      "N": 13,
+      "le_plane_z": 19.05,
+      "r_te": 41.296,
+      "le_round": {
+        "rho": 1.7100000000000002,
+        "half_t": 1.2293900665989876,
+        "plane_offset": -0.2,
+        "rms": 0.051244450092345205
+      },
+      "angles": "blade angle beta from the meridional direction, tan(beta) = r dtheta/dm of the camber; 90 deg = tangential",
+      "thickness": "tangential (r * dtheta between the side sheets); normal ~ tangential * cos(beta)",
+      "spans": {
+        "root_incl_fillet": {
+          "LE_rz": [
+            11.916,
+            19.05
+          ],
+          "TE_rz": [
+            41.296,
+            1.601
+          ],
+          "meridional_length": 35.67,
+          "wrap_deg": 45.23,
+          "beta_inlet_deg": -25.6,
+          "beta_exit_deg": -42.0,
+          "thickness_normal_mm": {
+            "0.05": 3.732,
+            "0.10": 4.36,
+            "0.25": 4.086,
+            "0.50": 4.363,
+            "0.75": 3.962,
+            "0.90": 3.96,
+            "0.97": 3.875
+          }
+        },
+        "span_25": {
+          "LE_rz": [
+            13.579,
+            19.05
+          ],
+          "TE_rz": [
+            41.296,
+            2.429
+          ],
+          "meridional_length": 33.74,
+          "wrap_deg": 44.51,
+          "beta_inlet_deg": -29.8,
+          "beta_exit_deg": -44.0,
+          "thickness_normal_mm": {
+            "0.05": 1.735,
+            "0.10": 1.868,
+            "0.25": 2.112,
+            "0.50": 2.095,
+            "0.75": 2.511,
+            "0.90": 2.421,
+            "0.97": 2.066
+          }
+        },
+        "span_50": {
+          "LE_rz": [
+            15.386,
+            19.05
+          ],
+          "TE_rz": [
+            41.296,
+            3.329
+          ],
+          "meridional_length": 31.64,
+          "wrap_deg": 43.9,
+          "beta_inlet_deg": -33.3,
+          "beta_exit_deg": -45.3,
+          "thickness_normal_mm": {
+            "0.05": 1.458,
+            "0.10": 1.4,
+            "0.25": 1.669,
+            "0.50": 1.848,
+            "0.75": 1.748,
+            "0.90": 1.808,
+            "0.97": 1.48
+          }
+        },
+        "tip": {
+          "LE_rz": [
+            18.856,
+            19.05
+          ],
+          "TE_rz": [
+            41.296,
+            5.057
+          ],
+          "meridional_length": 27.64,
+          "wrap_deg": 42.95,
+          "beta_inlet_deg": -41.0,
+          "beta_exit_deg": -45.4,
+          "thickness_normal_mm": {
+            "0.05": 0.856,
+            "0.10": 1.012,
+            "0.25": 1.21,
+            "0.50": 1.345,
+            "0.75": 1.27,
+            "0.90": 0.794,
+            "0.97": 0.933
+          }
+        }
+      },
+      "tip_line_rz": [
+        [
+          19.0,
+          19.05
+        ],
+        [
+          20.579,
+          16.808
+        ],
+        [
+          22.126,
+          14.539
+        ],
+        [
+          23.919,
+          12.459
+        ],
+        [
+          25.962,
+          10.624
+        ],
+        [
+          28.237,
+          9.087
+        ],
+        [
+          30.686,
+          7.843
+        ],
+        [
+          33.252,
+          6.863
+        ],
+        [
+          35.893,
+          6.107
+        ],
+        [
+          38.589,
+          5.581
+        ],
+        [
+          41.296,
+          5.129
+        ]
+      ],
+      "hub_line_rz": [
+        [
+          11.772,
+          19.05
+        ],
+        [
+          13.692,
+          16.028
+        ],
+        [
+          16.009,
+          13.297
+        ],
+        [
+          18.547,
+          10.768
+        ],
+        [
+          21.276,
+          8.447
+        ],
+        [
+          24.226,
+          6.417
+        ],
+        [
+          27.395,
+          4.75
+        ],
+        [
+          30.746,
+          3.483
+        ],
+        [
+          34.213,
+          2.584
+        ],
+        [
+          37.748,
+          2.01
+        ],
+        [
+          41.296,
+          1.529
+        ]
+      ],
+      "exit_blade_height": 3.6
+    },
+    "nominal": {
+      "back_face": "flat plane z = 0 (the scan's back plane)",
+      "balance_cuts": "not modelled: built to the nominal surfaces, listed under balance_cuts",
+      "front_face": {
+        "z_front": 24.799785684538364,
+        "r_cyl": null,
+        "kind": "separate_piece"
+      }
+    },
+    "notes": [
+      "baseline_rerun s07 bore_d=14.275 (1a2e364/0c0a7ba)"
+    ],
+    "seconds": 1358.2
+  },
+  "balance_cuts": {
+    "count": 2,
+    "by_plane": {
+      "back": {
+        "count": 2,
+        "cuts": [
+          {
+            "plane": "back",
+            "angle_deg": -97.9,
+            "radius_mm": 38.81,
+            "z_mm": 0.3,
+            "depth_mm": 0.493,
+            "depth_max_mm": 0.658,
+            "area_mm2": 94.6,
+            "span_deg": 55.0,
+            "radial_width_mm": 6.02,
+            "n_points": 194
+          },
+          {
+            "plane": "back",
+            "angle_deg": -41.1,
+            "radius_mm": 39.93,
+            "z_mm": 0.27,
+            "depth_mm": 0.371,
+            "depth_max_mm": 0.416,
+            "area_mm2": 34.8,
+            "span_deg": 33.9,
+            "radial_width_mm": 3.97,
+            "n_points": 71
+          }
+        ]
+      },
+      "front": {
+        "count": 0,
+        "cuts": []
+      }
+    },
+    "search_zones": {
+      "back": {
+        "points": 2809,
+        "r_range": [
+          28.91,
+          41.36
+        ],
+        "residual_p1": -0.452,
+        "candidates": 272
+      },
+      "front": {
+        "points": 496,
+        "r_range": [
+          8.8,
+          9.46
+        ],
+        "residual_p1": -0.963,
+        "candidates": 196
+      }
+    },
+    "config": {
+      "back_band": [
+        0.7,
+        1.0
+      ],
+      "front_band": [
+        null,
+        1.0
+      ],
+      "plane_tol": 2.0,
+      "axial_normal": 0.85,
+      "depth_min": 0.15,
+      "link": 1.2,
+      "area_min": 8.0,
+      "max_span_deg": 60.0,
+      "min_width": 1.0,
+      "max_aspect": 12.0,
+      "max_radial_aspect": 4.0,
+      "dilate": 1.0
+    },
+    "faces_axis_frame": {
+      "z_back": -0.0,
+      "z_front": 24.8,
+      "back_sign": -1.0,
+      "r_front_out": 9.456,
+      "r_back_in": 8.223
+    },
+    "frame": "angles about the part axis from the axis-frame x direction",
+    "excluded_mesh_faces": 414,
+    "modelled_as": "not modelled: the solid is built to the nominal surfaces; cuts are listed here",
+    "axis_point": [
+      0.1986,
+      -0.0197,
+      6.1885
+    ],
+    "axis_dir": [
+      0.002171,
+      0.000678,
+      0.999997
+    ]
+  },
+  "deviation": {
+    "mesh_vertices_to_solid": {
+      "max": 10.775475878083,
+      "mean": 0.21582040755025533,
+      "rms": 1.1581442139326663,
+      "p95": 0.15656368480898672,
+      "n": 132863
+    },
+    "mesh_to_solid": {
+      "max": 10.709990935726545,
+      "mean": 0.24400161002677728,
+      "rms": 1.1802057412973024,
+      "p95": 0.36133057768735677,
+      "n": 30000
+    },
+    "solid_to_mesh": {
+      "max": 9.4333366963399,
+      "mean": 0.369198019602523,
+      "rms": 1.427922045552254,
+      "p95": 3.099739917653093,
+      "n": 30000
+    },
+    "hausdorff": 10.709990935726545,
+    "solid_tessellation": {
+      "triangles": 305782,
+      "linear_deflection": 0.01
+    },
+    "solid_scan_coverage": {
+      "covered_frac": 1.0,
+      "open_boundary_edges": 6
+    },
+    "solid_to_mesh_scanned": {
+      "max": 9.4333366963399,
+      "mean": 0.369198019602523,
+      "rms": 1.427922045552254,
+      "p95": 3.099739917653093,
+      "n": 30000
+    },
+    "excluded_zones": {
+      "faces": 9025,
+      "area_frac": 0.059730468447593804
+    },
+    "mesh_vertices_to_solid_excl": {
+      "max": 0.5913189065333828,
+      "mean": 0.02647320192870778,
+      "rms": 0.0457629725682091,
+      "p95": 0.08985183592008553,
+      "n": 128146
+    },
+    "mesh_to_solid_excl": {
+      "max": 0.6681162831746621,
+      "mean": 0.02541143968516203,
+      "rms": 0.046924594013181276,
+      "p95": 0.09245511583545131,
+      "n": 28272
+    },
+    "solid_to_mesh_excl": {
+      "max": 9.4333366963399,
+      "mean": 0.30969756782832303,
+      "rms": 1.3166478936815136,
+      "p95": 2.5314997500157723,
+      "n": 29086
+    },
+    "excluded_from_gate": {
+      "scan_only_faces": 8611,
+      "balance_cut_faces": 414
+    },
+    "acceptance": {
+      "basis": "mesh vertices -> solid rms/p95, scan-only stub/cap and balance cuts excluded",
+      "rms_limit": 0.048299999999999996,
+      "p95_limit": 0.08805,
+      "limits_basis": "1.5 x the blade-to-blade scatter of the folded side fits (rms 0.0322, p95 0.0587 mm; exclusions=9025): an N-fold model cannot fit closer; noise tolerance 0.0088",
+      "passed": true
+    }
+  },
+  "step": "/workspace/quadremesh-fusion/results/baseline_rerun/s07/s07.step",
+  "seconds": 1374.5004935264587
+}

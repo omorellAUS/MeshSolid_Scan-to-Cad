@@ -1,0 +1,1212 @@
+{
+ "chamfered_block": {
+  "truth": {
+   "L": 50.0,
+   "W": 30.0,
+   "H": 15.0,
+   "chamfer": 2.0,
+   "hole_d": 8.0,
+   "volume": 21436.68442980512
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 11,
+  "volume": 21431.279020851616,
+  "volume_err_pct": -0.025215694951344618,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    8.0,
+    7.9997
+   ],
+   [
+    "D2",
+    "distance",
+    15.0,
+    14.9995
+   ],
+   [
+    "D3",
+    "distance",
+    30.0,
+    29.9996
+   ],
+   [
+    "D4",
+    "distance",
+    50.0,
+    50.0
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07796700869787926,
+   "mean": 0.015757774480281404,
+   "rms": 0.01981933869776916,
+   "p95": 0.0385951196279577,
+   "n": 6352
+  },
+  "solid_to_mesh": {
+   "max": 0.06967596797533268,
+   "mean": 0.011602429276680025,
+   "rms": 0.014744639531897178,
+   "p95": 0.02908935672584438,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.13648608648535,
+   "p95_limit": 0.2729721729707,
+   "solid_to_mesh_p95_limit": 0.2979057356622544,
+   "facet_sag_p95": 0.024933562691554452,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0004925727844238281,
+   "regions_after": 11
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 5.3,
+  "stage_seconds": {
+   "segmentation": 0.1,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 0.8,
+   "deviation": 3.5
+  },
+  "peak_rss_mb_process": 612.4
+ },
+ "slotted_plate": {
+  "truth": {
+   "L": 60.0,
+   "W": 40.0,
+   "T": 8.0,
+   "slot_len": 20.0,
+   "slot_w": 8.0,
+   "volume": 18029.876140340504
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 10,
+  "volume": 18030.008337601615,
+  "volume_err_pct": 0.0007332122532750262,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    8.0,
+    8.0034
+   ],
+   [
+    "D2",
+    "diameter",
+    8.0,
+    8.0116
+   ],
+   [
+    "D3",
+    "distance",
+    8.0,
+    7.9997
+   ],
+   [
+    "D4",
+    "distance",
+    16.0,
+    15.9992
+   ],
+   [
+    "D5",
+    "distance",
+    8.0,
+    8.0003
+   ],
+   [
+    "D6",
+    "distance",
+    16.0,
+    15.9999
+   ],
+   [
+    "D7",
+    "span",
+    40.0,
+    39.9994
+   ],
+   [
+    "D8",
+    "distance",
+    60.0,
+    60.0
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.0777900008760481,
+   "mean": 0.015738115295974908,
+   "rms": 0.019762546789800325,
+   "p95": 0.038671253350470836,
+   "n": 7722
+  },
+  "solid_to_mesh": {
+   "max": 0.06498784334780344,
+   "mean": 0.011144996534787737,
+   "rms": 0.014135068276713668,
+   "p95": 0.027896954110661072,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.1311681813310028,
+   "p95_limit": 0.2623363626620056,
+   "solid_to_mesh_p95_limit": 0.2854154035292266,
+   "facet_sag_p95": 0.023079040867221002,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0004942417144775391,
+   "regions_after": 10
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 10.4,
+  "stage_seconds": {
+   "segmentation": 4.8,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 0.6,
+   "deviation": 4.0
+  },
+  "peak_rss_mb_process": 590.8
+ },
+ "counterbore_plate": {
+  "truth": {
+   "L": 60.0,
+   "W": 40.0,
+   "T": 10.0,
+   "hole_d": 6.6,
+   "cbore_d": 11.0,
+   "cbore_depth": 6.4,
+   "centers": [
+    [
+     10.0,
+     10.0
+    ],
+    [
+     50.0,
+     10.0
+    ],
+    [
+     10.0,
+     30.0
+    ],
+    [
+     50.0,
+     30.0
+    ]
+   ],
+   "volume": 21074.498655494717
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 18,
+  "volume": 21074.277207942276,
+  "volume_err_pct": -0.0010507844388687006,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    11.0,
+    11.0016
+   ],
+   [
+    "D2",
+    "diameter",
+    11.0,
+    11.0003
+   ],
+   [
+    "D3",
+    "diameter",
+    11.0,
+    10.9935
+   ],
+   [
+    "D4",
+    "diameter",
+    11.0,
+    10.9983
+   ],
+   [
+    "D5",
+    "diameter",
+    6.6021,
+    6.602
+   ],
+   [
+    "D6",
+    "diameter",
+    6.5953,
+    6.5953
+   ],
+   [
+    "D7",
+    "diameter",
+    6.5999,
+    6.5999
+   ],
+   [
+    "D8",
+    "diameter",
+    6.6028,
+    6.6028
+   ],
+   [
+    "D9",
+    "distance",
+    6.4004,
+    6.3982
+   ],
+   [
+    "D10",
+    "distance",
+    0.0004,
+    0.0031
+   ],
+   [
+    "D11",
+    "distance",
+    0.001,
+    -0.0004
+   ],
+   [
+    "D12",
+    "distance",
+    3.5983,
+    3.5985
+   ],
+   [
+    "D13",
+    "span",
+    10.0,
+    9.9993
+   ],
+   [
+    "D14",
+    "distance",
+    40.0,
+    39.9997
+   ],
+   [
+    "D15",
+    "distance",
+    60.0,
+    60.0015
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07930158405185007,
+   "mean": 0.015657580035782086,
+   "rms": 0.019679901663209563,
+   "p95": 0.038520878677447225,
+   "n": 8926
+  },
+  "solid_to_mesh": {
+   "max": 0.07214338687006577,
+   "mean": 0.01183924843878586,
+   "rms": 0.01521117766537638,
+   "p95": 0.030199985102877316,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.1353468057781119,
+   "p95_limit": 0.2706936115562238,
+   "solid_to_mesh_p95_limit": 0.2982368828810176,
+   "facet_sag_p95": 0.027543271324793797,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0005776882171630859,
+   "regions_after": 18
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 7.7,
+  "stage_seconds": {
+   "segmentation": 0.1,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 0.8,
+   "deviation": 5.9
+  },
+  "peak_rss_mb_process": 847.8
+ },
+ "bolt_circle_flange": {
+  "truth": {
+   "D": 60.0,
+   "T": 8.0,
+   "n_holes": 6,
+   "hole_d": 6.0,
+   "PCD": 45.0,
+   "bore": 20.0,
+   "volume": 18749.024956623874
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 10,
+  "volume": 18749.02495662389,
+  "volume_err_pct": 7.76142506718771e-14,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    60.0,
+    59.9972
+   ],
+   [
+    "D2",
+    "diameter",
+    6.0,
+    5.9965
+   ],
+   [
+    "D3",
+    "diameter",
+    6.0,
+    6.0021
+   ],
+   [
+    "D4",
+    "diameter",
+    6.0,
+    5.9977
+   ],
+   [
+    "D5",
+    "diameter",
+    20.0,
+    19.9962
+   ],
+   [
+    "D6",
+    "diameter",
+    6.0,
+    5.9966
+   ],
+   [
+    "D7",
+    "diameter",
+    6.0,
+    6.0
+   ],
+   [
+    "D8",
+    "diameter",
+    6.0,
+    6.0036
+   ],
+   [
+    "D9",
+    "distance",
+    8.0,
+    7.9995
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07930373788948877,
+   "mean": 0.015612852224585761,
+   "rms": 0.019606168241847508,
+   "p95": 0.03838662526991551,
+   "n": 8642
+  },
+  "solid_to_mesh": {
+   "max": 0.08184636349051834,
+   "mean": 0.012478683366188407,
+   "rms": 0.01624422331113143,
+   "p95": 0.032760598629395066,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.1378578385777168,
+   "p95_limit": 0.2757156771554336,
+   "solid_to_mesh_p95_limit": 0.30810558945634553,
+   "facet_sag_p95": 0.03238991230091193,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0005140304565429688,
+   "regions_after": 10
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 5.7,
+  "stage_seconds": {
+   "segmentation": 0.2,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 0.6,
+   "deviation": 3.9
+  },
+  "peak_rss_mb_process": 576.8
+ },
+ "countersunk_plate": {
+  "truth": {
+   "L": 50.0,
+   "W": 30.0,
+   "T": 8.0,
+   "hole_d": 5.5,
+   "csink_d": 10.4,
+   "csink_angle": 90.0,
+   "volume": 11742.6755491365
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 8,
+  "volume": 11742.459909525951,
+  "volume_err_pct": -0.0018363754465234926,
+  "dims": [
+   [
+    "D1",
+    "cone_half_angle_deg",
+    45.0609,
+    45.0609
+   ],
+   [
+    "D2",
+    "diameter",
+    5.5,
+    5.5029
+   ],
+   [
+    "D3",
+    "distance",
+    8.0,
+    8.0001
+   ],
+   [
+    "D4",
+    "distance",
+    30.0,
+    29.9977
+   ],
+   [
+    "D5",
+    "distance",
+    50.0,
+    50.0004
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07716343871220707,
+   "mean": 0.01574021118002579,
+   "rms": 0.01985025367472386,
+   "p95": 0.03870930104496924,
+   "n": 5102
+  },
+  "solid_to_mesh": {
+   "max": 0.07944051767946268,
+   "mean": 0.011406684318271748,
+   "rms": 0.014620941773917002,
+   "p95": 0.02896739307603687,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.13526519817441118,
+   "p95_limit": 0.27053039634882237,
+   "solid_to_mesh_p95_limit": 0.2948145055722484,
+   "facet_sag_p95": 0.02428410922342605,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0003376007080078125,
+   "regions_after": 8
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 10.6,
+  "stage_seconds": {
+   "segmentation": 0.2,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 0.5,
+   "deviation": 8.9
+  },
+  "peak_rss_mb_process": 768.4
+ },
+ "drafted_block": {
+  "truth": {
+   "L": 40.0,
+   "W": 30.0,
+   "H": 20.0,
+   "draft_deg": 5.0,
+   "volume": 21631.962927893357
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 6,
+  "volume": 21630.90002063901,
+  "volume_err_pct": -0.004913595950084873,
+  "dims": [
+   [
+    "D1",
+    "distance",
+    20.0,
+    19.9999
+   ],
+   [
+    "D2",
+    "draft_angle_deg",
+    4.9999,
+    4.9999
+   ],
+   [
+    "D3",
+    "draft_angle_deg",
+    5.0088,
+    5.0088
+   ],
+   [
+    "D4",
+    "draft_angle_deg",
+    4.9984,
+    4.9984
+   ],
+   [
+    "D5",
+    "draft_angle_deg",
+    4.9969,
+    4.9969
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07842188343642716,
+   "mean": 0.015807673400374436,
+   "rms": 0.01987982562186337,
+   "p95": 0.038941799350026104,
+   "n": 5310
+  },
+  "solid_to_mesh": {
+   "max": 0.07614462050788681,
+   "mean": 0.01094291858956719,
+   "rms": 0.013934712593103428,
+   "p95": 0.027633301115223555,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.13645032172973143,
+   "p95_limit": 0.27290064345946285,
+   "solid_to_mesh_p95_limit": 0.2951282284555258,
+   "facet_sag_p95": 0.0222275849960629,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0003371238708496094,
+   "regions_after": 6
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 1.9,
+  "stage_seconds": {
+   "segmentation": 0.0,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 0.4,
+   "deviation": 0.6
+  },
+  "peak_rss_mb_process": 499.2
+ },
+ "pocket_plate": {
+  "truth": {
+   "L": 60.0,
+   "W": 40.0,
+   "T": 12.0,
+   "pocket_L": 36.0,
+   "pocket_W": 22.0,
+   "pocket_depth": 6.0,
+   "corner_r": 4.0,
+   "volume": 24130.407105255374
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 15,
+  "volume": 24130.40682012128,
+  "volume_err_pct": -1.1816381419192573e-06,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    8.0,
+    8.0386
+   ],
+   [
+    "D2",
+    "diameter",
+    8.0,
+    8.0637
+   ],
+   [
+    "D3",
+    "diameter",
+    8.0,
+    8.0277
+   ],
+   [
+    "D4",
+    "diameter",
+    8.0,
+    8.0718
+   ],
+   [
+    "D5",
+    "distance",
+    6.0,
+    6.0008
+   ],
+   [
+    "D6",
+    "distance",
+    6.0,
+    5.9994
+   ],
+   [
+    "D7",
+    "span",
+    12.0,
+    12.0003
+   ],
+   [
+    "D8",
+    "distance",
+    9.0,
+    9.0012
+   ],
+   [
+    "D9",
+    "distance",
+    22.0,
+    21.9984
+   ],
+   [
+    "D10",
+    "distance",
+    9.0,
+    9.0
+   ],
+   [
+    "D11",
+    "span",
+    40.0,
+    39.9997
+   ],
+   [
+    "D12",
+    "distance",
+    12.0,
+    12.0009
+   ],
+   [
+    "D13",
+    "distance",
+    36.0,
+    35.9987
+   ],
+   [
+    "D14",
+    "distance",
+    12.0,
+    12.0002
+   ],
+   [
+    "D15",
+    "span",
+    60.0,
+    59.9997
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07913623842598475,
+   "mean": 0.015702874260575272,
+   "rms": 0.019716257966284862,
+   "p95": 0.0386515212724501,
+   "n": 8853
+  },
+  "solid_to_mesh": {
+   "max": 0.10479468299191909,
+   "mean": 0.011127973755567296,
+   "rms": 0.014112967070412456,
+   "p95": 0.02795466148325399,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.13234117977828674,
+   "p95_limit": 0.2646823595565735,
+   "solid_to_mesh_p95_limit": 0.2875327563329777,
+   "facet_sag_p95": 0.0228503967764042,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0007781982421875,
+   "regions_after": 15
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 16.0,
+  "stage_seconds": {
+   "segmentation": 10.1,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 1.0,
+   "deviation": 3.7
+  },
+  "peak_rss_mb_process": 567.4
+ },
+ "chamfer_fillet_block": {
+  "truth": {
+   "L": 50.0,
+   "W": 30.0,
+   "H": 16.0,
+   "chamfer": 1.5,
+   "fillet_r": 3.0,
+   "volume": 23705.717883440488
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 18,
+  "volume": 23721.00045972099,
+  "volume_err_pct": 0.06446789063991905,
+  "dims": [
+   [
+    "D1",
+    "cone_half_angle_deg",
+    45.0062,
+    45.0062
+   ],
+   [
+    "D2",
+    "cone_half_angle_deg",
+    45.0663,
+    45.0663
+   ],
+   [
+    "D3",
+    "cone_half_angle_deg",
+    45.1037,
+    45.1037
+   ],
+   [
+    "D4",
+    "cone_half_angle_deg",
+    44.9517,
+    44.9517
+   ],
+   [
+    "D5",
+    "diameter",
+    6.0,
+    6.0565
+   ],
+   [
+    "D6",
+    "diameter",
+    6.0,
+    6.1255
+   ],
+   [
+    "D7",
+    "diameter",
+    6.0,
+    6.0456
+   ],
+   [
+    "D8",
+    "diameter",
+    6.0,
+    6.0675
+   ],
+   [
+    "D9",
+    "distance",
+    16.0,
+    16.0
+   ],
+   [
+    "D10",
+    "distance",
+    30.0,
+    29.9998
+   ],
+   [
+    "D11",
+    "distance",
+    50.0,
+    49.9978
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.07963829642778816,
+   "mean": 0.01585670894848746,
+   "rms": 0.019920884526807098,
+   "p95": 0.0390990116017472,
+   "n": 6152
+  },
+  "solid_to_mesh": {
+   "max": 0.11649146024144319,
+   "mean": 0.011838813138170534,
+   "rms": 0.015337479646595346,
+   "p95": 0.03004408928229173,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.1375011502996075,
+   "p95_limit": 0.275002300599215,
+   "solid_to_mesh_p95_limit": 0.3016815245228962,
+   "facet_sag_p95": 0.026679223923681196,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 0,
+   "candidates": 0,
+   "seconds": 0.0005214214324951172,
+   "regions_after": 18
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 31.6,
+  "stage_seconds": {
+   "segmentation": 20.9,
+   "threads": 0.0,
+   "freeform": 0.0,
+   "build": 1.8,
+   "deviation": 7.9
+  },
+  "peak_rss_mb_process": 758.4
+ },
+ "threaded_stud": {
+  "truth": {
+   "thread": {
+    "type": "external",
+    "major_d": 12.0,
+    "pitch": 1.75,
+    "hand": "right",
+    "z_start": 15.0,
+    "z_end": 37.0,
+    "designation": "M12x1.75"
+   },
+   "shank_d": 12.0,
+   "volume": 3765.0830961981037,
+   "model_volume": 4166.799056211262
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 83,
+  "volume": 4184.601416153702,
+  "volume_err_pct": 0.4272430636150621,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    12.0,
+    11.9997
+   ],
+   [
+    "D2",
+    "distance",
+    37.0,
+    36.9993
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 1.0160997887606407,
+   "mean": 0.43797807290783913,
+   "rms": 0.575802387980836,
+   "p95": 0.9602376273347455,
+   "n": 25760
+  },
+  "solid_to_mesh": {
+   "max": 0.9172292145437592,
+   "mean": 0.16483610522188627,
+   "rms": 0.26633229803066744,
+   "p95": 0.5944700753818672,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95); thread zones excluded (modelled by the thread spec, not by geometry)",
+   "rms_limit": 0.16431600419268444,
+   "p95_limit": 0.3286320083853689,
+   "solid_to_mesh_p95_limit": 0.3529671443585974,
+   "facet_sag_p95": 0.024335135973228488,
+   "passed": true
+  },
+  "threads": [
+   {
+    "kind": "external",
+    "axis": [
+     0.0038699569734633728,
+     0.009356108546609716,
+     0.9999487420192535
+    ],
+    "axis_point": [
+     0.004490548072406236,
+     0.07174905350394808,
+     12.779961570155605
+    ],
+    "start": [
+     0.012920848467380494,
+     0.09213036681486013,
+     14.958246324379814
+    ],
+    "end": [
+     0.10425715423195454,
+     0.3129473931641009,
+     38.55841156555446
+    ],
+    "length": 23.601374999999987,
+    "major_d": 11.976398058062262,
+    "minor_d": 10.102601228031514,
+    "pitch": 1.74825,
+    "turns": 13.499999999999991,
+    "hand": "right",
+    "taper_half_angle_deg": 0.0,
+    "tapered": false,
+    "phase_score": 0.8250890025117689,
+    "standard": {
+     "designation": "M12x1.75",
+     "nominal_major_d": 12.0,
+     "nominal_pitch": 1.75,
+     "standard": "metric",
+     "match_error": 0.074,
+     "match": "good"
+    },
+    "confidence": 0.688,
+    "modelled_as": "cylinder at major diameter",
+    "model_diameter": 12.0,
+    "model_diameter_source": "nominal (standard match good)",
+    "volume_delta_mm3": 442.65959184802955,
+    "region": 0,
+    "merged_into_existing_cylinder": true,
+    "runout_regions_absorbed": 9,
+    "end_chamfers_kept": 0
+   }
+  ],
+  "vertices_to_solid_excl": {
+   "max": 0.9329943351754183,
+   "mean": 0.018660717485560713,
+   "rms": 0.04472082164127962,
+   "p95": 0.04044770831284645,
+   "n": 3878
+  },
+  "solid_to_mesh_excl": {
+   "max": 0.9133270587670131,
+   "mean": 0.02168641561273054,
+   "rms": 0.07916578588301598,
+   "p95": 0.0323703051205887,
+   "n": 13262
+  },
+  "reason": "",
+  "seconds": 131.4,
+  "stage_seconds": {
+   "segmentation": 112.1,
+   "threads": 0.3,
+   "freeform": 0.0,
+   "build": 1.7,
+   "deviation": 15.2
+  },
+  "peak_rss_mb_process": 838.7
+ },
+ "pipe_elbow": {
+  "truth": {
+   "r_out": 10.0,
+   "r_in": 7.0,
+   "bend_radius": 40.0,
+   "ovalisation": 0.06,
+   "flange_r": 21.0,
+   "flange_t": 6.0,
+   "n_bolts": 4,
+   "bolt_d": 4.0,
+   "pcd": 32.0,
+   "volume": 22817.422252729495
+  },
+  "status": "ok",
+  "method": "local_trim+maker_volume",
+  "brepcheck_valid": true,
+  "n_solids": 1,
+  "regions": 29,
+  "volume": 22817.004458934927,
+  "volume_err_pct": -0.001831029771638049,
+  "dims": [
+   [
+    "D1",
+    "diameter",
+    42.0,
+    41.9973
+   ],
+   [
+    "D2",
+    "diameter",
+    42.0,
+    41.9968
+   ],
+   [
+    "D3",
+    "diameter",
+    4.0,
+    4.0021
+   ],
+   [
+    "D4",
+    "diameter",
+    4.0,
+    3.998
+   ],
+   [
+    "D5",
+    "diameter",
+    17.0,
+    17.0011
+   ],
+   [
+    "D6",
+    "diameter",
+    4.0,
+    4.0018
+   ],
+   [
+    "D7",
+    "diameter",
+    4.0,
+    4.0032
+   ],
+   [
+    "D8",
+    "diameter",
+    4.0,
+    4.0068
+   ],
+   [
+    "D9",
+    "diameter",
+    4.0,
+    4.0002
+   ],
+   [
+    "D10",
+    "diameter",
+    4.0,
+    3.9985
+   ],
+   [
+    "D11",
+    "diameter",
+    4.0,
+    4.0034
+   ],
+   [
+    "D12",
+    "distance",
+    6.0,
+    5.9992
+   ],
+   [
+    "D13",
+    "distance",
+    6.0,
+    5.9995
+   ]
+  ],
+  "vertices_to_solid": {
+   "max": 0.15211654663645843,
+   "mean": 0.016496618269083947,
+   "rms": 0.020922503398948515,
+   "p95": 0.04074006324280381,
+   "n": 15055
+  },
+  "solid_to_mesh": {
+   "max": 0.16197136522480612,
+   "mean": 0.014142866166312941,
+   "rms": 0.018855740375145123,
+   "p95": 0.03688448952382919,
+   "n": 30000
+  },
+  "acceptance": {
+   "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95)",
+   "rms_limit": 0.13631629971711298,
+   "p95_limit": 0.27263259943422596,
+   "solid_to_mesh_p95_limit": 0.3104894603872039,
+   "facet_sag_p95": 0.03785686095297793,
+   "passed": true
+  },
+  "threads": [],
+  "freeform": {
+   "accepted": 2,
+   "candidates": 2,
+   "seconds": 3.510655641555786,
+   "regions_after": 18
+  },
+  "vertices_to_solid_excl": null,
+  "solid_to_mesh_excl": null,
+  "reason": "",
+  "seconds": 51.4,
+  "stage_seconds": {
+   "segmentation": 26.4,
+   "threads": 0.1,
+   "freeform": 3.5,
+   "build": 3.1,
+   "deviation": 15.7
+  },
+  "peak_rss_mb_process": 1979.1
+ }
+}

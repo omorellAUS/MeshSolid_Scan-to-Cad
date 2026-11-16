@@ -1,0 +1,732 @@
+{
+ "files": {
+  "s01": {
+   "file": "s01.stl",
+   "format": "stl",
+   "triangles": 508256,
+   "vertices": 254104,
+   "bbox": [
+    139.989,
+    57.6,
+    139.978
+   ],
+   "bbox_min": [
+    -69.994,
+    -10.85,
+    -69.978
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 0,
+   "nonmanifold_edges": 40,
+   "components": 33,
+   "largest_components_faces": [
+    56472,
+    56472,
+    56472,
+    56472,
+    56472
+   ],
+   "mean_edge_mm": 0.6997,
+   "median_edge_mm": 0.5355,
+   "roughness_mm": 0.0212,
+   "area_mm2": 94694.6,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 8.9,
+   "description": "Centrifugal impeller, 140 mm diameter, 57.6 mm tall along Y, 10.7 mm through-bore. 8 full blades plus 8 splitter blades (8 at 0.35R, 16 further out), open (unshrouded), on a conical hub/backplate. File is an Autodesk-exported STL made of 33 shells, several of them identical (56,472 faces each): a patterned or rebuilt mesh, not a raw scan. Not watertight: 40 non-manifold edges, no open edges.",
+   "rotor_probe": {
+    "axis": [
+     -0.0013,
+     1.0,
+     -0.0011
+    ],
+    "outer_d": 140.203,
+    "height": 57.648,
+    "inner_d_min": 10.641,
+    "blade_count_by_radius": {
+     "0.35R": {
+      "k": 8,
+      "strength": 14.6
+     },
+     "0.50R": {
+      "k": 16,
+      "strength": 14.3
+     },
+     "0.65R": {
+      "k": 16,
+      "strength": 21.3
+     },
+     "0.80R": {
+      "k": 16,
+      "strength": 24.8
+     },
+     "0.92R": {
+      "k": 16,
+      "strength": 19.7
+     }
+    },
+    "radius_percentiles": {
+     "0.1": 5.329,
+     "1": 5.46,
+     "5": 17.609,
+     "50": 40.275,
+     "95": 66.314,
+     "99.9": 70.102
+    }
+   }
+  },
+  "s02": {
+   "file": "s02.ply",
+   "format": "ply",
+   "kind": "point cloud (no faces)",
+   "triangles": 0,
+   "vertices": 403432,
+   "bbox": [
+    140.435,
+    94.734,
+    130.828
+   ],
+   "bbox_min": [
+    -70.197,
+    -47.204,
+    -0.155
+   ],
+   "units_guess": "mm",
+   "point_spacing_mm": 0.2382,
+   "roughness_mm": 0.0059,
+   "seconds": 1.5,
+   "description": "Same 140 mm, 8+8-blade impeller as s01, as a raw Revopoint point cloud (403k points with normals, no faces). Tilted about 23 deg off the axes; includes a short shaft stub. Point spacing 0.24 mm. Needs surface reconstruction before the pipeline.",
+   "rotor_probe": {
+    "axis": [
+     -0.0135,
+     0.9201,
+     0.3916
+    ],
+    "outer_d": 140.937,
+    "height": 72.011,
+    "inner_d_min": 9.714,
+    "blade_count_by_radius": {
+     "0.35R": {
+      "k": 8,
+      "strength": 11.0
+     },
+     "0.50R": {
+      "k": 16,
+      "strength": 21.3
+     },
+     "0.65R": {
+      "k": 16,
+      "strength": 32.8
+     },
+     "0.80R": {
+      "k": 16,
+      "strength": 45.2
+     },
+     "0.92R": {
+      "k": 16,
+      "strength": 35.3
+     }
+    },
+    "radius_percentiles": {
+     "0.1": 5.03,
+     "1": 5.773,
+     "5": 18.182,
+     "50": 41.875,
+     "95": 66.388,
+     "99.9": 70.469
+    }
+   }
+  },
+  "s03": {
+   "file": "s03.obj",
+   "format": "obj",
+   "triangles": 280853,
+   "vertices": 141536,
+   "bbox": [
+    71.667,
+    73.497,
+    75.266
+   ],
+   "bbox_min": [
+    -70.418,
+    -0.0,
+    -70.545
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 2217,
+   "nonmanifold_edges": 0,
+   "components": 1,
+   "largest_components_faces": [
+    280853
+   ],
+   "mean_edge_mm": 0.3681,
+   "median_edge_mm": 0.3805,
+   "roughness_mm": 0.0044,
+   "area_mm2": 17012.6,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 6.0,
+   "description": "90-degree sector (one quarter) of a radius-70 mm impeller: backplate quarter disc plus about 2 blade passages and a hub/nose step. Matches s01/s02 in radius. Single shell with 2,217 open edges (the cut boundary). Looks like a partial working model or partial scan.",
+   "rotor_probe": null
+  },
+  "s04": {
+   "file": "s04.stl",
+   "format": "stl",
+   "triangles": 256285,
+   "vertices": 128718,
+   "bbox": [
+    142.869,
+    144.259,
+    57.655
+   ],
+   "bbox_min": [
+    -71.434,
+    -72.237,
+    -0.005
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 1384,
+   "nonmanifold_edges": 165,
+   "components": 109,
+   "largest_components_faces": [
+    256073,
+    8,
+    8,
+    4,
+    4
+   ],
+   "mean_edge_mm": 0.7894,
+   "median_edge_mm": 0.7127,
+   "roughness_mm": 0.0366,
+   "area_mm2": 65459.5,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 5.4,
+   "description": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026). Thick plain ring/sleeve, OD about 143 mm (147.6 incl. a small protrusion), bore 91.8 mm, 57.7 mm long. Two circumferential grooves on the OD and a small radial hole/pin feature. Prismatic/turned. Plausibly a bearing housing, bush carrier or seal ring (oil groove + radial feed hole pattern), but the docs do not identify it.",
+   "rotor_probe": {
+    "axis": [
+     -0.003,
+     0.0002,
+     1.0
+    ],
+    "outer_d": 147.633,
+    "height": 57.803,
+    "inner_d_min": 91.795,
+    "blade_count_by_radius": {},
+    "radius_percentiles": {
+     "0.1": 45.909,
+     "1": 45.975,
+     "5": 47.304,
+     "50": 65.176,
+     "95": 71.49,
+     "99.9": 73.816
+    }
+   },
+   "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026)"
+  },
+  "s05": {
+   "file": "s05.obj",
+   "format": "obj",
+   "triangles": 256229,
+   "vertices": 128718,
+   "bbox": [
+    142.865,
+    147.292,
+    57.655
+   ],
+   "bbox_min": [
+    -71.231,
+    -71.233,
+    -0.005
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 1384,
+   "nonmanifold_edges": 110,
+   "components": 81,
+   "largest_components_faces": [
+    256073,
+    8,
+    8,
+    4,
+    4
+   ],
+   "mean_edge_mm": 0.7895,
+   "median_edge_mm": 0.7128,
+   "roughness_mm": 0.0386,
+   "area_mm2": 65459.5,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 5.9,
+   "description": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026). Same geometry as s04 (QuickSurface OBJ re-export).",
+   "rotor_probe": null,
+   "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026)"
+  },
+  "s06": {
+   "file": "s06.stl",
+   "format": "stl",
+   "triangles": 256285,
+   "vertices": 128718,
+   "bbox": [
+    142.869,
+    144.259,
+    57.655
+   ],
+   "bbox_min": [
+    -71.434,
+    -72.237,
+    -0.005
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 1384,
+   "nonmanifold_edges": 165,
+   "components": 109,
+   "largest_components_faces": [
+    256073,
+    8,
+    8,
+    4,
+    4
+   ],
+   "mean_edge_mm": 0.7894,
+   "median_edge_mm": 0.7127,
+   "roughness_mm": 0.0366,
+   "area_mm2": 65459.5,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 4.8,
+   "description": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026). Same geometry as s04 (byte-different STL, identical vertices).",
+   "rotor_probe": null,
+   "part": "TA2000 bull gear drive end (DE) bearing casing (user-identified, 30 Oct 2026)"
+  },
+  "s07": {
+   "file": "s07.stl",
+   "format": "stl",
+   "triangles": 265728,
+   "vertices": 132862,
+   "bbox": [
+    82.73,
+    82.655,
+    33.487
+   ],
+   "bbox_min": [
+    -41.152,
+    -41.36,
+    5.843
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 12,
+   "nonmanifold_edges": 2,
+   "components": 1,
+   "largest_components_faces": [
+    265728
+   ],
+   "mean_edge_mm": 0.3734,
+   "median_edge_mm": 0.3196,
+   "roughness_mm": 0.0265,
+   "area_mm2": 15758.8,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 5.1,
+   "description": "Centrifugal impeller, 82.9 mm diameter, 33.3 mm tall incl. a nose/hub extension, 13 full blades, no splitters, open. Single-shell scan, 12 open edges, roughness 0.027 mm.",
+   "rotor_probe": {
+    "axis": [
+     -0.0016,
+     0.001,
+     -1.0
+    ],
+    "outer_d": 82.863,
+    "height": 33.304,
+    "inner_d_min": 2.201,
+    "blade_count_by_radius": {
+     "0.35R": {
+      "k": 13,
+      "strength": 18.1
+     },
+     "0.50R": {
+      "k": 13,
+      "strength": 30.6
+     },
+     "0.65R": {
+      "k": 13,
+      "strength": 23.9
+     },
+     "0.80R": {
+      "k": 13,
+      "strength": 23.1
+     },
+     "0.92R": {
+      "k": 13,
+      "strength": 26.1
+     }
+    },
+    "radius_percentiles": {
+     "0.1": 1.61,
+     "1": 5.02,
+     "5": 9.176,
+     "50": 27.202,
+     "95": 40.723,
+     "99.9": 41.431
+    }
+   }
+  },
+  "s08": {
+   "file": "s08.stl",
+   "format": "stl",
+   "triangles": 332737,
+   "vertices": 167515,
+   "bbox": [
+    123.065,
+    122.892,
+    257.751
+   ],
+   "bbox_min": [
+    -61.246,
+    -61.827,
+    -0.233
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 1808,
+   "nonmanifold_edges": 512,
+   "components": 1090,
+   "largest_components_faces": [
+    288217,
+    16533,
+    4600,
+    3420,
+    2254
+   ],
+   "mean_edge_mm": 0.3844,
+   "median_edge_mm": 0.3167,
+   "roughness_mm": 0.0278,
+   "area_mm2": 22905.9,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 5.9,
+   "description": "Same 83 mm, 13-blade impeller as s07/s09, scan with stray debris (1,090 shells; the bbox height of 258 mm comes from outliers). Main body 83.8 x 27.3 mm.",
+   "rotor_probe": {
+    "axis": [
+     0.0259,
+     0.0294,
+     0.9992
+    ],
+    "outer_d": 83.75,
+    "height": 27.312,
+    "inner_d_min": 1.689,
+    "blade_count_by_radius": {
+     "0.35R": {
+      "k": 12,
+      "strength": 9.6
+     },
+     "0.50R": {
+      "k": 13,
+      "strength": 18.9
+     },
+     "0.65R": {
+      "k": 13,
+      "strength": 16.1
+     },
+     "0.80R": {
+      "k": 13,
+      "strength": 16.0
+     },
+     "0.92R": {
+      "k": 13,
+      "strength": 19.3
+     }
+    },
+    "radius_percentiles": {
+     "0.1": 1.147,
+     "1": 4.756,
+     "5": 11.388,
+     "50": 28.834,
+     "95": 40.474,
+     "99.9": 41.875
+    }
+   }
+  },
+  "s09": {
+   "file": "s09.stl",
+   "format": "stl",
+   "triangles": 328460,
+   "vertices": 157913,
+   "bbox": [
+    82.57,
+    82.57,
+    22.112
+   ],
+   "bbox_min": [
+    0.498,
+    11.657,
+    0.0
+   ],
+   "units_guess": "mm",
+   "watertight": false,
+   "open_edges": 0,
+   "nonmanifold_edges": 8276,
+   "components": 6177,
+   "largest_components_faces": [
+    317390,
+    45,
+    45,
+    31,
+    31
+   ],
+   "mean_edge_mm": 0.286,
+   "median_edge_mm": 0.0977,
+   "roughness_mm": 0.0079,
+   "area_mm2": 16474.7,
+   "volume_mm3": null,
+   "has_vertex_colors": false,
+   "seconds": 5.7,
+   "description": "Same 83 mm, 13-blade impeller; STL header 'Impellor_J03N20003 3RD' -> a 3rd-stage impeller CAD export (SolidWorks-style facets: 6,177 shells, 8,276 non-manifold edges). 22.2 mm tall without the nose, 14.3 mm bore. Smooth (roughness 0.008 mm): design-intent rebuild, the best reference for s07/s08.",
+   "rotor_probe": {
+    "axis": [
+     -0.0006,
+     -0.0011,
+     1.0
+    ],
+    "outer_d": 82.642,
+    "height": 22.178,
+    "inner_d_min": 14.275,
+    "blade_count_by_radius": {
+     "0.35R": {
+      "k": 13,
+      "strength": 22.0
+     },
+     "0.50R": {
+      "k": 13,
+      "strength": 32.9
+     },
+     "0.65R": {
+      "k": 13,
+      "strength": 26.1
+     },
+     "0.80R": {
+      "k": 13,
+      "strength": 24.1
+     },
+     "0.92R": {
+      "k": 13,
+      "strength": 26.7
+     }
+    },
+    "radius_percentiles": {
+     "0.1": 7.14,
+     "1": 7.162,
+     "5": 7.251,
+     "50": 26.901,
+     "95": 40.846,
+     "99.9": 41.321
+    }
+   }
+  }
+ },
+ "groups": [
+  {
+   "part": "Turbocharger compressor wheel, 140 mm, 8 + 8 splitters",
+   "members": [
+    "s01",
+    "s02",
+    "s03"
+   ],
+   "label": "Turbocharger compressor wheel from a Cummins KTA38 twin-turbo diesel generator (user, 25 Oct 2026). Not a TA2000 part; not cross-checked against the TA2000 documents.",
+   "accuracy_rank": [
+    "s01 (complete, smooth, patterned/rebuilt mesh)",
+    "s02 (raw point cloud, needs meshing, tilted)",
+    "s03 (quarter sector only)"
+   ],
+   "label_source": "user correction 25 Oct 2026 05:51 UTC"
+  },
+  {
+   "part": "Impeller B, 83 mm, 13 blades",
+   "members": [
+    "s09",
+    "s07",
+    "s08"
+   ],
+   "label": "TA2000 3rd-stage impeller (user-confirmed; s09 file header '3RD'; s07/s08 match it within 0.25-0.46 mm median)",
+   "accuracy_rank": [
+    "s09 (CAD rebuild, design intent)",
+    "s07 (clean single-shell scan)",
+    "s08 (scan with debris)"
+   ]
+  },
+  {
+   "part": "Ring / sleeve, 143 x 92 x 57.7 mm",
+   "members": [
+    "s04",
+    "s06",
+    "s05"
+   ],
+   "label": "possible bearing housing / bush / seal carrier; not identifiable from the docs",
+   "accuracy_rank": [
+    "s04 = s06 = s05 (same mesh, three exports)"
+   ]
+  }
+ ],
+ "icp_same_part": {
+  "s07-s09": {
+   "median_mm": 0.25,
+   "p90_mm": 0.55
+  },
+  "s08-s09": {
+   "median_mm": 0.39,
+   "p90_mm": 1.57
+  },
+  "s07-s08": {
+   "median_mm": 0.45,
+   "p90_mm": 1.31
+  },
+  "s01-s02": {
+   "median_mm": 0.74,
+   "p90_mm": 1.82,
+   "note": "s02 has an extra shaft stub; reverse direction median 1.02 / p90 4.39"
+  },
+  "s04-s06": {
+   "median_mm": 0.0,
+   "note": "identical vertex coordinates (different files)"
+  },
+  "s04-s05": {
+   "median_mm": 0.0,
+   "note": "same mesh re-exported as OBJ by QuickSurface (56 fewer faces)"
+  },
+  "impeller_83-impeller_140": {
+   "median_mm": ">9",
+   "note": "different parts"
+  }
+ },
+ "bbox_pairs": {
+  "s01-s02": {
+   "bbox_rel_diff": 0.392
+  },
+  "s01-s03": {
+   "bbox_rel_diff": 0.475
+  },
+  "s01-s04": {
+   "bbox_rel_diff": 0.03,
+   "icp_median_mm": 9.251,
+   "icp_p90_mm": 25.387
+  },
+  "s01-s05": {
+   "bbox_rel_diff": 0.05,
+   "icp_median_mm": 9.284,
+   "icp_p90_mm": 25.385
+  },
+  "s01-s06": {
+   "bbox_rel_diff": 0.03,
+   "icp_median_mm": 9.251,
+   "icp_p90_mm": 25.387
+  },
+  "s01-s07": {
+   "bbox_rel_diff": 0.419
+  },
+  "s01-s08": {
+   "bbox_rel_diff": 0.531
+  },
+  "s01-s09": {
+   "bbox_rel_diff": 0.616
+  },
+  "s02-s03": {
+   "bbox_rel_diff": 0.464
+  },
+  "s02-s04": {
+   "bbox_rel_diff": 0.391
+  },
+  "s02-s05": {
+   "bbox_rel_diff": 0.391
+  },
+  "s02-s06": {
+   "bbox_rel_diff": 0.391
+  },
+  "s02-s07": {
+   "bbox_rel_diff": 0.647
+  },
+  "s02-s08": {
+   "bbox_rel_diff": 0.455
+  },
+  "s02-s09": {
+   "bbox_rel_diff": 0.767
+  },
+  "s03-s04": {
+   "bbox_rel_diff": 0.486
+  },
+  "s03-s05": {
+   "bbox_rel_diff": 0.489
+  },
+  "s03-s06": {
+   "bbox_rel_diff": 0.486
+  },
+  "s03-s07": {
+   "bbox_rel_diff": 0.533
+  },
+  "s03-s08": {
+   "bbox_rel_diff": 0.708
+  },
+  "s03-s09": {
+   "bbox_rel_diff": 0.691
+  },
+  "s04-s05": {
+   "bbox_rel_diff": 0.021,
+   "icp_median_mm": 0.0,
+   "icp_p90_mm": 0.0
+  },
+  "s04-s06": {
+   "bbox_rel_diff": 0.0,
+   "icp_median_mm": 0.0,
+   "icp_p90_mm": 0.0
+  },
+  "s04-s07": {
+   "bbox_rel_diff": 0.427
+  },
+  "s04-s08": {
+   "bbox_rel_diff": 0.531
+  },
+  "s04-s09": {
+   "bbox_rel_diff": 0.616
+  },
+  "s05-s06": {
+   "bbox_rel_diff": 0.021,
+   "icp_median_mm": 0.0,
+   "icp_p90_mm": 0.0
+  },
+  "s05-s07": {
+   "bbox_rel_diff": 0.438
+  },
+  "s05-s08": {
+   "bbox_rel_diff": 0.531
+  },
+  "s05-s09": {
+   "bbox_rel_diff": 0.616
+  },
+  "s06-s07": {
+   "bbox_rel_diff": 0.427
+  },
+  "s06-s08": {
+   "bbox_rel_diff": 0.531
+  },
+  "s06-s09": {
+   "bbox_rel_diff": 0.616
+  },
+  "s07-s08": {
+   "bbox_rel_diff": 0.728
+  },
+  "s07-s09": {
+   "bbox_rel_diff": 0.34
+  },
+  "s08-s09": {
+   "bbox_rel_diff": 0.82
+  }
+ },
+ "notes": [
+  "roughness_mm = median RMS distance of vertices to their 24-NN plane (scanner noise + smoothing; low values on CAD exports)",
+  "blade counts from the FFT of the angular density of tangent-facing surface at 0.35..0.92 R",
+  "TA2000: only the 3rd-stage impeller is among the files (the 140 mm wheel is a Cummins KTA38 turbocharger compressor wheel)"
+ ]
+}

@@ -1,0 +1,84 @@
+{
+  "WING 2 L": {
+    "ok": true,
+    "nsol": 1,
+    "vol": 1.0124,
+    "rms": 0.57274,
+    "levels": [
+      -395.0,
+      -322.8187,
+      -304.4495,
+      -290.0
+    ],
+    "t": 18.02,
+    "reason": "",
+    "slabs": [
+      {
+        "from": -395.0,
+        "to": -322.8187,
+        "sections": 46,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "shared_wire": true,
+        "corner_count_intent": 10,
+        "corner_count_used": 0,
+        "shared_wire_mode": "smooth",
+        "strip_fallback": "strip sew MakeSolid failed (free=37)"
+      },
+      {
+        "from": -322.8187,
+        "to": -304.4495,
+        "sections": 13,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "shared_wire": true,
+        "corner_count_intent": 6,
+        "corner_count_used": 0,
+        "shared_wire_mode": "smooth",
+        "strip_fallback": "strip sew MakeSolid failed (free=37)"
+      },
+      {
+        "from": -304.4495,
+        "to": -290.0,
+        "sections": 12,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "shared_wire": true,
+        "corner_count_intent": 2,
+        "corner_count_used": 0,
+        "shared_wire_mode": "smooth",
+        "strip_fallback": "strip sew MakeSolid failed (free=37)"
+      }
+    ],
+    "p95": 1.3438
+  },
+  "WINGTIP L 2": {
+    "ok": false,
+    "nsol": 1,
+    "vol": 0.9988,
+    "rms": 0.05855,
+    "levels": [
+      463.9288,
+      683.7948
+    ],
+    "t": 11.37,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.05855 / p95 0.1021, solid->mesh p95 0.01394 (tol 0.0115, lim_s2m 0.04219)",
+    "slabs": [
+      {
+        "from": 463.9288,
+        "to": 683.7948,
+        "sections": 80,
+        "corners": [
+          0
+        ],
+        "smooth": true
+      }
+    ]
+  }
+}

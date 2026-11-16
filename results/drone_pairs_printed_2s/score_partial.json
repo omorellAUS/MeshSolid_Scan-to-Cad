@@ -1,0 +1,170 @@
+[
+  {
+    "report": "drone_wing_1_l_v2_userstl.report.json",
+    "stl_name": "WING 1 L V2",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": null,
+    "loft_tried": null,
+    "failure": "analytic solid construction failed (local_trim: local trim exceeded its 76 s budget after trimming 20 of 72 regions; loc",
+    "seconds": 131.05977416038513,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "drone_wing_1_r_v2_userstl.report.json",
+    "stl_name": "WING 1 R V2",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": null,
+    "loft_tried": null,
+    "failure": "analytic solid construction failed (local_trim: local trim exceeded its 87 s budget after trimming 21 of 63 regions; loc",
+    "seconds": 139.75053691864014,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "drone_wing_2_l_userstl.report.json",
+    "stl_name": "WING 2 L",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": false,
+    "loft_tried": true,
+    "failure": "analytic solid construction failed (local_trim: local trim exceeded its 11 s budget after trimming 9 of 33 regions; revo",
+    "seconds": 120.02616953849792,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "drone_wing_2_r_userstl.report.json",
+    "stl_name": "WING 2 R",
+    "status": "timeout",
+    "method": null,
+    "loft_accepted": null,
+    "loft_tried": null,
+    "failure": "time budget of 150 s exceeded during stage 'loft_skin'; the engine was stopped. No STEP written.",
+    "seconds": null,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "drone_wingtip_l_1_userstl.report.json",
+    "stl_name": "WINGTIP L 1",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": false,
+    "loft_tried": true,
+    "failure": "analytic solid construction failed (local_trim: 5 regions produced no trimmed face; 40 free (unsewn) edges - shell not c",
+    "seconds": 120.17056083679199,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "drone_wingtip_l_2_userstl.report.json",
+    "stl_name": "WINGTIP L 2",
+    "status": "ok",
+    "method": "section_loft",
+    "loft_accepted": true,
+    "loft_tried": true,
+    "failure": "",
+    "seconds": 19.734517574310303,
+    "rms": 0.04193,
+    "step": "results/drone_pairs_printed_2s/runs/drone_wingtip_l_2_userstl.step",
+    "vs_step": {
+      "hausdorff": 0.34632,
+      "t2r_rms": 0.01694,
+      "r2t_rms": 0.01912,
+      "align_med": 0.31952
+    }
+  },
+  {
+    "report": "drone_wingtip_r_1_userstl.report.json",
+    "stl_name": "WINGTIP R 1",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": false,
+    "loft_tried": true,
+    "failure": "analytic solid construction failed (local_trim: 3 regions produced no trimmed face; 53 free (unsewn) edges - shell not c",
+    "seconds": 125.66968250274658,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "drone_wingtip_r_2_userstl.report.json",
+    "stl_name": "WINGTIP R 2",
+    "status": "ok",
+    "method": "section_loft",
+    "loft_accepted": true,
+    "loft_tried": true,
+    "failure": "",
+    "seconds": 20.145507097244263,
+    "rms": 0.04,
+    "step": "results/drone_pairs_printed_2s/runs/drone_wingtip_r_2_userstl.step",
+    "vs_step": {
+      "hausdorff": 0.26081,
+      "t2r_rms": 0.01742,
+      "r2t_rms": 0.01894,
+      "align_med": 0.31744
+    }
+  },
+  {
+    "report": "vtol_aileron_1r_vtol_userstl.report.json",
+    "stl_name": "AILERON 1R VTOL",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": false,
+    "loft_tried": true,
+    "failure": "analytic solid construction failed (local_trim: 40 free (unsewn) edges - shell not closed; 3 shells after sewing; revolv",
+    "seconds": 66.71383857727051,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "vtol_wing_root_vtol_r_userstl.report.json",
+    "stl_name": "WING ROOT VTOL R",
+    "status": "failed",
+    "method": "revolve_profile",
+    "loft_accepted": null,
+    "loft_tried": null,
+    "failure": "analytic solid construction failed (local_trim: 18 regions produced no trimmed face; 296 free (unsewn) edges - shell not",
+    "seconds": 129.08484768867493,
+    "rms": null,
+    "step": null
+  },
+  {
+    "report": "wingtip_l_2.report.json",
+    "stl_name": "WINGTIP L 2",
+    "status": "ok",
+    "method": "section_loft",
+    "loft_accepted": true,
+    "loft_tried": true,
+    "failure": "",
+    "seconds": 19.876248598098755,
+    "rms": 0.04193,
+    "step": "results/drone_pairs_printed_2s/runs/wingtip_l_2.step",
+    "vs_step": {
+      "hausdorff": 0.34632,
+      "t2r_rms": 0.01694,
+      "r2t_rms": 0.01912,
+      "align_med": 0.31952
+    }
+  },
+  {
+    "report": "wingtip_r_2.report.json",
+    "stl_name": "WINGTIP R 2",
+    "status": "ok",
+    "method": "section_loft",
+    "loft_accepted": true,
+    "loft_tried": true,
+    "failure": "",
+    "seconds": 20.210960149765015,
+    "rms": 0.04,
+    "step": "results/drone_pairs_printed_2s/runs/wingtip_r_2.step",
+    "vs_step": {
+      "hausdorff": 0.26081,
+      "t2r_rms": 0.01742,
+      "r2t_rms": 0.01894,
+      "align_med": 0.31744
+    }
+  }
+]

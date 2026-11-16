@@ -1,0 +1,10 @@
+cadquery-ocp==8.0.1.1.0
+matplotlib==3.11.2
+numpy==2.5.4
+pymeshlab==2025.7.post1
+pytest==9.1.1
+rtree==1.4.1
+scipy==1.18.1
+trimesh==5.2.0
+networkx
+libigl==2.6.3

@@ -1,0 +1,82 @@
+{
+  "base_rms": 0.57274,
+  "skin_only_target": 0.18811,
+  "after": {
+    "rms": 0.57288,
+    "skin_rms": 0.18812,
+    "feat_rms": 1.12456,
+    "vol_ratio": 1.0124,
+    "n_solids": 1,
+    "valid": true
+  },
+  "cut_log": [
+    {
+      "ok": false,
+      "n_faces": 80,
+      "n_floor": 56,
+      "n_walls": 24,
+      "n_wall_planes": 3,
+      "rim_n": 13,
+      "depth": 1.5508,
+      "depth_use": 1.9508,
+      "depth_floor": 5.1926,
+      "depth_mesh": 1.1791,
+      "mean_side": 0.3448,
+      "floor_normal": [
+        0.45384,
+        -0.83522,
+        -0.31053
+      ],
+      "floor_rms": 0.92786,
+      "centroid": [
+        353.19,
+        14.84,
+        470.14
+      ],
+      "i": 0,
+      "n_seed": 111,
+      "n_region_faces": 80,
+      "n_solids": 2,
+      "vol_ratio": 1.0124,
+      "reason": "nsol=2 vol=1.012"
+    },
+    {
+      "ok": true,
+      "n_faces": 80,
+      "n_floor": 50,
+      "n_walls": 30,
+      "n_wall_planes": 2,
+      "rim_n": 10,
+      "depth": 1.5399,
+      "depth_use": 1.9399,
+      "depth_floor": 4.9583,
+      "depth_mesh": 1.3742,
+      "mean_side": 0.5397,
+      "floor_normal": [
+        0.53121,
+        -0.84676,
+        -0.02864
+      ],
+      "floor_rms": 0.90128,
+      "centroid": [
+        369.44,
+        15.44,
+        508.47
+      ],
+      "i": 1,
+      "n_seed": 97,
+      "n_region_faces": 80,
+      "n_solids": 1,
+      "vol_ratio": 1.0124
+    }
+  ],
+  "delta_rms": -0.00014,
+  "printed_gate": {
+    "class": "printed",
+    "rms_limit": 0.05,
+    "p95_limit": 0.1,
+    "tol": 0.01653,
+    "basis": "printed: absolute vertex\u2192solid rms\u22640.05 mm, p95\u22640.10 mm (user 2026-11-09; FDM/SLA drone parts)"
+  },
+  "passes_printed": false
+}

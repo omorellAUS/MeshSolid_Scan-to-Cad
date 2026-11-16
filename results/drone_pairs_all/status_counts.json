@@ -1,0 +1,13 @@
+{
+  "generated": "2026-11-09T10:41:24.766171+08:00",
+  "expected": 35,
+  "counts": {
+    "failed": 22,
+    "timeout": 13
+  },
+  "pending_ids": [],
+  "ok_ids": [],
+  "step_written_ids": [],
+  "engine_rows_n": 35,
+  "active_note": "see agent report for PIDs"
+}

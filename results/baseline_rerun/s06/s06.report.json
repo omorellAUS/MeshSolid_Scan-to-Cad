@@ -1,0 +1,5189 @@
+{
+  "tool": "meshsolid",
+  "version": "0.1.0",
+  "input": "results/regression_loft_guard_2s/prepped/s06.stl",
+  "params": {
+    "tol": null,
+    "sharp_deg": 30.0,
+    "round_tol": 0.03,
+    "do_round": true,
+    "snap_angle_deg": 2.0,
+    "accept_rms": null,
+    "accept_p95": null,
+    "accuracy": "machined",
+    "max_tools": 80,
+    "balance_cuts": "auto",
+    "gears": "auto",
+    "gear_build": "snapped",
+    "impeller": "auto",
+    "screws": "auto",
+    "splines": "auto",
+    "bearing_build": "full",
+    "notes": [
+      "baseline_rerun s06 prepped (historical prep_scan)"
+    ],
+    "builder": "auto",
+    "split_bodies": true,
+    "cell_fallback_max": 30,
+    "seed": 0,
+    "freeform": true,
+    "threads": true,
+    "drop_faceless_rounds": 2,
+    "drop_faceless_area_frac": 0.01,
+    "time_budget_s": 600.0,
+    "consolidate": true
+  },
+  "status": "ok",
+  "stages": {
+    "load_repair": {
+      "input_vertices": 180102,
+      "input_faces": 60034,
+      "merged_vertices": 149708,
+      "removed_degenerate": 0,
+      "removed_duplicate": 0,
+      "removed_internal_walls": 0,
+      "holes_found": 6,
+      "holes_filled": 4,
+      "holes_left_open": 2,
+      "non_manifold_edges": 1,
+      "watertight": false,
+      "winding_consistent": false,
+      "flipped_inside_out": false,
+      "notes": [
+        "winding made consistent",
+        "1 non-manifold edges (>2 faces) - not repaired"
+      ]
+    },
+    "impeller_probe": {
+      "votes": [],
+      "tangential_area_frac": 0.431,
+      "rim_radius": 2.186,
+      "reason": "not a bladed rotor (votes/tangential area)",
+      "blades": null,
+      "seconds": 0.08
+    },
+    "segmentation": {
+      "sharp_edges": 4129,
+      "sharp_components": 328,
+      "small_regions_merged": 1,
+      "regions_simplified": 1,
+      "regions_absorbed": 0,
+      "unassigned_faces": 16798,
+      "unassigned_area_frac": 0.0732399608715148,
+      "budget_hit": false,
+      "regions": 30,
+      "seconds": 50.87568712234497
+    },
+    "coaxial_refit": [
+      {
+        "region": 27,
+        "coaxial_with": 8,
+        "accepted": false,
+        "rms_current": 0.03167746403032088,
+        "rms_coaxial_cone": 0.09531065868298771,
+        "normal_err_current": 7.6881085746910545,
+        "normal_err_coaxial": 9.911012596747673,
+        "half_angle_deg": 68.8399122860821
+      }
+    ],
+    "threads": {
+      "found": 0,
+      "seconds": 0.2338733673095703,
+      "regions_after": 30
+    },
+    "freeform": {
+      "accepted": 0,
+      "candidates": 0,
+      "log": [],
+      "seconds": 0.005244016647338867,
+      "regions_after": 30
+    },
+    "snapping": {
+      "frame": [
+        [
+          4.817381839387519e-05,
+          0.00012408825832141475,
+          0.9999999911406936
+        ],
+        [
+          0.7042414007871891,
+          0.7099605866014655,
+          -0.000122023771096242
+        ],
+        [
+          -0.7099605954534244,
+          0.7042414004264498,
+          -5.31865764957676e-05
+        ]
+      ],
+      "direction_clusters": [
+        {
+          "dir": [
+            4.817381839387519e-05,
+            0.00012408825832141475,
+            0.9999999911406936
+          ],
+          "regions": [
+            1,
+            0,
+            2,
+            4,
+            3,
+            6,
+            5,
+            8,
+            9,
+            13,
+            10,
+            11,
+            14,
+            12,
+            18,
+            22,
+            19,
+            23,
+            28,
+            29,
+            20
+          ]
+        },
+        {
+          "dir": [
+            0.7042414007871891,
+            0.7099605866014655,
+            -0.000122023771096242
+          ],
+          "regions": [
+            16
+          ]
+        },
+        {
+          "dir": [
+            -0.01898327808490614,
+            -0.07105496628982806,
+            0.9972917461398658
+          ],
+          "regions": [
+            17
+          ]
+        },
+        {
+          "dir": [
+            -0.31451904095221095,
+            0.9491765577643185,
+            -0.011901053280314912
+          ],
+          "regions": [
+            27
+          ]
+        },
+        {
+          "dir": [
+            0.29972137911273383,
+            0.9403687312187275,
+            0.1608531760607839
+          ],
+          "regions": [
+            24
+          ]
+        }
+      ],
+      "log": [
+        {
+          "op": "snap_direction",
+          "regions": [
+            1,
+            0,
+            2,
+            4,
+            3,
+            6,
+            5,
+            8,
+            9,
+            13,
+            10,
+            11,
+            14,
+            12,
+            18,
+            22,
+            19,
+            23,
+            28,
+            29,
+            20
+          ],
+          "angle_deg": 8.537736462515939e-07
+        },
+        {
+          "op": "snap_direction",
+          "regions": [
+            16
+          ],
+          "angle_deg": 0.05083243728585472
+        },
+        {
+          "op": "coplanar",
+          "regions": [
+            10,
+            20
+          ],
+          "gap": 0.017675941632852243
+        },
+        {
+          "op": "coplanar",
+          "regions": [
+            10,
+            29
+          ],
+          "gap": 0.025320492959547636
+        },
+        {
+          "op": "coplanar",
+          "regions": [
+            20,
+            29
+          ],
+          "gap": 0.003211233265570712
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            1
+          ],
+          "axis_offset": 0.0043407387701863195
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            4
+          ],
+          "axis_offset": 0.008776294399266572
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            6
+          ],
+          "axis_offset": 0.005860010477090209
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            8
+          ],
+          "axis_offset": 0.007297622613428543
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            12
+          ],
+          "axis_offset": 0.0067646412063104185
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            13
+          ],
+          "axis_offset": 0.003915118693702116
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            14
+          ],
+          "axis_offset": 0.007732091946051057
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            19
+          ],
+          "axis_offset": 0.0038206427616394954
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            22
+          ],
+          "axis_offset": 0.019633973355648218
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            0,
+            23
+          ],
+          "axis_offset": 0.029477991596657153
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            4
+          ],
+          "axis_offset": 0.0040968143191466135
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            6
+          ],
+          "axis_offset": 0.004426435266327407
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            8
+          ],
+          "axis_offset": 0.003993633045139035
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            12
+          ],
+          "axis_offset": 0.003074418542759515
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            13
+          ],
+          "axis_offset": 0.0026117425360021604
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            14
+          ],
+          "axis_offset": 0.003001305286456028
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            19
+          ],
+          "axis_offset": 0.0027532676288683864
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            22
+          ],
+          "axis_offset": 0.0031280889888977807
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            1,
+            23
+          ],
+          "axis_offset": 0.0026394665561503276
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            6
+          ],
+          "axis_offset": 0.000994485780872498
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            8
+          ],
+          "axis_offset": 0.0011729406575127156
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            12
+          ],
+          "axis_offset": 0.0010222480743572373
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            13
+          ],
+          "axis_offset": 0.0011079912828787764
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            14
+          ],
+          "axis_offset": 0.0011468647944247634
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            19
+          ],
+          "axis_offset": 0.0010893307786640175
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            22
+          ],
+          "axis_offset": 0.001112551438555073
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            4,
+            23
+          ],
+          "axis_offset": 0.0011144164373763654
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            8
+          ],
+          "axis_offset": 0.00026026394836471065
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            12
+          ],
+          "axis_offset": 0.00023419731770579094
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            13
+          ],
+          "axis_offset": 0.00032000602668741607
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            14
+          ],
+          "axis_offset": 0.0003674240002291414
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            19
+          ],
+          "axis_offset": 0.00034262757351516155
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            22
+          ],
+          "axis_offset": 0.0003593858251521314
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            6,
+            23
+          ],
+          "axis_offset": 0.0003676841538282695
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            8,
+            12
+          ],
+          "axis_offset": 2.6860750102451202e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            8,
+            13
+          ],
+          "axis_offset": 7.828123246761141e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            8,
+            14
+          ],
+          "axis_offset": 0.00011457543330000713
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            8,
+            19
+          ],
+          "axis_offset": 0.00010447533358446796
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            8,
+            22
+          ],
+          "axis_offset": 0.00011561772821935598
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            8,
+            23
+          ],
+          "axis_offset": 0.00012170573998018512
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            12,
+            13
+          ],
+          "axis_offset": 2.225289263859337e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            12,
+            14
+          ],
+          "axis_offset": 3.8093462006439226e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            12,
+            19
+          ],
+          "axis_offset": 2.601138851328796e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            12,
+            22
+          ],
+          "axis_offset": 2.9974537894719364e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            12,
+            23
+          ],
+          "axis_offset": 3.081223303758986e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            13,
+            14
+          ],
+          "axis_offset": 2.2629050620113664e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            13,
+            19
+          ],
+          "axis_offset": 2.0328577370731397e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            13,
+            22
+          ],
+          "axis_offset": 2.5783875216120867e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            13,
+            23
+          ],
+          "axis_offset": 2.8743143414069366e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            14,
+            19
+          ],
+          "axis_offset": 4.480553172095977e-06
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            14,
+            22
+          ],
+          "axis_offset": 9.325981162991641e-06
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            14,
+            23
+          ],
+          "axis_offset": 1.2613218672185854e-05
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            19,
+            22
+          ],
+          "axis_offset": 2.3603092603211045e-06
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            19,
+            23
+          ],
+          "axis_offset": 3.8851549191172846e-06
+        },
+        {
+          "op": "coaxial",
+          "regions": [
+            22,
+            23
+          ],
+          "axis_offset": 1.8018699006555424e-06
+        },
+        {
+          "op": "round_diameter",
+          "region": 4,
+          "raw": 100.0264812555145,
+          "snapped": 100.0
+        },
+        {
+          "op": "round_diameter",
+          "region": 6,
+          "raw": 100.03136827733154,
+          "snapped": 100.0
+        },
+        {
+          "op": "round_diameter",
+          "region": 18,
+          "raw": 115.44663544207748,
+          "snapped": 115.5
+        },
+        {
+          "op": "round_diameter",
+          "region": 17,
+          "raw": 5.450872649478456,
+          "snapped": 5.5
+        },
+        {
+          "op": "round_minor_radius",
+          "region": 19,
+          "raw": 0.5096507068225999,
+          "snapped": 0.5
+        },
+        {
+          "op": "tangent_exact",
+          "region": 27,
+          "with": [
+            2
+          ],
+          "residual": 4.707345624410664e-14,
+          "radius_before": 2.4690979553533112,
+          "radius_after": 2.4690979553533112
+        },
+        {
+          "op": "tangent_exact",
+          "region": 18,
+          "with": [
+            28
+          ],
+          "residual": 9.769962616701378e-15,
+          "radius_before": 57.75,
+          "radius_after": 57.75
+        },
+        {
+          "op": "tangent_exact",
+          "region": 16,
+          "with": [
+            2
+          ],
+          "residual": 5.684341886080802e-14,
+          "radius_before": 165.78844016773547,
+          "radius_after": 165.78844016773547
+        },
+        {
+          "op": "tangent_exact",
+          "region": 12,
+          "with": [
+            4,
+            5
+          ],
+          "minor_radius_before": 1.0959183837978153,
+          "minor_radius_after": 1.0917238410002574
+        },
+        {
+          "op": "tangent_exact",
+          "region": 13,
+          "with": [
+            0,
+            3
+          ],
+          "minor_radius_before": 1.2658597692016895,
+          "minor_radius_after": 1.2303159270155977
+        },
+        {
+          "op": "tangent_exact",
+          "region": 14,
+          "with": [
+            1,
+            2
+          ],
+          "minor_radius_before": 1.3191075115835307,
+          "minor_radius_after": 1.2239113274740325
+        },
+        {
+          "op": "tangent_exact",
+          "region": 19,
+          "with": [
+            0,
+            9
+          ],
+          "minor_radius_before": 0.5,
+          "minor_radius_after": 0.4511293887333771
+        },
+        {
+          "op": "tangent_exact",
+          "region": 22,
+          "with": [
+            6,
+            3
+          ],
+          "minor_radius_before": 0.6467131728253521,
+          "minor_radius_after": 0.6256102952200554
+        },
+        {
+          "op": "tangent_exact",
+          "region": 23,
+          "with": [
+            8,
+            11
+          ],
+          "minor_radius_before": 0.8739322751517001,
+          "minor_radius_after": 0.8265707221099838
+        }
+      ]
+    },
+    "blends": {
+      "pipes": 0,
+      "log": []
+    },
+    "consolidate": {
+      "regions_before": 30,
+      "regions_after": 23,
+      "log": [
+        {
+          "op": "degenerate_to_plane",
+          "region": 16,
+          "was": "cylinder",
+          "radius": 165.788
+        },
+        {
+          "op": "degenerate_to_plane",
+          "region": 24,
+          "was": "torus",
+          "radius": 7.216
+        },
+        {
+          "op": "same_surface",
+          "region": 0,
+          "into": 1,
+          "area": 8524.39
+        },
+        {
+          "op": "same_surface",
+          "region": 16,
+          "into": 2,
+          "area": 101.85
+        },
+        {
+          "op": "same_surface",
+          "region": 6,
+          "into": 4,
+          "area": 3932.79
+        },
+        {
+          "op": "same_surface",
+          "region": 29,
+          "into": 10,
+          "area": 55.71
+        },
+        {
+          "op": "same_surface",
+          "region": 20,
+          "into": 10,
+          "area": 25.18
+        },
+        {
+          "op": "absorbed_small",
+          "region": 24,
+          "into": 26,
+          "area": 16.71
+        },
+        {
+          "op": "absorbed_small",
+          "region": 28,
+          "into": 18,
+          "area": 111.16
+        }
+      ],
+      "ops": {
+        "absorbed_small": 2,
+        "degenerate_to_plane": 2,
+        "same_surface": 5
+      }
+    },
+    "coaxial_realign": [],
+    "build": {
+      "ok": true,
+      "method": "revolve_profile",
+      "reason": "",
+      "axis_point": [
+        0.0007,
+        0.5929,
+        40.2799
+      ],
+      "axis_dir": [
+        4.8e-05,
+        0.000124,
+        1.0
+      ],
+      "coaxial_area_frac": 0.9929,
+      "profile": [
+        {
+          "region": 1,
+          "kind": "line",
+          "from": [
+            71.4115,
+            -14.8903
+          ],
+          "to": [
+            71.4115,
+            15.7269
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 14,
+          "kind": "circle",
+          "from": [
+            71.4115,
+            15.7269
+          ],
+          "to": [
+            70.1876,
+            16.9508
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 2,
+          "kind": "line",
+          "from": [
+            70.1876,
+            16.9508
+          ],
+          "to": [
+            46.0523,
+            16.9508
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 8,
+          "kind": "line",
+          "from": [
+            46.0523,
+            16.9508
+          ],
+          "to": [
+            46.0523,
+            8.5477
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 23,
+          "kind": "circle",
+          "from": [
+            46.0523,
+            8.5477
+          ],
+          "to": [
+            46.8789,
+            7.7211
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 11,
+          "kind": "line",
+          "from": [
+            46.8789,
+            7.7211
+          ],
+          "to": [
+            50.0,
+            7.7211
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 4,
+          "kind": "line",
+          "from": [
+            50.0,
+            7.7211
+          ],
+          "to": [
+            50.0,
+            -17.0666
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 12,
+          "kind": "circle",
+          "from": [
+            50.0,
+            -17.0666
+          ],
+          "to": [
+            51.0917,
+            -18.1583
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 5,
+          "kind": "line",
+          "from": [
+            51.0917,
+            -18.1583
+          ],
+          "to": [
+            57.9201,
+            -18.1583
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 18,
+          "kind": "line",
+          "from": [
+            57.9201,
+            -18.1583
+          ],
+          "to": [
+            57.9201,
+            -26.2014
+          ],
+          "synthesised": false
+        },
+        {
+          "region": null,
+          "kind": "line",
+          "from": [
+            57.9201,
+            -26.2014
+          ],
+          "to": [
+            50.0,
+            -26.2014
+          ],
+          "synthesised": true,
+          "between_regions": [
+            18,
+            4
+          ]
+        },
+        {
+          "region": 4,
+          "kind": "line",
+          "from": [
+            50.0,
+            -26.2014
+          ],
+          "to": [
+            50.0,
+            -39.6268
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 22,
+          "kind": "circle",
+          "from": [
+            50.0,
+            -39.6268
+          ],
+          "to": [
+            50.6256,
+            -40.2524
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 3,
+          "kind": "line",
+          "from": [
+            50.6256,
+            -40.2524
+          ],
+          "to": [
+            70.1906,
+            -40.2524
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 13,
+          "kind": "circle",
+          "from": [
+            70.1906,
+            -40.2524
+          ],
+          "to": [
+            71.4115,
+            -39.1739
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 1,
+          "kind": "line",
+          "from": [
+            71.4115,
+            -39.1739
+          ],
+          "to": [
+            71.4115,
+            -19.9862
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 19,
+          "kind": "circle",
+          "from": [
+            71.4115,
+            -19.9862
+          ],
+          "to": [
+            70.9697,
+            -19.6266
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 9,
+          "kind": "line",
+          "from": [
+            70.9697,
+            -19.6266
+          ],
+          "to": [
+            68.6219,
+            -19.6266
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 7,
+          "kind": "circle",
+          "from": [
+            68.6219,
+            -19.6266
+          ],
+          "to": [
+            68.6176,
+            -14.8903
+          ],
+          "synthesised": false
+        },
+        {
+          "region": 10,
+          "kind": "line",
+          "from": [
+            68.6176,
+            -14.8903
+          ],
+          "to": [
+            71.4115,
+            -14.8903
+          ],
+          "synthesised": false
+        }
+      ],
+      "synthesised": [
+        {
+          "region": null,
+          "kind": "line",
+          "from": [
+            57.9201,
+            -26.2014
+          ],
+          "to": [
+            50.0,
+            -26.2014
+          ],
+          "synthesised": true,
+          "between_regions": [
+            18,
+            4
+          ]
+        }
+      ],
+      "dropped_segments": [],
+      "holes_cut": [
+        {
+          "region": 17,
+          "diameter": 5.5,
+          "depth": 4.843,
+          "open_ends": [
+            true,
+            false
+          ],
+          "pattern_angle_deg": 0.0,
+          "axis_parallel_to_part_axis": false
+        },
+        {
+          "region": 17,
+          "diameter": 5.5,
+          "depth": 4.843,
+          "open_ends": [
+            true,
+            false
+          ],
+          "pattern_angle_deg": 90.0
+        },
+        {
+          "region": 17,
+          "diameter": 5.5,
+          "depth": 4.843,
+          "open_ends": [
+            true,
+            false
+          ],
+          "pattern_angle_deg": 180.1
+        },
+        {
+          "region": 17,
+          "diameter": 5.5,
+          "depth": 4.843,
+          "open_ends": [
+            true,
+            false
+          ],
+          "pattern_angle_deg": 270.1
+        },
+        {
+          "region": null,
+          "source": "unfitted scan cluster",
+          "axis_kind": "axial",
+          "diameter": 10.9423,
+          "depth": 5.003,
+          "open_ends": [
+            false,
+            true
+          ],
+          "centre_radius": 59.55,
+          "angle_deg": null,
+          "median_dev_before": 2.156,
+          "median_dev_after": 0.113
+        }
+      ],
+      "unmodelled_regions": [
+        {
+          "region": 15,
+          "kind": "sphere",
+          "area": 145.05
+        },
+        {
+          "region": 21,
+          "kind": "sphere",
+          "area": 97.92
+        },
+        {
+          "region": 25,
+          "kind": "sphere",
+          "area": 68.67
+        },
+        {
+          "region": 26,
+          "kind": "sphere",
+          "area": 78.8
+        },
+        {
+          "region": 27,
+          "kind": "cylinder",
+          "area": 17.51
+        }
+      ],
+      "profile_refits": [
+        {
+          "region": 18,
+          "offset_mm": -0.1701,
+          "points": 1557
+        }
+      ],
+      "fill_artifacts": [
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 0.0,
+          "faces": 42,
+          "area_mm2": 18.38,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 1.44,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 90.0,
+          "faces": 33,
+          "area_mm2": 15.99,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 0.81,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 180.1,
+          "faces": 27,
+          "area_mm2": 12.96,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 0.8,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 270.1,
+          "faces": 20,
+          "area_mm2": 10.11,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 0.83,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": null,
+          "pattern_angle_deg": null,
+          "faces": 93,
+          "area_mm2": 77.24,
+          "hole_cross_section_mm2": 94.04,
+          "wall_beyond_cap_mm": 3.32,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        }
+      ],
+      "bosses": [
+        {
+          "faces": 518,
+          "area_mm2": 129.6,
+          "outer_diameter": 6.349,
+          "inner_diameter": 3.919,
+          "height_above_surface": 4.333,
+          "inner_depth": 2.836,
+          "axis": [
+            -0.2964,
+            -0.9551,
+            0.0001
+          ],
+          "foot": [
+            -21.158,
+            -67.586,
+            48.689
+          ],
+          "median_dev_before": 2.883,
+          "median_dev_after": 0.066
+        }
+      ],
+      "gear_zone_regions": [],
+      "gear": null,
+      "screw": null,
+      "brepcheck_valid": true,
+      "n_solids": 1,
+      "n_faces": 34,
+      "volume": 449492.2613496728,
+      "mesh_volume": 0.0,
+      "seconds": 26.288686275482178,
+      "max_shape_tolerance": 2.00001e-07,
+      "max_shape_tolerance_limit": 0.14288687715381032,
+      "attempts": [
+        {
+          "ok": false,
+          "method": "local_trim",
+          "reason": "5 regions produced no trimmed face; 10 free (unsewn) edges - shell not closed; 2 shells after sewing",
+          "n_regions": 23,
+          "pieces_kept": 28,
+          "pieces_dropped": 66,
+          "pieces_degenerate": 0,
+          "regions_without_piece": [
+            15,
+            18,
+            25,
+            26,
+            27
+          ],
+          "split_failures": [],
+          "unify_failed": false,
+          "tangent_contacts": 24,
+          "no_piece_diag": {
+            "15": {
+              "kind": "sphere",
+              "area": 145.05,
+              "n_tools": 1,
+              "pieces(area,frac,median_dist)": [
+                [
+                  5390.498,
+                  0.24,
+                  1.2815
+                ],
+                [
+                  1943.739,
+                  0.003,
+                  4.6986
+                ],
+                [
+                  1938.517,
+                  0.001,
+                  4.7119
+                ]
+              ]
+            },
+            "18": {
+              "kind": "cylinder",
+              "area": 452.92,
+              "n_tools": 2,
+              "pieces(area,frac,median_dist)": [
+                [
+                  22540.858,
+                  0.128,
+                  2.2039
+                ],
+                [
+                  972.264,
+                  0.027,
+                  0.1755
+                ],
+                [
+                  11431.096,
+                  0.0,
+                  4.4514
+                ],
+                [
+                  632.59,
+                  0.0,
+                  0.9987
+                ]
+              ]
+            },
+            "25": {
+              "kind": "sphere",
+              "area": 68.67,
+              "n_tools": 1,
+              "pieces(area,frac,median_dist)": [
+                [
+                  1537.614,
+                  0.344,
+                  2.1338
+                ],
+                [
+                  1081.635,
+                  0.001,
+                  4.2792
+                ]
+              ]
+            },
+            "26": {
+              "kind": "sphere",
+              "area": 78.8,
+              "n_tools": 1,
+              "pieces(area,frac,median_dist)": [
+                [
+                  2486.023,
+                  0.262,
+                  2.7037
+                ],
+                [
+                  1949.697,
+                  0.002,
+                  5.3159
+                ]
+              ]
+            },
+            "27": {
+              "kind": "cylinder",
+              "area": 17.51,
+              "n_tools": 2,
+              "pieces(area,frac,median_dist)": [
+                [
+                  26.239,
+                  0.294,
+                  0.0476
+                ],
+                [
+                  580.438,
+                  0.201,
+                  0.4407
+                ],
+                [
+                  226.142,
+                  0.008,
+                  0.4314
+                ],
+                [
+                  126.025,
+                  0.0,
+                  0.2907
+                ]
+              ]
+            }
+          },
+          "kept_area": {
+            "1": 22228.606680372977,
+            "2": 8799.804935218523,
+            "3": 7389.885726823371,
+            "4": 14868.617607587043,
+            "5": 2288.161066050806,
+            "7": 2041.2423907448656,
+            "8": 2430.539819664763,
+            "9": 1027.929101341278,
+            "10": 1227.0356944684347,
+            "11": 948.3484024896749,
+            "12": 201.71227823735575,
+            "13": 320.1532243750952,
+            "14": 318.4523066511885,
+            "17": 103.41581980192798,
+            "19": 117.8609569040758,
+            "21": 195.51538316664013,
+            "22": 115.21250957360877,
+            "23": 140.47672462149606
+          },
+          "free_edge_info": [
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -25.559,
+                61.219,
+                6.188
+              ],
+              "p1": [
+                -25.559,
+                61.219,
+                6.188
+              ],
+              "near": 17
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -0.172,
+                58.479,
+                22.114
+              ],
+              "p1": [
+                -55.359,
+                -16.286,
+                22.126
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                1.276,
+                58.461,
+                22.114
+              ],
+              "p1": [
+                -0.172,
+                58.479,
+                22.114
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                1.276,
+                58.461,
+                22.114
+              ],
+              "p1": [
+                57.229,
+                7.066,
+                22.118
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -18.751,
+                -53.951,
+                22.129
+              ],
+              "p1": [
+                -30.691,
+                -48.458,
+                22.129
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -18.751,
+                -53.951,
+                22.129
+              ],
+              "p1": [
+                57.229,
+                7.066,
+                22.118
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                0.0,
+                50.59,
+                23.207
+              ],
+              "p1": [
+                0.0,
+                50.59,
+                23.207
+              ],
+              "near": 4
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -30.657,
+                -48.32,
+                17.372
+              ],
+              "p1": [
+                -30.691,
+                -48.458,
+                22.129
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -55.473,
+                -15.91,
+                21.355
+              ],
+              "p1": [
+                -30.657,
+                -48.32,
+                17.372
+              ],
+              "near": 21
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -55.359,
+                -16.286,
+                22.126
+              ],
+              "p1": [
+                -55.473,
+                -15.91,
+                21.355
+              ],
+              "near": 18
+            }
+          ],
+          "holes_filled": 0,
+          "assembly_attempts": [],
+          "assembly_fuzzy": 0.0,
+          "setback_corners": 7,
+          "setback_radius": 4.8727,
+          "setback_patches": 0,
+          "setback_dropped": 0,
+          "setback_patch_stats": [],
+          "setback_free_info": [
+            [
+              [
+                -4.8667846892660265,
+                50.352284116828116,
+                23.207363056432083
+              ],
+              [
+                4.867085756628879,
+                50.35228405864093,
+                23.20689413872802
+              ]
+            ],
+            [
+              [
+                0.00015053368143421505,
+                50.589718421738226,
+                23.20709913476683
+              ],
+              [
+                0.00038527137482649706,
+                50.5903230695014,
+                28.07982251727772
+              ]
+            ],
+            [
+              [
+                0.00015053368142196812,
+                50.589718421738226,
+                23.207099134766818
+              ],
+              [
+                -4.8667846892660265,
+                50.352284116828116,
+                23.207363056432083
+              ]
+            ],
+            [
+              [
+                -34.163665327800935,
+                -45.957306235507474,
+                22.129001437812153
+              ],
+              [
+                -33.54084183223341,
+                -45.24685242422522,
+                22.12888327504908
+              ]
+            ],
+            [
+              [
+                -52.995215410956945,
+                -20.309185182387026,
+                22.12672599479508
+              ],
+              [
+                -53.80668640464066,
+                -20.681030635029337,
+                22.1268112281067
+              ]
+            ],
+            [
+              [
+                -23.29442170006587,
+                -52.18970881633599,
+                22.12925119282718
+              ],
+              [
+                -22.88431930359805,
+                -51.37006423885559,
+                22.12912972835967
+              ]
+            ],
+            [
+              [
+                -26.591342532872734,
+                -49.579058700607526,
+                22.129086067065224
+              ],
+              [
+                -26.947926039398162,
+                -50.4382600187438,
+                22.129209861850523
+              ]
+            ],
+            [
+              [
+                -13.904811130169138,
+                -54.458542803223615,
+                22.129080395089137
+              ],
+              [
+                -14.055889975509626,
+                -55.25422177697321,
+                22.129186407552968
+              ]
+            ],
+            [
+              [
+                -56.56370196716908,
+                -11.378029982308046,
+                22.12578965091651
+              ],
+              [
+                -55.7994970225445,
+                -11.255642203707065,
+                22.125737649359543
+              ]
+            ],
+            [
+              [
+                -4.318627070577915,
+                58.33028422581523,
+                22.114622822766925
+              ],
+              [
+                -56.634930646445,
+                -11.395922959616088,
+                22.125795302582407
+              ]
+            ],
+            [
+              [
+                -56.63493064644501,
+                -11.395922959616065,
+                22.12579530258241
+              ],
+              [
+                -56.56370196716909,
+                -11.378029982308048,
+                22.12578965091651
+              ]
+            ],
+            [
+              [
+                -4.317440949490728,
+                58.29377427994631,
+                22.114627296082578
+              ],
+              [
+                -4.318627070577906,
+                58.33028422581522,
+                22.114622822766925
+              ]
+            ],
+            [
+              [
+                -3.5315063837126237,
+                55.811731615962536,
+                22.114897426967183
+              ],
+              [
+                -4.317440949490728,
+                58.29377427994631,
+                22.114627296082578
+              ]
+            ],
+            [
+              [
+                5.4177553971054895,
+                58.20815475724408,
+                22.11416893887514
+              ],
+              [
+                4.454592229604282,
+                55.55239293897219,
+                22.11454488698453
+              ]
+            ],
+            [
+              [
+                53.8355677417969,
+                10.562887647207807,
+                22.117748686220875
+              ],
+              [
+                56.490565773743526,
+                11.882545889361223,
+                22.117457030732414
+              ]
+            ],
+            [
+              [
+                57.5274284606756,
+                2.2025325887038356,
+                22.11860825709884
+              ],
+              [
+                54.82461490213978,
+                2.827963939941027,
+                22.11866085326175
+              ]
+            ],
+            [
+              [
+                5.419017543725679,
+                58.23274244859669,
+                22.11416582702889
+              ],
+              [
+                5.4177553971054895,
+                58.20815475724408,
+                22.11416893887514
+              ]
+            ],
+            [
+              [
+                56.49056577374353,
+                11.882545889361223,
+                22.117457030732414
+              ],
+              [
+                56.51893753442514,
+                11.886810817207625,
+                22.117455134728882
+              ]
+            ],
+            [
+              [
+                5.419017543725622,
+                58.23274244859669,
+                22.11416582702889
+              ],
+              [
+                56.51893753442515,
+                11.886810817207586,
+                22.117455134728882
+              ]
+            ],
+            [
+              [
+                -53.80668640464066,
+                -20.681030635029337,
+                22.1268112281067
+              ],
+              [
+                -53.86105083797426,
+                -20.699758325808247,
+                22.126816170935612
+              ]
+            ],
+            [
+              [
+                -34.25356674316232,
+                -46.091738155117156,
+                22.12902245012956
+              ],
+              [
+                -34.163665327800935,
+                -45.957306235507474,
+                22.129001437812153
+              ]
+            ],
+            [
+              [
+                -26.947926039398162,
+                -50.4382600187438,
+                22.129209861850523
+              ],
+              [
+                -26.997745992188687,
+                -50.52631732651109,
+                22.12922318874595
+              ]
+            ],
+            [
+              [
+                -23.31571310850235,
+                -52.24566368039406,
+                22.12925916185732
+              ],
+              [
+                -26.997745992188648,
+                -50.52631732651111,
+                22.129223188745957
+              ]
+            ],
+            [
+              [
+                -23.315713108502543,
+                -52.245663680393974,
+                22.12925916185732
+              ],
+              [
+                -23.29442170006587,
+                -52.18970881633599,
+                22.12925119282718
+              ]
+            ],
+            [
+              [
+                4.454592229604282,
+                55.55239293897219,
+                22.11454488698453
+              ],
+              [
+                3.0099107082694094,
+                54.262810331500035,
+                22.11477450487153
+              ]
+            ],
+            [
+              [
+                3.009910708269406,
+                54.262810331500035,
+                22.11477450487153
+              ],
+              [
+                4.667052627487535,
+                51.46770964103817,
+                22.115041513196537
+              ]
+            ],
+            [
+              [
+                -4.666856745136784,
+                51.46770969683446,
+                22.11549116324862
+              ],
+              [
+                -2.4682685189118945,
+                54.64652015955136,
+                22.114990795800402
+              ]
+            ],
+            [
+              [
+                -2.468268518911884,
+                54.64652015955136,
+                22.114990795800402
+              ],
+              [
+                -3.5315063837126237,
+                55.811731615962536,
+                22.114897426967183
+              ]
+            ],
+            [
+              [
+                -55.7994970225445,
+                -11.255642203707065,
+                22.125737649359543
+              ],
+              [
+                -50.55847733749182,
+                -16.097952313302358,
+                22.126086043259875
+              ]
+            ],
+            [
+              [
+                -50.55847733749182,
+                -16.09795231330236,
+                22.126086043259875
+              ],
+              [
+                -52.995215410956945,
+                -20.309185182387026,
+                22.12672599479508
+              ]
+            ],
+            [
+              [
+                -33.54084183223341,
+                -45.24685242422522,
+                22.12888327504908
+              ],
+              [
+                -26.421225038522206,
+                -48.388543899961235,
+                22.128930142946448
+              ]
+            ],
+            [
+              [
+                -26.421225038522206,
+                -48.388543899961235,
+                22.128930142946448
+              ],
+              [
+                -26.591342532872734,
+                -49.579058700607526,
+                22.129086067065224
+              ]
+            ],
+            [
+              [
+                -22.88431930359806,
+                -51.3700642388556,
+                22.12912972835967
+              ],
+              [
+                -13.8782603801756,
+                -53.95056248238663,
+                22.129016081644284
+              ]
+            ],
+            [
+              [
+                -13.8782603801756,
+                -53.95056248238663,
+                22.129016081644284
+              ],
+              [
+                -13.904811130169138,
+                -54.458542803223615,
+                22.129080395089137
+              ]
+            ],
+            [
+              [
+                54.82461490213977,
+                2.8279639399410286,
+                22.11866085326175
+              ],
+              [
+                53.8355677417969,
+                10.56288764720781,
+                22.117748686220875
+              ]
+            ],
+            [
+              [
+                -14.055889975509626,
+                -55.25422177697321,
+                22.129186407552968
+              ],
+              [
+                -14.075277235373193,
+                -55.32213154727599,
+                22.129195768316507
+              ]
+            ],
+            [
+              [
+                -14.075277235373175,
+                -55.322131547275994,
+                22.129195768316507
+              ],
+              [
+                57.55896034786571,
+                2.204569419960955,
+                22.118606485340575
+              ]
+            ],
+            [
+              [
+                57.55896034786571,
+                2.204569419960963,
+                22.118606485340575
+              ],
+              [
+                57.5274284606756,
+                2.2025325887038356,
+                22.11860825709884
+              ]
+            ],
+            [
+              [
+                4.826082940736605,
+                50.58971842173822,
+                22.533444931407306
+              ],
+              [
+                4.667052627487513,
+                51.46770964103816,
+                22.115041513196537
+              ]
+            ],
+            [
+              [
+                4.867085756628879,
+                50.35228405864093,
+                23.206894138728025
+              ],
+              [
+                4.826082940736605,
+                50.589718421738226,
+                22.53344493140731
+              ]
+            ],
+            [
+              [
+                -4.8667846892660265,
+                50.352284116828116,
+                23.207363056432087
+              ],
+              [
+                -4.666856745136761,
+                51.467709696834454,
+                22.11549116324862
+              ]
+            ],
+            [
+              [
+                -25.466606258710986,
+                61.565435332799666,
+                1.3287182133886617
+              ],
+              [
+                -27.818577355381,
+                56.91618056046435,
+                5.838654930093702
+              ]
+            ],
+            [
+              [
+                -27.818577355380842,
+                56.916180560464134,
+                5.83865493009369
+              ],
+              [
+                -23.299635689682184,
+                56.910082960690836,
+                5.9242377716979115
+              ]
+            ],
+            [
+              [
+                -23.29963568968227,
+                56.91008296069072,
+                5.9242377716979036
+              ],
+              [
+                -24.161080772832115,
+                61.219204134048326,
+                1.5203807174330315
+              ]
+            ],
+            [
+              [
+                -24.161080772832115,
+                61.219204134048326,
+                1.5203807174330315
+              ],
+              [
+                -25.466606258710993,
+                61.565435332799666,
+                1.3287182133886561
+              ]
+            ],
+            [
+              [
+                -34.253566743162324,
+                -46.09173815511716,
+                22.129022450129607
+              ],
+              [
+                -33.99875486456372,
+                -46.07773798937955,
+                17.03950291461957
+              ]
+            ],
+            [
+              [
+                -54.12817956923638,
+                -19.85821432604719,
+                18.921798695321534
+              ],
+              [
+                -33.998754864567175,
+                -46.077737989384886,
+                17.039502914619277
+              ]
+            ],
+            [
+              [
+                -54.12817956923921,
+                -19.85821432604817,
+                18.921798695321453
+              ],
+              [
+                -53.861050837974254,
+                -20.6997583258083,
+                22.126816170935616
+              ]
+            ]
+          ],
+          "setback_patch_failures": 2,
+          "setback_patch_timeouts": 0,
+          "setback_capped_by_wall": 10.8283,
+          "setback_free_edges_before": 10,
+          "setback_free_edges_after": 48,
+          "wireframe_healed": true,
+          "wireframe_error": "",
+          "budget_hit": "",
+          "setback_skipped": "",
+          "faces_refixed": 0,
+          "invalid_pieces": [],
+          "valid_before_unify": false,
+          "volume_before_unify": 0.0,
+          "invalid_faces_before_unify": [],
+          "hole_fill_max_size": 0.0,
+          "holes_unfilled_sizes": [
+            9.045,
+            164.617,
+            142.552,
+            9.045,
+            164.617,
+            142.552
+          ],
+          "free_edges_near_regions": {
+            "5": 6,
+            "17": 1,
+            "4": 1,
+            "21": 1,
+            "18": 1
+          },
+          "free_edge_midpoints": [
+            [
+              -25.559,
+              55.733,
+              5.797
+            ],
+            [
+              -46.635,
+              35.025,
+              22.12
+            ],
+            [
+              0.552,
+              58.475,
+              22.114
+            ],
+            [
+              38.985,
+              43.359,
+              22.114
+            ],
+            [
+              -24.882,
+              -51.554,
+              22.129
+            ],
+            [
+              35.988,
+              -44.299,
+              22.125
+            ],
+            [
+              0.0,
+              -49.41,
+              23.22
+            ],
+            [
+              -30.59,
+              -48.498,
+              19.748
+            ],
+            [
+              -46.534,
+              -33.705,
+              16.901
+            ],
+            [
+              -55.442,
+              -16.015,
+              21.762
+            ]
+          ],
+          "free_edges": 10,
+          "multiple_edges": 0,
+          "n_shells": 2,
+          "n_solids": 0,
+          "n_faces": 0,
+          "brepcheck_valid": false,
+          "volume": 0.0,
+          "mesh_volume": 487389.8003544675,
+          "seconds": 10.157271146774292,
+          "area_ratio": {
+            "1": 1.006,
+            "2": 1.092,
+            "3": 1.016,
+            "4": 1.305,
+            "5": 1.073,
+            "7": 1.147,
+            "8": 1.142,
+            "9": 1.165,
+            "10": 1.473,
+            "11": 1.27,
+            "12": 0.396,
+            "13": 0.379,
+            "14": 0.427,
+            "15": 0.0,
+            "17": 3.664,
+            "18": 0.0,
+            "19": 0.493,
+            "21": 1.997,
+            "22": 0.456,
+            "23": 0.68,
+            "25": 0.0,
+            "26": 0.0,
+            "27": 0.0
+          }
+        },
+        {
+          "ok": false,
+          "method": "local_trim_retry1",
+          "reason": "1 regions produced no trimmed face; 3 free (unsewn) edges - shell not closed; 2 shells after sewing",
+          "n_regions": 18,
+          "pieces_kept": 19,
+          "pieces_dropped": 44,
+          "pieces_degenerate": 0,
+          "regions_without_piece": [
+            21
+          ],
+          "split_failures": [],
+          "unify_failed": false,
+          "tangent_contacts": 24,
+          "no_piece_diag": {
+            "21": {
+              "kind": "sphere",
+              "area": 97.92,
+              "n_tools": 1,
+              "pieces(area,frac,median_dist)": [
+                [
+                  3129.041,
+                  0.24,
+                  2.4828
+                ],
+                [
+                  1172.554,
+                  0.004,
+                  5.36
+                ],
+                [
+                  1225.459,
+                  0.0,
+                  5.4277
+                ]
+              ]
+            }
+          },
+          "kept_area": {
+            "1": 22228.606680372977,
+            "2": 8799.064670899637,
+            "3": 7389.885726823371,
+            "4": 14868.617607587043,
+            "5": 1746.9261383566422,
+            "7": 2041.2423907448656,
+            "8": 2430.4725483874868,
+            "9": 1027.929101341278,
+            "10": 1227.0356944684347,
+            "11": 948.3484024896749,
+            "12": 201.71227823735575,
+            "13": 320.1532243750952,
+            "14": 318.4523066511885,
+            "17": 103.41581980192798,
+            "19": 117.8609569040758,
+            "22": 115.21250957360877,
+            "23": 140.47672462149606
+          },
+          "free_edge_info": [
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -25.559,
+                61.219,
+                6.188
+              ],
+              "p1": [
+                -25.559,
+                61.219,
+                6.188
+              ],
+              "near": 17
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -1.363,
+                55.854,
+                22.115
+              ],
+              "p1": [
+                -1.363,
+                55.854,
+                22.115
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                0.0,
+                50.59,
+                23.207
+              ],
+              "p1": [
+                0.0,
+                50.59,
+                23.207
+              ],
+              "near": 4
+            }
+          ],
+          "holes_filled": 0,
+          "assembly_attempts": [],
+          "assembly_fuzzy": 0.0,
+          "setback_corners": 3,
+          "setback_radius": 4.8727,
+          "setback_patches": 0,
+          "setback_dropped": 0,
+          "setback_patch_stats": [],
+          "setback_free_info": [
+            [
+              [
+                -4.8667846892660265,
+                50.352284116828116,
+                23.207363056432083
+              ],
+              [
+                4.867085756628879,
+                50.35228405864093,
+                23.20689413872802
+              ]
+            ],
+            [
+              [
+                0.00015053368143421505,
+                50.589718421738226,
+                23.20709913476683
+              ],
+              [
+                0.00038527137482649706,
+                50.5903230695014,
+                28.07982251727772
+              ]
+            ],
+            [
+              [
+                0.00015053368142196812,
+                50.589718421738226,
+                23.207099134766818
+              ],
+              [
+                -4.8667846892660265,
+                50.352284116828116,
+                23.207363056432083
+              ]
+            ],
+            [
+              [
+                3.5052025477091657,
+                55.642892928256,
+                22.114579392724906
+              ],
+              [
+                3.1871630568429747,
+                54.11012101250681,
+                22.11478491290083
+              ]
+            ],
+            [
+              [
+                3.1871630568429716,
+                54.11012101250681,
+                22.11478491290083
+              ],
+              [
+                4.667052627487535,
+                51.46770964103817,
+                22.115041513196537
+              ]
+            ],
+            [
+              [
+                -4.666856745136784,
+                51.46770969683446,
+                22.11549116324862
+              ],
+              [
+                -4.495083480927659,
+                52.12089500990923,
+                22.115401835645933
+              ]
+            ],
+            [
+              [
+                -4.495083480927653,
+                52.12089500990923,
+                22.115401835645933
+              ],
+              [
+                -6.231108143519846,
+                55.64246423587461,
+                22.11504848118782
+              ]
+            ],
+            [
+              [
+                3.5052025477091915,
+                55.642892928256,
+                22.11457939272491
+              ],
+              [
+                -6.231108143519921,
+                55.64246423587461,
+                22.11504848118782
+              ]
+            ],
+            [
+              [
+                4.826082940736605,
+                50.58971842173822,
+                22.533444931407306
+              ],
+              [
+                4.667052627487513,
+                51.46770964103816,
+                22.115041513196537
+              ]
+            ],
+            [
+              [
+                4.867085756628879,
+                50.35228405864093,
+                23.206894138728025
+              ],
+              [
+                4.826082940736605,
+                50.589718421738226,
+                22.53344493140731
+              ]
+            ],
+            [
+              [
+                -4.8667846892660265,
+                50.352284116828116,
+                23.207363056432087
+              ],
+              [
+                -4.666856745136761,
+                51.467709696834454,
+                22.11549116324862
+              ]
+            ],
+            [
+              [
+                -25.466606258710986,
+                61.565435332799666,
+                1.3287182133886617
+              ],
+              [
+                -27.818577355381,
+                56.91618056046435,
+                5.838654930093702
+              ]
+            ],
+            [
+              [
+                -27.818577355380842,
+                56.916180560464134,
+                5.83865493009369
+              ],
+              [
+                -23.299635689682184,
+                56.910082960690836,
+                5.9242377716979115
+              ]
+            ],
+            [
+              [
+                -23.29963568968227,
+                56.91008296069072,
+                5.9242377716979036
+              ],
+              [
+                -24.161080772832115,
+                61.219204134048326,
+                1.5203807174330315
+              ]
+            ],
+            [
+              [
+                -24.161080772832115,
+                61.219204134048326,
+                1.5203807174330315
+              ],
+              [
+                -25.466606258710993,
+                61.565435332799666,
+                1.3287182133886561
+              ]
+            ]
+          ],
+          "setback_patch_failures": 2,
+          "setback_patch_timeouts": 0,
+          "setback_capped_by_wall": 10.8283,
+          "setback_free_edges_before": 3,
+          "setback_free_edges_after": 15,
+          "wireframe_healed": true,
+          "wireframe_error": "",
+          "budget_hit": "",
+          "setback_skipped": "",
+          "faces_refixed": 0,
+          "invalid_pieces": [],
+          "valid_before_unify": false,
+          "volume_before_unify": 0.0,
+          "invalid_faces_before_unify": [],
+          "hole_fill_max_size": 0.0,
+          "holes_unfilled_sizes": [
+            9.045,
+            160.304,
+            142.552,
+            9.045,
+            160.304,
+            142.552
+          ],
+          "free_edges_near_regions": {
+            "17": 1,
+            "5": 1,
+            "4": 1
+          },
+          "free_edge_midpoints": [
+            [
+              -25.559,
+              55.733,
+              5.797
+            ],
+            [
+              -1.358,
+              -56.705,
+              22.129
+            ],
+            [
+              0.0,
+              -49.41,
+              23.22
+            ]
+          ],
+          "free_edges": 3,
+          "multiple_edges": 0,
+          "n_shells": 2,
+          "n_solids": 0,
+          "n_faces": 0,
+          "brepcheck_valid": false,
+          "volume": 0.0,
+          "mesh_volume": 487389.8003544675,
+          "seconds": 5.12428617477417,
+          "area_ratio": {
+            "1": 1.006,
+            "2": 1.092,
+            "3": 1.016,
+            "4": 1.305,
+            "5": 0.819,
+            "7": 1.147,
+            "8": 1.142,
+            "9": 1.165,
+            "10": 1.473,
+            "11": 1.27,
+            "12": 0.396,
+            "13": 0.379,
+            "14": 0.427,
+            "17": 3.664,
+            "19": 0.493,
+            "21": 0.0,
+            "22": 0.456,
+            "23": 0.68
+          },
+          "released_regions": [
+            15,
+            18,
+            25,
+            26,
+            27
+          ]
+        },
+        {
+          "ok": false,
+          "method": "local_trim_retry2",
+          "reason": "1 regions produced no trimmed face; 3 free (unsewn) edges - shell not closed",
+          "n_regions": 17,
+          "pieces_kept": 18,
+          "pieces_dropped": 41,
+          "pieces_degenerate": 0,
+          "regions_without_piece": [
+            5
+          ],
+          "split_failures": [],
+          "unify_failed": false,
+          "tangent_contacts": 24,
+          "no_piece_diag": {
+            "5": {
+              "kind": "plane",
+              "area": 2132.07,
+              "n_tools": 1,
+              "pieces(area,frac,median_dist)": [
+                [
+                  54944.187,
+                  0.068,
+                  1.834
+                ],
+                [
+                  32748.452,
+                  0.001,
+                  0.1133
+                ]
+              ]
+            }
+          },
+          "kept_area": {
+            "1": 22228.606680372977,
+            "2": 8799.064670899637,
+            "3": 7389.885726823371,
+            "4": 14868.617607587043,
+            "7": 2041.2423907448656,
+            "8": 2430.4725483874868,
+            "9": 1027.929101341278,
+            "10": 1227.0356944684347,
+            "11": 948.3484024896749,
+            "12": 201.71227823735575,
+            "13": 320.1532243750952,
+            "14": 318.4523066511885,
+            "17": 103.41581980192798,
+            "19": 117.8609569040758,
+            "22": 115.21250957360877,
+            "23": 140.47672462149606
+          },
+          "free_edge_info": [
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                -25.559,
+                61.219,
+                6.188
+              ],
+              "p1": [
+                -25.559,
+                61.219,
+                6.188
+              ],
+              "near": 17
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                0.0,
+                51.681,
+                22.115
+              ],
+              "p1": [
+                0.0,
+                51.681,
+                22.115
+              ],
+              "near": 5
+            },
+            {
+              "owner": [
+                -3
+              ],
+              "p0": [
+                0.0,
+                50.59,
+                23.207
+              ],
+              "p1": [
+                0.0,
+                50.59,
+                23.207
+              ],
+              "near": 4
+            }
+          ],
+          "holes_filled": 0,
+          "assembly_attempts": [],
+          "assembly_fuzzy": 0.0,
+          "setback_corners": 2,
+          "setback_radius": 4.8727,
+          "setback_patches": 0,
+          "setback_dropped": 0,
+          "setback_patch_stats": [],
+          "setback_free_info": [
+            [
+              [
+                4.779804877608592,
+                50.36074314125694,
+                23.206897293708447
+              ],
+              [
+                0.0003574975659709067,
+                50.59025152849255,
+                27.503289256358865
+              ]
+            ],
+            [
+              [
+                0.00035749756597081017,
+                50.59025152849255,
+                27.503289256358897
+              ],
+              [
+                -4.779503810245625,
+                50.360743198400606,
+                23.207357802106124
+              ]
+            ],
+            [
+              [
+                -4.779503810245598,
+                50.36074319840061,
+                23.207357802106124
+              ],
+              [
+                4.779804877608466,
+                50.36074314125693,
+                23.206897293708433
+              ]
+            ],
+            [
+              [
+                -0.0001090227091550878,
+                50.5890498448739,
+                17.819185181846436
+              ],
+              [
+                4.779804877608572,
+                50.3607431412569,
+                23.20689729370843
+              ]
+            ],
+            [
+              [
+                -4.779503810245716,
+                50.36074319840059,
+                23.20735780210614
+              ],
+              [
+                -0.00010902270915469359,
+                50.5890498448739,
+                17.819185181846418
+              ]
+            ],
+            [
+              [
+                -4.831573729491682,
+                51.45233156119671,
+                22.115501006540864
+              ],
+              [
+                4.831769611842429,
+                51.45233150343112,
+                22.115035486396707
+              ]
+            ],
+            [
+              [
+                4.84712831959091,
+                51.135512602980796,
+                22.16118447360293
+              ],
+              [
+                4.83176961184234,
+                51.452331503431125,
+                22.115035486396707
+              ]
+            ],
+            [
+              [
+                4.779804877608422,
+                50.36074314125693,
+                23.206897293708437
+              ],
+              [
+                4.84712831959091,
+                51.135512602980796,
+                22.16118447360293
+              ]
+            ],
+            [
+              [
+                -4.779503810245568,
+                50.36074319840061,
+                23.207357802106127
+              ],
+              [
+                -4.831573729491587,
+                51.452331561196715,
+                22.115501006540864
+              ]
+            ],
+            [
+              [
+                -25.466606258710986,
+                61.565435332799666,
+                1.3287182133886617
+              ],
+              [
+                -27.818577355381,
+                56.91618056046435,
+                5.838654930093702
+              ]
+            ],
+            [
+              [
+                -27.818577355380842,
+                56.916180560464134,
+                5.83865493009369
+              ],
+              [
+                -23.299635689682184,
+                56.910082960690836,
+                5.9242377716979115
+              ]
+            ],
+            [
+              [
+                -23.29963568968227,
+                56.91008296069072,
+                5.9242377716979036
+              ],
+              [
+                -24.161080772832115,
+                61.219204134048326,
+                1.5203807174330315
+              ]
+            ],
+            [
+              [
+                -24.161080772832115,
+                61.219204134048326,
+                1.5203807174330315
+              ],
+              [
+                -25.466606258710993,
+                61.565435332799666,
+                1.3287182133886561
+              ]
+            ]
+          ],
+          "setback_patch_failures": 2,
+          "setback_patch_timeouts": 0,
+          "setback_capped_by_wall": 10.8283,
+          "setback_free_edges_before": 3,
+          "setback_free_edges_after": 13,
+          "wireframe_healed": true,
+          "wireframe_error": "",
+          "budget_hit": "",
+          "setback_skipped": "",
+          "faces_refixed": 0,
+          "invalid_pieces": [],
+          "valid_before_unify": false,
+          "volume_before_unify": 0.0,
+          "invalid_faces_before_unify": [],
+          "hole_fill_max_size": 0.0,
+          "holes_unfilled_sizes": [
+            9.045,
+            145.638,
+            142.552,
+            9.045,
+            145.638,
+            142.552
+          ],
+          "free_edges_near_regions": {
+            "17": 1,
+            "5": 1,
+            "4": 1
+          },
+          "free_edge_midpoints": [
+            [
+              -25.559,
+              55.733,
+              5.797
+            ],
+            [
+              0.0,
+              -50.502,
+              22.128
+            ],
+            [
+              0.0,
+              -49.41,
+              23.22
+            ]
+          ],
+          "free_edges": 3,
+          "multiple_edges": 0,
+          "n_shells": 1,
+          "n_solids": 0,
+          "n_faces": 0,
+          "brepcheck_valid": false,
+          "volume": 0.0,
+          "mesh_volume": 487389.8003544675,
+          "seconds": 4.588125944137573,
+          "area_ratio": {
+            "1": 1.006,
+            "2": 1.092,
+            "3": 1.016,
+            "4": 1.305,
+            "5": 0.0,
+            "7": 1.147,
+            "8": 1.142,
+            "9": 1.165,
+            "10": 1.473,
+            "11": 1.27,
+            "12": 0.396,
+            "13": 0.379,
+            "14": 0.427,
+            "17": 3.664,
+            "19": 0.493,
+            "22": 0.456,
+            "23": 0.68
+          },
+          "released_regions": [
+            21
+          ]
+        },
+        {
+          "ok": true,
+          "method": "revolve_profile",
+          "reason": "",
+          "axis_point": [
+            0.0007,
+            0.5929,
+            40.2799
+          ],
+          "axis_dir": [
+            4.8e-05,
+            0.000124,
+            1.0
+          ],
+          "coaxial_area_frac": 0.9929,
+          "profile": [
+            {
+              "region": 1,
+              "kind": "line",
+              "from": [
+                71.4115,
+                -14.8903
+              ],
+              "to": [
+                71.4115,
+                15.7269
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 14,
+              "kind": "circle",
+              "from": [
+                71.4115,
+                15.7269
+              ],
+              "to": [
+                70.1876,
+                16.9508
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 2,
+              "kind": "line",
+              "from": [
+                70.1876,
+                16.9508
+              ],
+              "to": [
+                46.0523,
+                16.9508
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 8,
+              "kind": "line",
+              "from": [
+                46.0523,
+                16.9508
+              ],
+              "to": [
+                46.0523,
+                8.5477
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 23,
+              "kind": "circle",
+              "from": [
+                46.0523,
+                8.5477
+              ],
+              "to": [
+                46.8789,
+                7.7211
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 11,
+              "kind": "line",
+              "from": [
+                46.8789,
+                7.7211
+              ],
+              "to": [
+                50.0,
+                7.7211
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 4,
+              "kind": "line",
+              "from": [
+                50.0,
+                7.7211
+              ],
+              "to": [
+                50.0,
+                -17.0666
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 12,
+              "kind": "circle",
+              "from": [
+                50.0,
+                -17.0666
+              ],
+              "to": [
+                51.0917,
+                -18.1583
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 5,
+              "kind": "line",
+              "from": [
+                51.0917,
+                -18.1583
+              ],
+              "to": [
+                57.9201,
+                -18.1583
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 18,
+              "kind": "line",
+              "from": [
+                57.9201,
+                -18.1583
+              ],
+              "to": [
+                57.9201,
+                -26.2014
+              ],
+              "synthesised": false
+            },
+            {
+              "region": null,
+              "kind": "line",
+              "from": [
+                57.9201,
+                -26.2014
+              ],
+              "to": [
+                50.0,
+                -26.2014
+              ],
+              "synthesised": true,
+              "between_regions": [
+                18,
+                4
+              ]
+            },
+            {
+              "region": 4,
+              "kind": "line",
+              "from": [
+                50.0,
+                -26.2014
+              ],
+              "to": [
+                50.0,
+                -39.6268
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 22,
+              "kind": "circle",
+              "from": [
+                50.0,
+                -39.6268
+              ],
+              "to": [
+                50.6256,
+                -40.2524
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 3,
+              "kind": "line",
+              "from": [
+                50.6256,
+                -40.2524
+              ],
+              "to": [
+                70.1906,
+                -40.2524
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 13,
+              "kind": "circle",
+              "from": [
+                70.1906,
+                -40.2524
+              ],
+              "to": [
+                71.4115,
+                -39.1739
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 1,
+              "kind": "line",
+              "from": [
+                71.4115,
+                -39.1739
+              ],
+              "to": [
+                71.4115,
+                -19.9862
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 19,
+              "kind": "circle",
+              "from": [
+                71.4115,
+                -19.9862
+              ],
+              "to": [
+                70.9697,
+                -19.6266
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 9,
+              "kind": "line",
+              "from": [
+                70.9697,
+                -19.6266
+              ],
+              "to": [
+                68.6219,
+                -19.6266
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 7,
+              "kind": "circle",
+              "from": [
+                68.6219,
+                -19.6266
+              ],
+              "to": [
+                68.6176,
+                -14.8903
+              ],
+              "synthesised": false
+            },
+            {
+              "region": 10,
+              "kind": "line",
+              "from": [
+                68.6176,
+                -14.8903
+              ],
+              "to": [
+                71.4115,
+                -14.8903
+              ],
+              "synthesised": false
+            }
+          ],
+          "synthesised": [
+            {
+              "region": null,
+              "kind": "line",
+              "from": [
+                57.9201,
+                -26.2014
+              ],
+              "to": [
+                50.0,
+                -26.2014
+              ],
+              "synthesised": true,
+              "between_regions": [
+                18,
+                4
+              ]
+            }
+          ],
+          "dropped_segments": [],
+          "holes_cut": [
+            {
+              "region": 17,
+              "diameter": 5.5,
+              "depth": 4.843,
+              "open_ends": [
+                true,
+                false
+              ],
+              "pattern_angle_deg": 0.0,
+              "axis_parallel_to_part_axis": false
+            },
+            {
+              "region": 17,
+              "diameter": 5.5,
+              "depth": 4.843,
+              "open_ends": [
+                true,
+                false
+              ],
+              "pattern_angle_deg": 90.0
+            },
+            {
+              "region": 17,
+              "diameter": 5.5,
+              "depth": 4.843,
+              "open_ends": [
+                true,
+                false
+              ],
+              "pattern_angle_deg": 180.1
+            },
+            {
+              "region": 17,
+              "diameter": 5.5,
+              "depth": 4.843,
+              "open_ends": [
+                true,
+                false
+              ],
+              "pattern_angle_deg": 270.1
+            },
+            {
+              "region": null,
+              "source": "unfitted scan cluster",
+              "axis_kind": "axial",
+              "diameter": 10.9423,
+              "depth": 5.003,
+              "open_ends": [
+                false,
+                true
+              ],
+              "centre_radius": 59.55,
+              "angle_deg": null,
+              "median_dev_before": 2.156,
+              "median_dev_after": 0.113
+            }
+          ],
+          "unmodelled_regions": [
+            {
+              "region": 15,
+              "kind": "sphere",
+              "area": 145.05
+            },
+            {
+              "region": 21,
+              "kind": "sphere",
+              "area": 97.92
+            },
+            {
+              "region": 25,
+              "kind": "sphere",
+              "area": 68.67
+            },
+            {
+              "region": 26,
+              "kind": "sphere",
+              "area": 78.8
+            },
+            {
+              "region": 27,
+              "kind": "cylinder",
+              "area": 17.51
+            }
+          ],
+          "profile_refits": [
+            {
+              "region": 18,
+              "offset_mm": -0.1701,
+              "points": 1557
+            }
+          ],
+          "fill_artifacts": [
+            {
+              "hole_region": 17,
+              "pattern_angle_deg": 0.0,
+              "faces": 42,
+              "area_mm2": 18.38,
+              "hole_cross_section_mm2": 23.76,
+              "wall_beyond_cap_mm": 1.44,
+              "why": "surface across the hole bore with hole wall continuing past it"
+            },
+            {
+              "hole_region": 17,
+              "pattern_angle_deg": 90.0,
+              "faces": 33,
+              "area_mm2": 15.99,
+              "hole_cross_section_mm2": 23.76,
+              "wall_beyond_cap_mm": 0.81,
+              "why": "surface across the hole bore with hole wall continuing past it"
+            },
+            {
+              "hole_region": 17,
+              "pattern_angle_deg": 180.1,
+              "faces": 27,
+              "area_mm2": 12.96,
+              "hole_cross_section_mm2": 23.76,
+              "wall_beyond_cap_mm": 0.8,
+              "why": "surface across the hole bore with hole wall continuing past it"
+            },
+            {
+              "hole_region": 17,
+              "pattern_angle_deg": 270.1,
+              "faces": 20,
+              "area_mm2": 10.11,
+              "hole_cross_section_mm2": 23.76,
+              "wall_beyond_cap_mm": 0.83,
+              "why": "surface across the hole bore with hole wall continuing past it"
+            },
+            {
+              "hole_region": null,
+              "pattern_angle_deg": null,
+              "faces": 93,
+              "area_mm2": 77.24,
+              "hole_cross_section_mm2": 94.04,
+              "wall_beyond_cap_mm": 3.32,
+              "why": "surface across the hole bore with hole wall continuing past it"
+            }
+          ],
+          "bosses": [
+            {
+              "faces": 518,
+              "area_mm2": 129.6,
+              "outer_diameter": 6.349,
+              "inner_diameter": 3.919,
+              "height_above_surface": 4.333,
+              "inner_depth": 2.836,
+              "axis": [
+                -0.2964,
+                -0.9551,
+                0.0001
+              ],
+              "foot": [
+                -21.158,
+                -67.586,
+                48.689
+              ],
+              "median_dev_before": 2.883,
+              "median_dev_after": 0.066
+            }
+          ],
+          "gear_zone_regions": [],
+          "gear": null,
+          "screw": null,
+          "brepcheck_valid": true,
+          "n_solids": 1,
+          "n_faces": 34,
+          "volume": 449492.2613496728,
+          "mesh_volume": 0.0,
+          "seconds": 6.391207218170166
+        }
+      ]
+    }
+  },
+  "last_stage": "done",
+  "stage_times": {
+    "load_repair": 0.0,
+    "impeller_probe": 3.02,
+    "gear_screw_detect": 3.1,
+    "segmentation": 10.08,
+    "coaxial_refit": 60.96,
+    "threads": 61.03,
+    "freeform": 61.27,
+    "snapping": 61.3,
+    "blends": 61.36,
+    "consolidate": 61.36,
+    "fit_stats": 61.42,
+    "build": 64.18,
+    "deviation": 90.47,
+    "preview": 103.55,
+    "done": 103.56
+  },
+  "device": {
+    "requested": "cpu",
+    "used": "cpu",
+    "gpu": null,
+    "accelerated": []
+  },
+  "tolerance": {
+    "tol": 0.07144343857690516,
+    "noise_sigma_est": 0.015876319683756704,
+    "exact_mesh_detected": false,
+    "auto": true,
+    "cad_tessellation": {
+      "edges": 89684,
+      "coplanar_len_frac": 0.0069,
+      "smooth_edge_len_frac": 0.974,
+      "turning_smooth_len_frac": 0.763,
+      "dihedral_turning_median_deg": 3.436,
+      "facet_width_median": 0.9027,
+      "sag_p50": 0.00536,
+      "sag_p90": 0.01578,
+      "cad_tessellation": false,
+      "faceted": false
+    }
+  },
+  "accuracy": {
+    "class": "machined",
+    "rms_limit": 0.10716515786535774,
+    "p95_limit": 0.21433031573071548,
+    "tol": 0.07144343857690516,
+    "basis": "machined: vertex\u2192solid rms\u22641.5\u00b7tol, p95\u22643\u00b7tol (existing default)"
+  },
+  "mesh": {
+    "vertices": 30398,
+    "faces": 60048,
+    "bounds": [
+      [
+        -71.4349365234375,
+        -72.23663330078125,
+        -0.0014345793751999736
+      ],
+      [
+        71.43486785888672,
+        72.02349090576172,
+        57.650508880615234
+      ]
+    ],
+    "area": 65838.808423799,
+    "volume": null
+  },
+  "warnings": [
+    "mesh is not watertight after repair; inside/outside classification may be wrong"
+  ],
+  "notes": [
+    "baseline_rerun s06 prepped (historical prep_scan)"
+  ],
+  "gear": {
+    "detected": false,
+    "axis_roundness": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "reason": "no N-fold periodic zone",
+    "seconds": 2.87
+  },
+  "screw_rotor": {
+    "detected": false,
+    "axis_roundness": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "harmonic_amp": [
+      97.932,
+      64.528,
+      65.446,
+      64.176,
+      60.718,
+      60.705,
+      68.149,
+      54.681,
+      59.241,
+      58.199,
+      58.901,
+      63.939,
+      61.876,
+      60.254,
+      59.499,
+      67.968
+    ],
+    "n_fold_correlation": 1.0,
+    "twist_fit": {
+      "rms_linear_rad": 1.8708900666967783,
+      "rms_quadratic_rad": 1.3806540481433,
+      "twist_rate_change_frac": 4.4917
+    },
+    "acceptance": {
+      "profile_rms_mm": 5.5093,
+      "twist_residual_mm_at_tip": 145.3307,
+      "gate_mm": 0.28577375430762064
+    },
+    "reason": "not one helicoid: profile rms 5.509 mm, twist residual 145.331 mm at the tip (gate 0.29)",
+    "seconds": 4.11
+  },
+  "threads": [],
+  "dimensions": [
+    {
+      "type": "diameter",
+      "regions": [
+        1
+      ],
+      "value": 142.82294765080903,
+      "name": "D1",
+      "units": "mm",
+      "fit_value": 142.82298126678248
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        4
+      ],
+      "value": 100.0,
+      "name": "D2",
+      "units": "mm",
+      "fit_value": 100.0264947380663
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        7
+      ],
+      "value": 137.32121427520846,
+      "name": "D3",
+      "units": "mm",
+      "fit_value": 137.32121427520846
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        8
+      ],
+      "value": 92.1046382690861,
+      "name": "D4",
+      "units": "mm",
+      "fit_value": 92.1045805616015
+    },
+    {
+      "type": "torus_minor_radius",
+      "regions": [
+        12
+      ],
+      "value": 1.0917238410002574,
+      "name": "D5",
+      "units": "mm",
+      "fit_value": 1.0959183837978153
+    },
+    {
+      "type": "torus_major_radius",
+      "regions": [
+        12
+      ],
+      "value": 51.09172384100026,
+      "name": "D6",
+      "units": "mm",
+      "fit_value": 51.103363437535606
+    },
+    {
+      "type": "torus_minor_radius",
+      "regions": [
+        13
+      ],
+      "value": 1.2303159270155977,
+      "name": "D7",
+      "units": "mm",
+      "fit_value": 1.2658597692016895
+    },
+    {
+      "type": "torus_major_radius",
+      "regions": [
+        13
+      ],
+      "value": 70.19055435963035,
+      "name": "D8",
+      "units": "mm",
+      "fit_value": 70.16005028728394
+    },
+    {
+      "type": "torus_minor_radius",
+      "regions": [
+        14
+      ],
+      "value": 1.2239113274740325,
+      "name": "D9",
+      "units": "mm",
+      "fit_value": 1.3191075115835307
+    },
+    {
+      "type": "torus_major_radius",
+      "regions": [
+        14
+      ],
+      "value": 70.18756249793049,
+      "name": "D10",
+      "units": "mm",
+      "fit_value": 70.11542384002237
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        15
+      ],
+      "value": 118.03146059962312,
+      "name": "D11",
+      "units": "mm",
+      "fit_value": 118.03146059962312
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        17
+      ],
+      "value": 5.5,
+      "name": "D12",
+      "units": "mm",
+      "fit_value": 5.4508726496189865
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        18
+      ],
+      "value": 115.5,
+      "name": "D13",
+      "units": "mm",
+      "fit_value": 115.42377045650156
+    },
+    {
+      "type": "torus_minor_radius",
+      "regions": [
+        19
+      ],
+      "value": 0.4511293887333771,
+      "name": "D14",
+      "units": "mm",
+      "fit_value": 0.5096507068225999
+    },
+    {
+      "type": "torus_major_radius",
+      "regions": [
+        19
+      ],
+      "value": 70.96974089791257,
+      "name": "D15",
+      "units": "mm",
+      "fit_value": 70.91231345875929
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        21
+      ],
+      "value": 112.56902182159871,
+      "name": "D16",
+      "units": "mm",
+      "fit_value": 112.56902182159871
+    },
+    {
+      "type": "torus_minor_radius",
+      "regions": [
+        22
+      ],
+      "value": 0.6256102952200554,
+      "name": "D17",
+      "units": "mm",
+      "fit_value": 0.6467131728253521
+    },
+    {
+      "type": "torus_major_radius",
+      "regions": [
+        22
+      ],
+      "value": 50.625610295220056,
+      "name": "D18",
+      "units": "mm",
+      "fit_value": 50.66047673307945
+    },
+    {
+      "type": "torus_minor_radius",
+      "regions": [
+        23
+      ],
+      "value": 0.8265707221099838,
+      "name": "D19",
+      "units": "mm",
+      "fit_value": 0.8739322751517001
+    },
+    {
+      "type": "torus_major_radius",
+      "regions": [
+        23
+      ],
+      "value": 46.87888985665303,
+      "name": "D20",
+      "units": "mm",
+      "fit_value": 46.91518388812123
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        25
+      ],
+      "value": 123.81533531076263,
+      "name": "D21",
+      "units": "mm",
+      "fit_value": 123.81533531076263
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        26
+      ],
+      "value": 114.73141314203616,
+      "name": "D22",
+      "units": "mm",
+      "fit_value": 114.73141314203616
+    },
+    {
+      "type": "diameter",
+      "regions": [
+        27
+      ],
+      "value": 4.9381959107066224,
+      "name": "D23",
+      "units": "mm",
+      "fit_value": 4.938197433283088
+    },
+    {
+      "type": "distance",
+      "regions": [
+        3,
+        9
+      ],
+      "direction": [
+        4.817381839387519e-05,
+        0.00012408825832141475,
+        0.9999999911406936
+      ],
+      "value": 20.62575579821436,
+      "name": "D24",
+      "units": "mm",
+      "fit_value": 20.62575579821436
+    },
+    {
+      "type": "distance",
+      "regions": [
+        9,
+        5
+      ],
+      "direction": [
+        4.817381839387519e-05,
+        0.00012408825832141475,
+        0.9999999911406936
+      ],
+      "value": 1.4683476258433323,
+      "name": "D25",
+      "units": "mm",
+      "fit_value": 1.468347625843336
+    },
+    {
+      "type": "distance",
+      "regions": [
+        5,
+        10
+      ],
+      "direction": [
+        4.817381839387519e-05,
+        0.00012408825832141475,
+        0.9999999911406936
+      ],
+      "value": 3.267980483971428,
+      "name": "D26",
+      "units": "mm",
+      "fit_value": 3.2656690613670563
+    },
+    {
+      "type": "distance",
+      "regions": [
+        10,
+        11
+      ],
+      "direction": [
+        4.817381839387519e-05,
+        0.00012408825832141475,
+        0.9999999911406936
+      ],
+      "value": 22.611426854154264,
+      "name": "D27",
+      "units": "mm",
+      "fit_value": 22.613738276758625
+    },
+    {
+      "type": "distance",
+      "regions": [
+        11,
+        2
+      ],
+      "direction": [
+        4.817381839387519e-05,
+        0.00012408825832141475,
+        0.9999999911406936
+      ],
+      "value": 9.229667252940793,
+      "name": "D28",
+      "units": "mm",
+      "fit_value": 9.229667252940793
+    },
+    {
+      "type": "span",
+      "regions": [
+        3,
+        2
+      ],
+      "direction": [
+        4.817381839387519e-05,
+        0.00012408825832141475,
+        0.9999999911406936
+      ],
+      "value": 57.20317801512417,
+      "name": "D29",
+      "units": "mm",
+      "fit_value": 57.203178015124166
+    }
+  ],
+  "keyways": [],
+  "splines": [],
+  "spline_check": {
+    "reason": "no N-fold (N >= 6) axial zone"
+  },
+  "labyrinth": [],
+  "balance_cuts": {
+    "skipped": "balance_cuts=auto; turned body built by the revolve builder (not a bladed rotor)"
+  },
+  "deviation": {
+    "mesh_vertices_to_solid": {
+      "max": 4.041657047666987,
+      "mean": 0.04145974973469702,
+      "rms": 0.12260192772200144,
+      "p95": 0.1333989299302403,
+      "n": 30398
+    },
+    "mesh_to_solid": {
+      "max": 6.563773805344975,
+      "mean": 0.028657091919558852,
+      "rms": 0.20476101842843467,
+      "p95": 0.053862717156712044,
+      "n": 30000
+    },
+    "solid_to_mesh": {
+      "max": 6.16725597372088,
+      "mean": 0.15435222778640903,
+      "rms": 0.6672663084154145,
+      "p95": 0.6324996084091786,
+      "n": 30000
+    },
+    "hausdorff": 6.563773805344975,
+    "solid_tessellation": {
+      "triangles": 616302,
+      "linear_deflection": 0.002
+    },
+    "solid_scan_coverage": {
+      "covered_frac": 0.9527666666666667,
+      "open_boundary_edges": 772
+    },
+    "solid_to_mesh_scanned": {
+      "max": 5.690485428481452,
+      "mean": 0.04176256226542952,
+      "rms": 0.27734965923959054,
+      "p95": 0.06914033445828854,
+      "n": 28583
+    },
+    "excluded_zones": {
+      "faces": 215,
+      "area_frac": 0.0020454725680761686
+    },
+    "mesh_vertices_to_solid_excl": {
+      "max": 2.288411595856287,
+      "mean": 0.03624987771519799,
+      "rms": 0.07300103064109117,
+      "p95": 0.1264284951561451,
+      "n": 30224
+    },
+    "mesh_to_solid_excl": {
+      "max": 6.563773805344975,
+      "mean": 0.026064009069855624,
+      "rms": 0.19117483623903037,
+      "p95": 0.05274616073483214,
+      "n": 29945
+    },
+    "solid_to_mesh_excl": {
+      "max": 6.16725597372088,
+      "mean": 0.14967134992598535,
+      "rms": 0.6558028223952581,
+      "p95": 0.5544534095077116,
+      "n": 29929
+    },
+    "seconds": 13.0670645236969,
+    "excluded_from_gate": {
+      "thread_zone_faces": 0,
+      "hole_fill_artifact_faces": 215,
+      "balance_cut_faces": 0,
+      "internal_scan_faces": 0,
+      "hole_fill_artifacts": [
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 0.0,
+          "faces": 42,
+          "area_mm2": 18.38,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 1.44,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 90.0,
+          "faces": 33,
+          "area_mm2": 15.99,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 0.81,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 180.1,
+          "faces": 27,
+          "area_mm2": 12.96,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 0.8,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": 17,
+          "pattern_angle_deg": 270.1,
+          "faces": 20,
+          "area_mm2": 10.11,
+          "hole_cross_section_mm2": 23.76,
+          "wall_beyond_cap_mm": 0.83,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        },
+        {
+          "hole_region": null,
+          "pattern_angle_deg": null,
+          "faces": 93,
+          "area_mm2": 77.24,
+          "hole_cross_section_mm2": 94.04,
+          "wall_beyond_cap_mm": 3.32,
+          "why": "surface across the hole bore with hole wall continuing past it"
+        }
+      ],
+      "unscanned_solid_frac": 0.0472
+    },
+    "acceptance": {
+      "basis": "mesh vertices->solid rms/p95; solid->mesh p95 (limit widened by facet sag p95); hole-fill artefact faces excluded (scan surface across a hole bore with the hole wall continuing past it); solid->mesh over the scanned part of the solid only (open scan: solid surface nearest to the scan's open boundary was not scanned)",
+      "rms_limit": 0.10716515786535774,
+      "p95_limit": 0.21433031573071548,
+      "solid_to_mesh_p95_limit": 0.2564311826189737,
+      "facet_sag_p95": 0.042100866888258225,
+      "passed": true
+    },
+    "unassigned_faces_max_dev": 4.041657047666987
+  },
+  "step": "/workspace/quadremesh-fusion/results/baseline_rerun/s06/s06.step",
+  "regions": [
+    {
+      "id": 1,
+      "kind": "cylinder",
+      "n_faces": 8380,
+      "area": 22096.350503210462,
+      "params": {
+        "diameter": 142.82294765080903,
+        "axis_dir": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ],
+        "axis_point": [
+          0.0007373342765249634,
+          0.5928951018295648,
+          40.27987682191901
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 142.82298126678248,
+        "axis_dir": [
+          -0.0001003706882598143,
+          -2.8482179996398543e-05,
+          0.9999999945572452
+        ],
+        "axis_point": [
+          -0.000570657057479013,
+          0.5884761035154406,
+          40.27996795013549
+        ]
+      },
+      "fit": {
+        "rms": 0.016138454728805193,
+        "max": 0.08170748414610784,
+        "normal_err_deg": 1.980990879979635,
+        "rms_unsnapped": 0.015810721310369535
+      },
+      "deviation": {
+        "max": 0.05589796677886149,
+        "mean": 0.007836846702237287,
+        "rms": 0.009841686698360667,
+        "p95": 0.018684266491193403,
+        "n": 10145
+      },
+      "confidence": 0.697,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 2,
+      "kind": "plane",
+      "n_faces": 4996,
+      "area": 8060.013254721984,
+      "params": {
+        "normal": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ],
+        "offset": 57.23072727653396
+      },
+      "params_unsnapped": {
+        "normal": [
+          1.6174278566855538e-05,
+          -0.00011465945197771165,
+          0.9999999932958014
+        ],
+        "offset": 57.23181167652371
+      },
+      "fit": {
+        "rms": 0.029344910206566654,
+        "max": 0.11994847591654142,
+        "normal_err_deg": 2.1381486996604115,
+        "rms_unsnapped": 0.027245261744022777
+      },
+      "deviation": {
+        "max": 2.341363445797241,
+        "mean": 0.020931418715816514,
+        "rms": 0.06350721355864197,
+        "p95": 0.04964763019297342,
+        "n": 3646
+      },
+      "confidence": 0.526,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 3,
+      "kind": "plane",
+      "n_faces": 1572,
+      "area": 7274.716111889997,
+      "params": {
+        "normal": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ],
+        "offset": -0.02754926140977868
+      },
+      "params_unsnapped": {
+        "normal": [
+          -2.5071967770208824e-05,
+          -4.693444264784709e-05,
+          -0.9999999985842772
+        ],
+        "offset": -0.027465581030817563
+      },
+      "fit": {
+        "rms": 0.016586530651732528,
+        "max": 0.08351962183806948,
+        "normal_err_deg": 2.33830125554632,
+        "rms_unsnapped": 0.016209286836599873
+      },
+      "deviation": {
+        "max": 0.060322965032515136,
+        "mean": 0.007294910859459198,
+        "rms": 0.00912049948175032,
+        "p95": 0.01634391808701492,
+        "n": 3344
+      },
+      "confidence": 0.678,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 4,
+      "kind": "cylinder",
+      "n_faces": 6677,
+      "area": 11395.761125198143,
+      "params": {
+        "diameter": 100.0,
+        "axis_dir": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ],
+        "axis_point": [
+          0.0008207491384968869,
+          0.5914451773894907,
+          37.1257454815536
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 100.0264947380663,
+        "axis_dir": [
+          -0.0001411909308805722,
+          0.0003104829302517702,
+          0.9999999418327339
+        ],
+        "axis_point": [
+          0.002287666748051953,
+          0.597676511015154,
+          37.125820682223925
+        ]
+      },
+      "fit": {
+        "rms": 0.027227815418111808,
+        "max": 0.095108779576357,
+        "normal_err_deg": 2.8661194277779027,
+        "rms_unsnapped": 0.022262068859040487
+      },
+      "deviation": {
+        "max": 0.08622595464795228,
+        "mean": 0.00802481808629216,
+        "rms": 0.0118652260344122,
+        "p95": 0.024211619378200103,
+        "n": 5198
+      },
+      "confidence": 0.53,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 5,
+      "kind": "plane",
+      "n_faces": 1635,
+      "area": 2132.0685084625215,
+      "params": {
+        "normal": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ],
+        "offset": -22.121652685467474
+      },
+      "params_unsnapped": {
+        "normal": [
+          4.827108599203901e-06,
+          -0.000163795937800396,
+          -0.9999999865737949
+        ],
+        "offset": -22.121580402639964
+      },
+      "fit": {
+        "rms": 0.028495086520879537,
+        "max": 0.09487826057920128,
+        "normal_err_deg": 3.7449601787386486,
+        "rms_unsnapped": 0.028373373851972684
+      },
+      "deviation": {
+        "max": 0.06770754583416931,
+        "mean": 0.012804434017185623,
+        "rms": 0.016212645622841367,
+        "p95": 0.030395796732303557,
+        "n": 992
+      },
+      "confidence": 0.489,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 7,
+      "kind": "sphere",
+      "n_faces": 1937,
+      "area": 1780.1636434062057,
+      "params": {
+        "diameter": 137.32121427520846,
+        "center": [
+          -0.015350124386737295,
+          0.5934941169062259,
+          22.95928981071383
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 137.32121427520846,
+        "center": [
+          -0.015350124386737295,
+          0.5934941169062259,
+          22.95928981071383
+        ]
+      },
+      "fit": {
+        "rms": 0.030525815052019817,
+        "max": 0.09640630095454128,
+        "normal_err_deg": 6.424356492877978,
+        "rms_unsnapped": 0.030525815052019817
+      },
+      "deviation": {
+        "max": 0.07157898806782839,
+        "mean": 0.02528287653117472,
+        "rms": 0.028566904504424093,
+        "p95": 0.04804237306375744,
+        "n": 774
+      },
+      "confidence": 0.389,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 8,
+      "kind": "cylinder",
+      "n_faces": 2225,
+      "area": 2128.1835015241736,
+      "params": {
+        "diameter": 92.1046382690861,
+        "axis_dir": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ],
+        "axis_point": [
+          0.0016532741848451717,
+          0.5929416545523393,
+          52.84458811731146
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 92.1045805616015,
+        "axis_dir": [
+          -0.0007809171912056335,
+          -0.0013954533386884662,
+          -0.9999987214383427
+        ],
+        "axis_point": [
+          -0.005050097893102676,
+          0.5988795736891794,
+          52.83873285478166
+        ]
+      },
+      "fit": {
+        "rms": 0.028503867875899633,
+        "max": 0.09636584133063764,
+        "normal_err_deg": 3.3055349006266073,
+        "rms_unsnapped": 0.027641848290708832
+      },
+      "deviation": {
+        "max": 0.0698419573512443,
+        "mean": 0.01571792587222096,
+        "rms": 0.01945265355757842,
+        "p95": 0.037354008056693165,
+        "n": 944
+      },
+      "confidence": 0.502,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 9,
+      "kind": "plane",
+      "n_faces": 1632,
+      "area": 882.2683997020808,
+      "params": {
+        "normal": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ],
+        "offset": 20.65330505962414
+      },
+      "params_unsnapped": {
+        "normal": [
+          -8.16956482321703e-05,
+          -1.7378561465799254e-05,
+          0.9999999965119034
+        ],
+        "offset": 20.653575745751155
+      },
+      "fit": {
+        "rms": 0.03332132121321415,
+        "max": 0.08283693114947932,
+        "normal_err_deg": 5.693095732058231,
+        "rms_unsnapped": 0.03199054398378697
+      },
+      "deviation": {
+        "max": 0.07341772529679888,
+        "mean": 0.01773125311387345,
+        "rms": 0.022016184646221945,
+        "p95": 0.04061084725238891,
+        "n": 421
+      },
+      "confidence": 0.382,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 10,
+      "kind": "plane",
+      "n_faces": 1645,
+      "area": 832.8623891028119,
+      "params": {
+        "normal": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ],
+        "offset": -25.389633169438902
+      },
+      "params_unsnapped": {
+        "normal": [
+          -3.823519774364957e-05,
+          2.0397356875879205e-05,
+          -0.9999999990610088
+        ],
+        "offset": -25.3886595519749
+      },
+      "fit": {
+        "rms": 0.036757180237365246,
+        "max": 0.12200332667644727,
+        "normal_err_deg": 6.117579204416702,
+        "rms_unsnapped": 0.03378466645825195
+      },
+      "deviation": {
+        "max": 0.08726543958140623,
+        "mean": 0.01708519985909282,
+        "rms": 0.022006435812380508,
+        "p95": 0.04511983285486801,
+        "n": 380
+      },
+      "confidence": 0.337,
+      "flags": [
+        "high_fit_residual"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 11,
+      "kind": "plane",
+      "n_faces": 1160,
+      "area": 746.7157105842323,
+      "params": {
+        "normal": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ],
+        "offset": -48.00106002359316
+      },
+      "params_unsnapped": {
+        "normal": [
+          9.997962394898571e-05,
+          2.5718005581688222e-05,
+          -0.9999999946713295
+        ],
+        "offset": -48.00082583332063
+      },
+      "fit": {
+        "rms": 0.03238795900152014,
+        "max": 0.0837411056147179,
+        "normal_err_deg": 4.885795115699426,
+        "rms_unsnapped": 0.031626840152673134
+      },
+      "deviation": {
+        "max": 0.07420803051116766,
+        "mean": 0.016826331581695955,
+        "rms": 0.02149839231117164,
+        "p95": 0.04376130235194175,
+        "n": 347
+      },
+      "confidence": 0.413,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 12,
+      "kind": "torus",
+      "n_faces": 1665,
+      "area": 509.49800374503036,
+      "params": {
+        "major_radius": 51.09172384100026,
+        "minor_radius": 1.0917238410002574,
+        "center": [
+          0.0001505336814219684,
+          0.5897188066856253,
+          23.213303547690092
+        ],
+        "axis_dir": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ]
+      },
+      "params_unsnapped": {
+        "major_radius": 51.103363437535606,
+        "minor_radius": 1.0959183837978153,
+        "center": [
+          0.001962562588590344,
+          0.587429774929473,
+          23.207756088683816
+        ],
+        "axis_dir": [
+          4.5975337591753136e-05,
+          -9.591164754062057e-05,
+          0.9999999943436121
+        ]
+      },
+      "fit": {
+        "rms": 0.01682848418599438,
+        "max": 0.0575783779564738,
+        "normal_err_deg": 6.977410285936393,
+        "rms_unsnapped": 0.014922550856029802
+      },
+      "deviation": {
+        "max": 0.05830077815807964,
+        "mean": 0.014007277662179712,
+        "rms": 0.017551135074118773,
+        "p95": 0.033623643267062304,
+        "n": 246
+      },
+      "confidence": 0.498,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 13,
+      "kind": "torus",
+      "n_faces": 2331,
+      "area": 845.2550819642709,
+      "params": {
+        "major_radius": 70.19055435963035,
+        "minor_radius": 1.2303159270155977,
+        "center": [
+          -0.0023230053283534403,
+          0.5903693313796927,
+          1.257792053574481
+        ],
+        "axis_dir": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ]
+      },
+      "params_unsnapped": {
+        "major_radius": 70.16005028728394,
+        "minor_radius": 1.2658597692016895,
+        "center": [
+          -0.0010499023463446558,
+          0.5866323121768613,
+          1.279039504285805
+        ],
+        "axis_dir": [
+          -5.108105745597193e-05,
+          -3.783913871818088e-05,
+          -0.9999999979794626
+        ]
+      },
+      "fit": {
+        "rms": 0.013696776317610578,
+        "max": 0.09161913466269644,
+        "normal_err_deg": 6.2173385496565885,
+        "rms_unsnapped": 0.011025702048899869
+      },
+      "deviation": {
+        "max": 0.04443909320928635,
+        "mean": 0.01148276180669349,
+        "rms": 0.014301163033895356,
+        "p95": 0.028066994875059783,
+        "n": 375
+      },
+      "confidence": 0.557,
+      "flags": [],
+      "low_confidence": false
+    },
+    {
+      "id": 14,
+      "kind": "torus",
+      "n_faces": 2401,
+      "area": 745.5476855617476,
+      "params": {
+        "major_radius": 70.18756249793049,
+        "minor_radius": 1.2239113274740325,
+        "center": [
+          0.0014949574571957128,
+          0.5948466212251151,
+          56.00674255974181
+        ],
+        "axis_dir": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ]
+      },
+      "params_unsnapped": {
+        "major_radius": 70.11542384002237,
+        "minor_radius": 1.3191075115835307,
+        "center": [
+          -0.005118764593427629,
+          0.6018149622962161,
+          55.941903779317606
+        ],
+        "axis_dir": [
+          2.6069632902593558e-05,
+          -8.742137210667572e-06,
+          -0.9999999996219746
+        ]
+      },
+      "fit": {
+        "rms": 0.03064725802120431,
+        "max": 0.1349722112809726,
+        "normal_err_deg": 8.390512961786712,
+        "rms_unsnapped": 0.024118795941313498
+      },
+      "deviation": {
+        "max": 0.11632748277215907,
+        "mean": 0.01919271911302534,
+        "rms": 0.025453354915259106,
+        "p95": 0.04972517136746243,
+        "n": 346
+      },
+      "confidence": 0.331,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 15,
+      "kind": "sphere",
+      "n_faces": 256,
+      "area": 145.04913345711842,
+      "params": {
+        "diameter": 118.03146059962312,
+        "center": [
+          -0.5241970159262547,
+          1.5134858622726943,
+          18.852306302681228
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 118.03146059962312,
+        "center": [
+          -0.5241970159262547,
+          1.5134858622726943,
+          18.852306302681228
+        ]
+      },
+      "fit": {
+        "rms": 0.0388574258080734,
+        "max": 0.09261593690263936,
+        "normal_err_deg": 4.69564409198351,
+        "rms_unsnapped": 0.0388574258080734
+      },
+      "deviation": {
+        "max": 0.08359972712266628,
+        "mean": 0.02474239025428688,
+        "rms": 0.031523757127878756,
+        "p95": 0.06513953559472059,
+        "n": 72
+      },
+      "confidence": 0.349,
+      "flags": [
+        "high_fit_residual"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 17,
+      "kind": "cylinder",
+      "n_faces": 100,
+      "area": 28.222426101719922,
+      "params": {
+        "diameter": 5.5,
+        "axis_dir": [
+          -0.01898327808490614,
+          -0.07105496628982806,
+          0.9972917461398658
+        ],
+        "axis_point": [
+          -25.491165526337497,
+          58.730462679014856,
+          2.423509732215488
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 5.4508726496189865,
+        "axis_dir": [
+          -0.01898327808490614,
+          -0.07105496628982806,
+          0.9972917461398658
+        ],
+        "axis_point": [
+          -25.49116552648797,
+          58.73046267881583,
+          2.4235097321984442
+        ]
+      },
+      "fit": {
+        "rms": 0.03978990489013935,
+        "max": 0.09445761373306816,
+        "normal_err_deg": 5.828168580047801,
+        "rms_unsnapped": 0.0313027536943721
+      },
+      "deviation": {
+        "max": 0.08766690307009926,
+        "mean": 0.0374284845800283,
+        "rms": 0.04440836629658155,
+        "p95": 0.08473195434881474,
+        "n": 13
+      },
+      "confidence": 0.067,
+      "flags": [
+        "high_fit_residual",
+        "small_region"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 18,
+      "kind": "cylinder",
+      "n_faces": 829,
+      "area": 452.9179046315795,
+      "params": {
+        "diameter": 115.5,
+        "axis_dir": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ],
+        "axis_point": [
+          -0.1723644172196878,
+          0.7288940842184177,
+          18.58175116113221
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 115.42377045650156,
+        "axis_dir": [
+          -0.0003872202684195104,
+          0.006346474821362501,
+          0.9999797859545989
+        ],
+        "axis_point": [
+          -0.17065030442206416,
+          0.7385111960044216,
+          18.817264518526162
+        ]
+      },
+      "fit": {
+        "rms": 0.052365832031343526,
+        "max": 0.14873309641354382,
+        "normal_err_deg": 3.980869293473568,
+        "rms_unsnapped": 0.03588536213742883
+      },
+      "deviation": {
+        "max": 0.08148675585826227,
+        "mean": 0.02486739601424083,
+        "rms": 0.03099044726417839,
+        "p95": 0.058863205671822544,
+        "n": 214
+      },
+      "confidence": 0.214,
+      "flags": [
+        "high_fit_residual"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 19,
+      "kind": "torus",
+      "n_faces": 1277,
+      "area": 238.97050454356446,
+      "params": {
+        "major_radius": 70.96974089791257,
+        "minor_radius": 0.4511293887333771,
+        "center": [
+          -0.001410385555573967,
+          0.592720097872562,
+          20.202102368206415
+        ],
+        "axis_dir": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ]
+      },
+      "params_unsnapped": {
+        "major_radius": 70.91231345875929,
+        "minor_radius": 0.5096507068225999,
+        "center": [
+          0.0016644750961517401,
+          0.5905136341083677,
+          20.180147667959584
+        ],
+        "axis_dir": [
+          5.173609383851135e-05,
+          1.8656116933147046e-05,
+          -0.999999998487663
+        ]
+      },
+      "fit": {
+        "rms": 0.02655885758612421,
+        "max": 0.13324081453383502,
+        "normal_err_deg": 14.772445907536762,
+        "rms_unsnapped": 0.015199487744718288
+      },
+      "deviation": {
+        "max": 0.07621031673693542,
+        "mean": 0.015006698980806026,
+        "rms": 0.0192009403852712,
+        "p95": 0.03623409480799781,
+        "n": 118
+      },
+      "confidence": 0.164,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 21,
+      "kind": "sphere",
+      "n_faces": 181,
+      "area": 97.91580252014374,
+      "params": {
+        "diameter": 112.56902182159871,
+        "center": [
+          -1.360520925704113,
+          -0.4256971080200619,
+          21.35030529780147
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 112.56902182159871,
+        "center": [
+          -1.360520925704113,
+          -0.4256971080200619,
+          21.35030529780147
+        ]
+      },
+      "fit": {
+        "rms": 0.03630202880290946,
+        "max": 0.08554292683171383,
+        "normal_err_deg": 4.357287850421872,
+        "rms_unsnapped": 0.03630202880290946
+      },
+      "deviation": {
+        "max": 0.13141530076077362,
+        "mean": 0.039840492297688095,
+        "rms": 0.050628069876966116,
+        "p95": 0.08965929983171773,
+        "n": 44
+      },
+      "confidence": 0.286,
+      "flags": [
+        "high_fit_residual",
+        "small_region"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 22,
+      "kind": "torus",
+      "n_faces": 1169,
+      "area": 252.62790594573832,
+      "params": {
+        "major_radius": 50.625610295220056,
+        "minor_radius": 0.6256102952200554,
+        "center": [
+          -0.0008778040311762375,
+          0.5865749522930737,
+          0.6530868176386971
+        ],
+        "axis_dir": [
+          -4.81738183938752e-05,
+          -0.00012408825832141478,
+          -0.9999999911406937
+        ]
+      },
+      "params_unsnapped": {
+        "major_radius": 50.66047673307945,
+        "minor_radius": 0.6467131728253521,
+        "center": [
+          0.00517853333344818,
+          0.6085621203026894,
+          0.6513079655737557
+        ],
+        "axis_dir": [
+          -7.62811150308239e-05,
+          0.0003374173246300191,
+          -0.9999999401653685
+        ]
+      },
+      "fit": {
+        "rms": 0.03035100405009716,
+        "max": 0.10190293046317023,
+        "normal_err_deg": 11.805428590265365,
+        "rms_unsnapped": 0.019572884850328216
+      },
+      "deviation": {
+        "max": 0.09945514381254769,
+        "mean": 0.027235371276949583,
+        "rms": 0.034780574840755724,
+        "p95": 0.07423403933329369,
+        "n": 118
+      },
+      "confidence": 0.236,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 23,
+      "kind": "torus",
+      "n_faces": 837,
+      "area": 206.68979781114143,
+      "params": {
+        "major_radius": 46.87888985665303,
+        "minor_radius": 0.8265707221099838,
+        "center": [
+          0.0014597584841562377,
+          0.5924431882265021,
+          48.82755759271591
+        ],
+        "axis_dir": [
+          4.81738183938752e-05,
+          0.00012408825832141478,
+          0.9999999911406937
+        ]
+      },
+      "params_unsnapped": {
+        "major_radius": 46.91518388812123,
+        "minor_radius": 0.8739322751517001,
+        "center": [
+          -0.014654277992924179,
+          0.5714894881950361,
+          48.86552280972474
+        ],
+        "axis_dir": [
+          9.835803559824693e-05,
+          -0.0003360897444642752,
+          0.9999999386846884
+        ]
+      },
+      "fit": {
+        "rms": 0.031985449109158695,
+        "max": 0.11799028287500612,
+        "normal_err_deg": 11.697757383475006,
+        "rms_unsnapped": 0.027397473092239277
+      },
+      "deviation": {
+        "max": 0.07273409388014097,
+        "mean": 0.022324587382613607,
+        "rms": 0.027968147986518876,
+        "p95": 0.05800023371704619,
+        "n": 95
+      },
+      "confidence": 0.229,
+      "flags": [],
+      "low_confidence": true
+    },
+    {
+      "id": 25,
+      "kind": "sphere",
+      "n_faces": 134,
+      "area": 68.67019708099922,
+      "params": {
+        "diameter": 123.81533531076263,
+        "center": [
+          -3.5257433994659486,
+          -1.2900617330398552,
+          19.59393547706106
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 123.81533531076263,
+        "center": [
+          -3.5257433994659486,
+          -1.2900617330398552,
+          19.59393547706106
+        ]
+      },
+      "fit": {
+        "rms": 0.037221299437991844,
+        "max": 0.09850479458214068,
+        "normal_err_deg": 5.477234436548122,
+        "rms_unsnapped": 0.037221299437991844
+      },
+      "deviation": {
+        "max": 0.05461079906096463,
+        "mean": 0.02154694175869016,
+        "rms": 0.025627328292724856,
+        "p95": 0.05268528486094296,
+        "n": 28
+      },
+      "confidence": 0.181,
+      "flags": [
+        "high_fit_residual",
+        "small_region"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 26,
+      "kind": "sphere",
+      "n_faces": 159,
+      "area": 78.79975431196287,
+      "params": {
+        "diameter": 114.73141314203616,
+        "center": [
+          0.19255930908376254,
+          1.1263218969249424,
+          20.576259298889244
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 114.73141314203616,
+        "center": [
+          0.19255930908376254,
+          1.1263218969249424,
+          20.576259298889244
+        ]
+      },
+      "fit": {
+        "rms": 0.0508538757227313,
+        "max": 0.17370149461320494,
+        "normal_err_deg": 7.243572104414573,
+        "rms_unsnapped": 0.03499356335276597
+      },
+      "deviation": {
+        "max": 0.08176418104318567,
+        "mean": 0.026601120435341838,
+        "rms": 0.032406492506223065,
+        "p95": 0.0625012389833041,
+        "n": 41
+      },
+      "confidence": 0.11,
+      "flags": [
+        "high_fit_residual",
+        "small_region"
+      ],
+      "low_confidence": true
+    },
+    {
+      "id": 27,
+      "kind": "cylinder",
+      "n_faces": 52,
+      "area": 17.509325535167488,
+      "params": {
+        "diameter": 4.9381959107066224,
+        "axis_dir": [
+          -0.31451904095221095,
+          0.9491765577643185,
+          -0.011901053280314912
+        ],
+        "axis_point": [
+          45.41594942780711,
+          14.9613969812339,
+          54.75758541290145
+        ]
+      },
+      "params_unsnapped": {
+        "diameter": 4.938197433283088,
+        "axis_dir": [
+          -0.31451904095221095,
+          0.9491765577643185,
+          -0.011901053280314912
+        ],
+        "axis_point": [
+          45.416142757334185,
+          14.960800199757607,
+          54.70487942208903
+        ]
+      },
+      "fit": {
+        "rms": 0.05763172704501721,
+        "max": 0.12077974821660531,
+        "normal_err_deg": 7.988420938325283,
+        "rms_unsnapped": 0.03167746403032088
+      },
+      "deviation": {
+        "max": 0.36184340991608965,
+        "mean": 0.17970844618132573,
+        "rms": 0.22438403124419862,
+        "p95": 0.3592889179670545,
+        "n": 7
+      },
+      "confidence": 0.012,
+      "flags": [
+        "high_fit_residual",
+        "small_region",
+        "high_deviation_vs_solid"
+      ],
+      "low_confidence": true
+    }
+  ],
+  "seconds": 103.55580306053162
+}

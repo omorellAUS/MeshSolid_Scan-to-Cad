@@ -1,0 +1,114 @@
+{
+  "WING 2 L": {
+    "ok": true,
+    "nsol": 1,
+    "vol": 1.0117,
+    "rms": 0.61767,
+    "p95": 1.28073,
+    "s2m": 0.17455,
+    "levels": [
+      -395.0,
+      -322.8187,
+      -304.4495,
+      -290.0
+    ],
+    "slabs": [
+      {
+        "from": -395.0,
+        "to": -322.8187,
+        "sections": 35,
+        "corners": [
+          2
+        ],
+        "smooth": false,
+        "corner_deg": 35.0,
+        "shared_wire": true,
+        "corner_count_intent": 10,
+        "corner_count_used": 2,
+        "shared_wire_mode": "te_le"
+      },
+      {
+        "from": -322.8187,
+        "to": -304.4495,
+        "sections": 10,
+        "corners": [
+          2
+        ],
+        "smooth": false,
+        "corner_deg": 35.0,
+        "shared_wire": true,
+        "corner_count_intent": 6,
+        "corner_count_used": 2,
+        "shared_wire_mode": "te_le"
+      },
+      {
+        "from": -304.4495,
+        "to": -290.0,
+        "sections": 9,
+        "corners": [
+          2
+        ],
+        "smooth": false,
+        "corner_deg": 35.0,
+        "shared_wire": true,
+        "corner_count_intent": 2,
+        "corner_count_used": 2,
+        "shared_wire_mode": "te_le"
+      }
+    ],
+    "t": 7.66,
+    "reason": ""
+  },
+  "WINGTIP L 2": {
+    "ok": false,
+    "nsol": 1,
+    "vol": 0.9988,
+    "rms": 0.05855,
+    "p95": 0.1021,
+    "s2m": 0.01394,
+    "levels": [
+      463.9288,
+      683.7948
+    ],
+    "slabs": [
+      {
+        "from": 463.9288,
+        "to": 683.7948,
+        "sections": 80,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "corner_deg": 0.0
+      }
+    ],
+    "t": 11.74,
+    "reason": "loft deviates from the mesh: vertices->solid rms 0.05855 / p95 0.1021, solid->mesh p95 0.01394 (tol 0.0115, lim_s2m 0.04219)"
+  },
+  "AILERON 1R VTOL": {
+    "ok": true,
+    "nsol": 1,
+    "vol": 1.0158,
+    "rms": 0.83816,
+    "p95": 1.62733,
+    "s2m": 0.37508,
+    "levels": [
+      366.6044,
+      498.5348
+    ],
+    "slabs": [
+      {
+        "from": 366.6044,
+        "to": 498.5348,
+        "sections": 33,
+        "corners": [
+          0
+        ],
+        "smooth": true,
+        "corner_deg": 0.0
+      }
+    ],
+    "t": 2.59,
+    "reason": ""
+  }
+}

@@ -1,0 +1,6 @@
+{
+ "python": "C:\\meshsolid\\venv\\Scripts\\python.exe",
+ "engine_dir": "C:\\meshsolid\\quadremesh-fusion",
+ "timeout_s": 5400,
+ "extra_args": []
+}
