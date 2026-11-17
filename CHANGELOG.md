@@ -1,3 +1,30 @@
+# MeshSolid 1.0.2a
+
+Bug-fix release on top of 1.0.2, from the user's 1.0.2 test runs (X2-B1941 STG1, KK&K stage 1, LS pinion).
+
+## What's new (fixes)
+
+- **Face classifier no longer excludes blade passages and the hub (STG1 53.8 % excluded).** 1.0.2 read the hub flow surface between the blades, which sits behind a thin back plate, as end-face features. That gave 15 "balance cuts" 24° apart (the 15 blade passages at the rim), an "unclassified ring" over 37.5 % of the scan (the hub) and two "wide depressions" on the nose. Fixes:
+  - Only the true end face is classified: points in the thin axial slab at the end plane whose normals point **out** of the part through that face. Surfaces that face into the part (hub, passages, blade roots) are ignored, and the 2 mm exclusion border no longer reaches through the plate.
+  - A family of patches that repeats N-fold about the axis (N = the recognised blade count, or any regular N ≥ 3) is periodic and is **never** called a balance cut. The blade count is passed from the impeller build.
+  - A large uncertain region (a near-full ring, wider than 90°, or more than 5 % of the scan) is **flagged and kept inspected**, not auto-excluded.
+  - Metrology re-checks conversion reports written by 1.0.2 with the same rules, so re-running Metrology on an old STG1 conversion no longer greys out the blades. It also caps end-face classifier exclusions at 5 % per region and 5 % in total; anything over the cap is flagged and kept inspected.
+  - STG1 re-check on the user's data: classifier exclusion fell from 53.8 % to 0.2 % (new conversion) or 0.5 % (old 1.0.2 conversion report).
+- **Stage 3 regression fixed (13 blades: rms 0.356 mm, 41.8 % excluded, no STEP on 1.0.2).** The impeller build itself was fine; 1.0.2's classifier recognised the 13 blade passages at the back face as a 13-tooth Hirth coupling and **cut it into the solid**, and excluded 13 passage "balance cuts" and a ring. An N-fold signal whose N equals the blade count (or the full-blade count of a splitter wheel) is now blading: never Hirth, never modelled, never cut. `apply_modelled` refuses such a cut from an old report too. A real coupling with another count (KK&K: 24 teeth on 16 blades) is unchanged. Box rebuild of the Stage 3 scan: 1.0.2 gave a Hirth-cut solid, gate rms 0.155 mm, 43.2 % excluded, FAIL, no STEP. 1.0.2a gives status ok, STEP written, gate rms 0.046 / p95 0.081 mm, classifier exclusion 2.6 %.
+- **Prominent WARNING banner.** Total exclusion above 5 %, flagged classifier regions and alignment pose warnings are shown as a red WARNING banner at the top of the PDF, in the HTML results view and in the Fusion Metrology result message. The Metrology CLI prints them as `WARNING:` lines.
+- **PDF statistics table** now always lists the spec version, rms uncapped, rms capped and the capped count / % (and the final alignment pose).
+- **Alignment bounds (spec v2).** The half-pitch rotation clamp is reapplied after every `refine_on_deviation` step, so the refinement can no longer undo it and jump to a neighbouring blade. The blade / tooth count from the conversion report (or estimate) is used. The final pose (rotation about the axis, axis tilt, translation) is written to `report.json` (`stats.pose_summary`, `alignment.final_pose`) and the PDF, with a WARNING when the rotation hits the bound, the tilt is above 0.5° or the translation above 1 mm.
+- **PC stays awake during a job.** On Windows, conversion and Metrology jobs call `SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)` and release it when the job ends, also on error. Only system sleep is blocked, so the display can still turn off. Note: the time budget is wall-clock, so before this fix any time the PC spent asleep counted against it.
+- **Recogniser fall-through is explained, and slow stages are capped.** Every recogniser that falls through now writes its reason to the engine log (`[recogniser] impeller: none - ...`), not only to the report. The general method's `coaxial_refit` step is capped at 10 % of the time budget (at most 600 s) and `freeform` at 20 % (at most 1200 s); each stops cleanly with a logged reason. The KK&K run spent 37 min in coaxial_refit and timed out at 7560 s.
+- **Part type Impeller no longer falls through.** The Impeller part type now sends `--impeller on`. If the impeller recogniser cannot build the part, the run fails at once with the recogniser's reason instead of spending hours in the general method. Auto still falls through as before.
+
+## Known open issues
+
+- **Input-class misdetection** (a rough scan labelled `cad_tessellation`, as on KK&K) is only logged, not fixed.
+- **KK&K stage 1** (holdout, untuned) still needs the engine log of job 20261116-232354 to explain why the impeller recogniser rejected it.
+- Tiny fragments next to the blade passages (each under 0.1 % of the scan) can still be listed as balance cuts when an old 1.0.2 conversion report is re-measured; rebuild the conversion to clear them.
+- All 1.0.2 open issues below still apply.
+
 # MeshSolid 1.0.2
 
 What's new since 1.0.1, and the known open issues. This is the engine and Fusion add-in package built from the `measure-v1` branch.

@@ -68,7 +68,8 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
     ff_vmask = np.zeros(len(mesh.vertices), bool)
     try:
         from . import face_features as FF
-        ff, ff_vmask = FF.classify_mesh(mesh, spec.frame.a0, spec.frame.u, spec.frame.e1, spec.r_te)
+        ff, ff_vmask = FF.classify_mesh(mesh, spec.frame.a0, spec.frame.u, spec.frame.e1, spec.r_te,
+                                        n_blades=N or getattr(spec, "N", None))
         shape, ff = FF.apply_modelled(shape, ff, spec.frame.a0, spec.frame.u, spec.frame.e1, log=lambda *a: None)
         rep["face_features"] = ff
         imp["face_features"] = ff.get("summary")

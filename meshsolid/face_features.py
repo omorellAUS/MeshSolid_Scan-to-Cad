@@ -14,7 +14,14 @@ Deviations from the base face of revolution are segmented and classified:
 (c) Concentric features (bores, spigots, registers): reported and left to the hub of
     revolution (already modelled on a recognised impeller).
 
-Uncertain features are not modelled; they are excluded and flagged like (a).
+Uncertain features are not modelled; they are excluded and flagged like (a) -- unless they are large
+(a near-full ring, wider than 90 deg or more than 5 % of the scan): those are flagged and kept inspected,
+so the classifier can never silently remove a big region.
+
+Only the true end face is classified: points in a thin axial slab at the end plane whose normals point
+out of the part through that face.  The hub flow surface, blade passages and blade roots behind a thin
+back plate face into the part and are never end-face features.  A family of patches that repeats N-fold
+about the axis (N = the recognised blade count, or any regular N >= 3) is periodic, never balance cuts.
 
 This replaces rim-slot cutting on impellers: a one-off back-face slot is irregular, so it
 is (a) and is not cut.  A Hirth coupling is (b).
@@ -49,6 +56,11 @@ class FaceFeatureConfig:
     auto_exclude_mm: float = 2.0     # leftover end-face depth above this is excluded
     bore_min_r: float = 1.0
     step_min: float = 0.4            # mm axial step for a register/spigot
+    # 1.0.2a guards (STG1 X2-B1941: hub flow surface / blade passages were read as end-face features)
+    periodic_phase_r: float = 0.85   # min circular concentration of N * centre angle for a periodic group
+    periodic_size_cv: float = 0.6    # max relative std of patch size within a periodic group
+    flag_share_pct: float = 5.0      # one uncertain region above this % of the scan is flagged, not excluded
+    flag_span_deg: float = 90.0      # an uncertain region wider than this is flagged, not excluded
 
 
 # ---------------------------------------------------------------------------
@@ -340,10 +352,90 @@ def _feature(cls, kind, face, label, reason, n_points, depth, area, bounds, extr
     return out
 
 
+def periodic_group(feats, n_blades=None, cfg=FaceFeatureConfig()):
+    """Find a family among end-face patches that repeats N-fold about the axis.
+
+    feats: feature dicts with centre_deg, depth_mm, n_points, r_inner, r_outer (class 'a' patches).
+    A family needs >= nfold_min members of similar size, depth and radial band whose N * centre angles
+    line up (circular concentration >= periodic_phase_r) for N = the recognised blade count or N = the
+    member count (or a few more, when a patch is missing in a scan hole), with >= 0.6 N members present.
+    Returns {"N", "members" (indices into feats), "phase_r"} or None.  Pure function, works on stored
+    reports too (Metrology re-checks old conversion reports with it).
+    """
+    cand = [i for i, f in enumerate(feats)
+            if f.get("class") in ("a", None) and f.get("kind") in ("balance_cut", "drill_mark", None)
+            and f.get("centre_deg") is not None]
+    if len(cand) < cfg.nfold_min:
+        return None
+    # keep the dominant size cluster (tiny fragments next to the real patches do not break the family)
+    npts = np.array([float(feats[i].get("n_points") or 0) for i in cand])
+    med = float(np.median(npts))
+    cand = [i for i, n in zip(cand, npts) if 0.25 * med <= n <= 4.0 * med]
+    if len(cand) < cfg.nfold_min:
+        return None
+    th = np.radians([float(feats[i]["centre_deg"]) for i in cand])
+    dep = np.array([abs(float(feats[i].get("depth_mm") or 0.0)) for i in cand])
+    npts = np.array([float(feats[i].get("n_points") or 0) for i in cand])
+    rin = np.array([float(feats[i].get("r_inner") or 0.0) for i in cand])
+    rout = np.array([float(feats[i].get("r_outer") or 0.0) for i in cand])
+    def cv(x):
+        m = float(np.mean(x))
+        return float(np.std(x) / m) if m > 1e-9 else 1.0
+    if cv(dep) > cfg.period_cv or cv(npts) > cfg.periodic_size_cv:
+        return None
+    if np.ptp(rin) > max(3.0, 0.15 * np.mean(rout)) or np.ptp(rout) > max(3.0, 0.15 * np.mean(rout)):
+        return None
+    k = len(cand)
+    trials = []
+    if n_blades and int(n_blades) >= cfg.nfold_min:
+        trials.append(int(n_blades))
+    trials += [n for n in range(k, k + 4) if n not in trials]
+    for N in trials:
+        if N < cfg.nfold_min or N > cfg.nfold_max or k < max(cfg.nfold_min, int(math.ceil(0.6 * N))) or k > N:
+            continue
+        R = float(abs(np.mean(np.exp(1j * N * th))))
+        if R < cfg.periodic_phase_r:
+            continue
+        # one patch per pitch (no two patches in the same slot)
+        slot = np.round(((th - float(np.angle(np.mean(np.exp(1j * N * th)))) / N) % (2 * math.pi))
+                        * N / (2 * math.pi)).astype(int) % N
+        if len(np.unique(slot)) < k:
+            continue
+        return {"N": int(N), "members": cand, "phase_r": R}
+    return None
+
+
+def _is_blade_fold(N, n_blades):
+    """True when an N-fold end-face signal is the blading: N = blade count (or the full-blade count of a
+    splitter impeller, n_blades / 2)."""
+    if not N or not n_blades:
+        return False
+    N, nb = int(N), int(n_blades)
+    return N == nb or (nb % 2 == 0 and N == nb // 2)
+
+
+def _flag_instead_of_exclude(f, n_total, cfg):
+    span = float(f.get("span_deg") or 0.0)
+    share = 100.0 * float(f.get("n_points") or 0) / max(int(n_total or 0), 1) if n_total else 0.0
+    return f.get("kind") == "ring" or span > cfg.flag_span_deg or share > cfg.flag_share_pct
+
+
+def _keep_flagged(f, n_total, cfg):
+    share = 100.0 * float(f.get("n_points") or 0) / max(int(n_total or 0), 1) if n_total else None
+    f["exclude"] = False
+    f["flagged_kept_inspected"] = True
+    f["flag"] = ("uncertain end-face region kept INSPECTED (not auto-excluded): "
+                 + (f"{share:.1f} % of the scan, " if share is not None else "")
+                 + f"span {float(f.get('span_deg') or 0):.0f}° — too large to remove silently "
+                 f"(limits {cfg.flag_share_pct:g} % / {cfg.flag_span_deg:g}°); check it on the map")
+    f["reason"] = (f.get("reason") or "").replace("excluded and flagged", "flagged") + \
+        "; kept inspected because it is large (1.0.2a)"
+
+
 # ---------------------------------------------------------------------------
 # classification of one end face
 # ---------------------------------------------------------------------------
-def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
+def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None, n_blades=None, n_total=None):
     """Classify deviations from the base plane z = z0 (material on side s) of one end face.
 
     P, N are already in the axis frame.  Returns (features, vertex-mask of points to exclude).
@@ -352,11 +444,16 @@ def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
     r = np.hypot(P[:, 0], P[:, 1]); z = P[:, 2]; th = np.arctan2(P[:, 1], P[:, 0])
     if R is None or R <= 0:
         R = float(np.percentile(r, 99.5)) if len(r) else 1.0
-    ax = np.abs(N[:, 2]) > cfg.axial_cos
+    # Only the true end face: points in a thin axial slab at the end plane whose normals point OUT of
+    # the part through that face (-s along the axis).  A pocket floor or a Hirth flank on the end face
+    # faces outwards; the hub flow surface, blade passages and blade roots behind a thin back plate face
+    # the other way (into the part) and must never be read as end-face features (1.0.2a, STG1 X2-B1941).
+    n_out = -float(s) * N[:, 2]
+    ax = n_out > cfg.axial_cos
     band = ax & (np.abs(z - z0) < cfg.plane_band) & (r <= R * 1.05)
     # also keep mildly tilted floor/flank points inside the band (Hirth flanks, pocket walls)
     near = (np.abs(z - z0) < cfg.plane_band) & (r <= R * 1.05) & (s * (z - z0) > -0.5)
-    face_m = band | (near & (np.abs(N[:, 2]) > 0.35))
+    face_m = band | (near & (n_out > 0.35))
     mask = np.zeros(len(P), bool)
     features = []
     if face_m.sum() < cfg.min_points:
@@ -495,11 +592,26 @@ def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
         if consistent:
             # typify with slightly tilted flank points as well (Hirth flanks are not axial)
             r0b, r1b = float(np.percentile(r_f, 1)), float(np.percentile(r_f, 99))
-            typ_m = (np.abs(N[:, 2]) > 0.35) & ~taken & (np.abs(dep) >= 0.5 * cfg.depth_min)                 & (np.abs(z - z0) < cfg.plane_band) & (r >= r0b - 1.0) & (r <= r1b + 1.0)
+            typ_m = (n_out > 0.35) & ~taken & (np.abs(dep) >= 0.5 * cfg.depth_min)                 & (np.abs(z - z0) < cfg.plane_band) & (r >= r0b - 1.0) & (r <= r1b + 1.0)
             if typ_m.sum() < max(feat_m.sum(), cfg.min_points):
                 typ_m = feat_m
             hirth = _hirth_params(th[typ_m], r[typ_m], dep[typ_m], Nfold) if Nfold >= cfg.hirth_min_teeth else None
-            if hirth:
+            blade_fold = _is_blade_fold(Nfold, n_blades)
+            if blade_fold:
+                # 1.0.2a (Stage 3, 13 blades): an N-fold signal with N = the blade count is the blading seen
+                # through the end face, never a coupling to cut - 1.0.2 cut 13 'Hirth' grooves into the solid.
+                hirth = None
+            if blade_fold:
+                kind, model_pending = "periodic", False
+                r0, r1 = float(np.percentile(r_f, 1)), float(np.percentile(r_f, 99))
+                ht = float(np.percentile(np.abs(dep_f), 90))
+                label = (f"{Nfold}-fold periodic feature on the {face} face (r {r0:.2f}–{r1:.2f} mm, "
+                         "matches the blade count: blading, not modelled)")
+                reason = ("N-fold about the axis with N = the recognised blade count: blade passages / roots seen at "
+                          "the end face; not a coupling, never cut; kept inspected")
+                extra = {"N": int(Nfold), "period_snr": round(snr, 2), "matches_blade_count": True,
+                         "r_inner": round(r0, 3), "r_outer": round(r1, 3), "height_mm": round(ht, 3)}
+            elif hirth:
                 kind, model_pending = "hirth", True
                 label = (f"Hirth coupling, {Nfold} teeth, included angle {hirth['included_angle_deg']:.1f}°, "
                          f"r {hirth['r_inner']:.2f}–{hirth['r_outer']:.2f} mm, height {hirth['height_mm']:.3f} mm "
@@ -538,6 +650,7 @@ def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
     # ---- (a) irregular / non-periodic patches, plus leftover > auto_exclude_mm -------------------
     rest = face_m & ~taken & (np.abs(dep) >= cfg.depth_min)
     idx = np.where(rest)[0]
+    patch_ix = {}                      # feature index -> its vertex indices (mask is built at the end)
     if len(idx) >= cfg.min_points:
         lab, nc = _components(P[idx], cfg.link)
         for c in range(nc):
@@ -571,11 +684,52 @@ def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
                           f"with a {cfg.margin_mm:g} mm boundary")
             features.append(_feature(cls, kind, face, label, reason, len(q), dpth, a, bds,
                                      exclude=True, modelled=False))
-            mask[q] = True
+            patch_ix[len(features) - 1] = q
             taken[q] = True
+
+    # (b) guard: a family of patches that repeats N times about the axis (N >= 3, regular spacing, or N =
+    # the recognised blade count) is periodic geometry (blade passages, dogs, slots), never balance cuts.
+    grp = periodic_group([features[i] for i in patch_ix], n_blades=n_blades, cfg=cfg)
+    if grp is not None:
+        keys = list(patch_ix)
+        members = [keys[j] for j in grp["members"]]
+        q_all = np.concatenate([patch_ix[i] for i in members])
+        Nf = int(grp["N"])
+        r0, r1 = float(np.percentile(r[q_all], 1)), float(np.percentile(r[q_all], 99))
+        ht = float(np.percentile(np.abs(dep[q_all]), 90))
+        bds = _sector_bounds(th[q_all], r[q_all], z[q_all], cfg.margin_mm, axis_point, u, e1)
+        bds["boundary"]["theta_deg"] = [0.0, 360.0]
+        bds["span_deg"] = 360.0
+        why = "matches the recognised blade count" if (n_blades and Nf == int(n_blades)) else "regular angular spacing"
+        new = _feature(
+            "b", "periodic", face,
+            f"{Nf}-fold periodic feature on the {face} face (r {r0:.2f}–{r1:.2f} mm, {len(members)} patches, {why})",
+            f"{len(members)} patches repeat {Nf}-fold about the axis ({why}); periodic geometry, not balance "
+            "cuts — kept inspected, not excluded",
+            len(q_all), ht, _area(P[q_all, :2]), bds,
+            extra={"N": Nf, "phase_r": round(grp["phase_r"], 3), "r_inner": round(r0, 3), "r_outer": round(r1, 3),
+                   "height_mm": round(ht, 3), "regrouped_from_patches": len(members)},
+            exclude=False, modelled=False, model_pending=False)
+        for i in sorted(members, reverse=True):
+            del features[i]
+        patch_ix = {i - sum(1 for m in members if m < i): q for i, q in patch_ix.items() if i not in members}
+        features.append(new)
+
+    # (c) guard: one uncertain region covering a large share of the scan or a wide arc is not silently
+    # removed: it is flagged in the report and stays inspected.
+    for i, q in list(patch_ix.items()):
+        f = features[i]
+        if f["class"] != "uncertain":
+            continue
+        if _flag_instead_of_exclude(f, n_total, cfg):
+            _keep_flagged(f, n_total, cfg)
+            del patch_ix[i]
 
     # safety net: any remaining end-face points more than auto_exclude_mm into the material
     leftover = face_m & ~taken & (dep >= cfg.auto_exclude_mm)
+    for f in features:                           # flagged regions stay inspected: not re-caught here
+        if f.get("flagged_kept_inspected") and f.get("boundary"):
+            leftover &= ~_zmask(_world(), {**f["boundary"], "margin_mm": 0.0})
     if leftover.sum() >= cfg.min_points:
         lab, nc = _components(P[leftover], cfg.link)
         idx = np.where(leftover)[0]
@@ -592,12 +746,23 @@ def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
                 f"deeper than the {cfg.auto_exclude_mm:g} mm auto-exclusion threshold and not recognised "
                 f"as a periodic or concentric feature; excluded with a {cfg.margin_mm:g} mm boundary, not modelled",
                 len(q), dpth, _area(P[q, :2]), bds, exclude=True, modelled=False))
+            if _flag_instead_of_exclude(features[-1], n_total, cfg):
+                _keep_flagged(features[-1], n_total, cfg)
+            else:
+                patch_ix[len(features) - 1] = q
+
+    for i, q in patch_ix.items():
+        if features[i].get("exclude"):
             mask[q] = True
 
     # dilate each excluded feature's mask by margin_mm around its points (and the zone does the same)
     if mask.any():
         near = cKDTree(P[mask, :2]).query(P[:, :2], distance_upper_bound=cfg.margin_mm)[0] < np.inf
         in_band = np.abs(z - z0) < cfg.plane_band + cfg.margin_mm
+        # never dilate through a thin plate onto the far side (hub flow surface behind the back face):
+        # only points not facing into the part, and no deeper than the excluded feature plus the margin
+        d_lim = float(np.max(dep[mask])) + cfg.margin_mm
+        in_band &= (n_out > -0.5) & (dep <= d_lim)
         mask = (mask | near) & in_band & ~taken | mask
         # don't paint over modelled concentric / periodic points
         # (taken includes excluded already; strip modelled)
@@ -612,7 +777,8 @@ def classify_face(P, N, z0, s, face, cfg, axis_point, u, e1, R=None):
 # ---------------------------------------------------------------------------
 # public API
 # ---------------------------------------------------------------------------
-def classify_points(P, N, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeatureConfig(), planes=None):
+def classify_points(P, N, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeatureConfig(), planes=None,
+                    n_blades=None):
     """Classify front and back end-face features.  P, N may be in world coordinates.
 
     Returns (report, exclude_vertex_mask) in the same vertex order as P.
@@ -626,7 +792,8 @@ def classify_points(P, N, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeature
     features, mask = [], np.zeros(len(P), bool)
     faces_out = []
     for z0, s, name in planes:
-        feats, m = classify_face(Pl, Nl, z0, s, name, cfg, axis_point, u, e1, R)
+        feats, m = classify_face(Pl, Nl, z0, s, name, cfg, axis_point, u, e1, R,
+                                 n_blades=n_blades, n_total=len(P))
         features.extend(feats)
         mask |= m
         faces_out.append({"name": name, "z0": round(float(z0), 3), "material_side": int(s),
@@ -646,6 +813,9 @@ def classify_points(P, N, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeature
             "n_b_periodic": n_b,
             "n_c_concentric": n_c,
             "n_uncertain": n_u,
+            "n_flagged_kept_inspected": sum(1 for f in features if f.get("flagged_kept_inspected")),
+            "pct_excluded_by_classifier": round(100.0 * float(mask.mean()), 3) if len(mask) else 0.0,
+            "n_blades": None if not n_blades else int(n_blades),
             "n_excluded": len(exclusions),
             "hirth_N": None if hirth is None else hirth.get("N"),
             "margin_mm": cfg.margin_mm,
@@ -658,15 +828,18 @@ def classify_points(P, N, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeature
         "R": round(float(R), 3),
         "basis": ("deviations from the base face of revolution on the front and back end faces; "
                   "(a) irregular = exclude + 2 mm boundary, (b) N-fold functional = recognise, "
-                  "(c) concentric = model with the hub, uncertain = exclude and flag"),
+                  "(c) concentric = model with the hub, uncertain = exclude and flag; a large uncertain region "
+                  "(ring, > 90° or > 5 % of the scan) is flagged and kept inspected; only outward-facing end-face "
+                  "points are classified; an N-fold family of patches is periodic, never balance cuts"),
     }
     return report, mask
 
 
-def classify_mesh(mesh, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeatureConfig(), planes=None):
+def classify_mesh(mesh, axis_point, axis_dir, e1=None, R=None, cfg=FaceFeatureConfig(), planes=None,
+                  n_blades=None):
     V = np.asarray(mesh.vertices, float)
     N = np.asarray(mesh.vertex_normals, float)
-    return classify_points(V, N, axis_point, axis_dir, e1, R, cfg, planes)
+    return classify_points(V, N, axis_point, axis_dir, e1, R, cfg, planes, n_blades=n_blades)
 
 
 def exclusion_vertex_mask(P, report):
@@ -754,8 +927,13 @@ def apply_modelled(shape, report, axis_point, axis_dir, e1, log=print):
     Returns (shape, report).
     """
     feats = report.get("features") or []
+    nb = (report.get("summary") or {}).get("n_blades")
     for f in feats:
         if f.get("kind") != "hirth" or f.get("modelled") or not f.get("model_pending"):
+            continue
+        if _is_blade_fold(f.get("N"), nb):
+            f["model_pending"] = False
+            f["not_modelled_reason"] = "tooth count equals the blade count: blading, not a coupling (not cut)"
             continue
         if not hirth_params_complete(f):
             f["model_pending"] = True

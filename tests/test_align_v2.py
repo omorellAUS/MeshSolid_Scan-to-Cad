@@ -138,3 +138,47 @@ def test_step_face_ids_and_per_face_stats(tmp_path):
     assert pf[0]["mean"] == pytest.approx(0.1, abs=0.01)          # the raised face ranks first
     rows = list(csv.DictReader(open(rep["files"]["csv"])))
     assert len({r["solid_face"] for r in rows}) == 6
+
+
+# ---- 1.0.2a: half-pitch clamp after refine_on_deviation, final pose report -------------------------------
+def test_shifted_start_0p4_pitch_does_not_jump_to_neighbour_blade(nfold):
+    """Synthetic 15-fold part whose scan starts 0.4 pitch (9.6 deg) off: the pose is recovered on the SAME
+    blade (rotation -9.6 deg, inside the +/-12 deg bound), refinement + clamp keep it there."""
+    solid, owner, _scan, _vb, _Tt = nfold
+    z = np.array([0, 0, 1.0])
+    pitch = 360.0 / 15
+    off = S.known_motion(rot_deg=0.4 * pitch, axis=(0, 0, 1), t_mm=(0, 0, 0))
+    scan, _ = S.scan_of(solid, owner, noise=0.013, T=off, densify=1)
+    T, info = A.align_v2(scan, solid, n_fold=15, axis=AXIS, min_points=100_000, max_iter=60)
+    P = A.apply(T, np.asarray(scan.vertices))
+    dT, _r = A.refine_on_deviation(P, solid)
+    T2, hit, _a = A.clamp_half_pitch(dT @ T, AXIS, 15)
+    rot = np.degrees(A.axis_angle(T2, z))
+    assert abs(rot + 0.4 * pitch) < 0.05, rot            # same blade, not -0.4p +/- 1 pitch
+    assert abs(rot) <= pitch / 2 + 1e-6 and not hit
+    ps = A.pose_summary(T2, AXIS, 15)
+    assert ps["rotation_bound_deg"] == pytest.approx(12.0) and not ps["bound_hit"]
+    assert ps["tilt_deg"] < 0.05 and ps["translation_mm"] < 0.05 and not ps["warnings"]
+
+
+def test_clamp_after_refinement_cannot_undo_the_bound():
+    """A refinement that tries to rotate 0.6 pitch (onto the neighbouring blade) is clamped back to the bound,
+    and the final pose reports the hit with a WARNING; tilt and translation warnings fire above their limits."""
+    z = np.array([0, 0, 1.0])
+    jump = S.known_motion(rot_deg=0.6 * 24.0, axis=(0, 0, 1), t_mm=(0, 0, 0))
+    T, hit, a = A.clamp_half_pitch(jump, AXIS, 15)
+    assert hit and a == pytest.approx(14.4, abs=1e-6)
+    assert np.degrees(A.axis_angle(T, z)) == pytest.approx(12.0, abs=1e-6)
+    ps = A.pose_summary(T, AXIS, 15, bound_hit=hit)
+    assert ps["bound_hit"] and any("half-pitch bound" in w for w in ps["warnings"])
+    # relative to a given start transform
+    T0 = S.known_motion(rot_deg=5.0, axis=(0, 0, 1), t_mm=(0, 0, 0))
+    T, hit, _ = A.clamp_half_pitch(jump @ T0, AXIS, 15, T_ref=T0)
+    assert hit and np.degrees(A.axis_angle(T @ np.linalg.inv(T0), z)) == pytest.approx(12.0, abs=1e-6)
+    # no n_fold -> untouched
+    T, hit, _ = A.clamp_half_pitch(jump, AXIS, None)
+    assert not hit and np.allclose(T, jump)
+    tilt = S.known_motion(rot_deg=0.8, axis=(1, 0, 0), t_mm=(0, 0, 0))
+    assert any("tilted" in w for w in A.pose_summary(tilt, AXIS, 15)["warnings"])
+    shift = S.known_motion(rot_deg=0.0, axis=(0, 0, 1), t_mm=(1.5, 0, 0))
+    assert any("moved the part" in w for w in A.pose_summary(shift, AXIS, 15)["warnings"])

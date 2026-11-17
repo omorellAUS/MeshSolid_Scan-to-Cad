@@ -277,12 +277,18 @@ def face_label(path, k=0):
     return f"selected faces {k + 1}" if stem in ("exclude_faces", "faces") else stem
 
 
-def face_feature_zones(convert_report):
+def face_feature_zones(convert_report, n_fold=None, flagged=None):
     """Named exclusion zones from impeller end-face classification (balance cuts, drill marks,
     uncertain features).  Each zone carries a 2 mm boundary, a label, class and reason so Metrology
     can grey the region and list it on the Not inspected page.
 
     Modelled features (periodic couplings, bores, registers) are not returned.
+
+    1.0.2a: conversion reports written by 1.0.2 are re-checked with the current rules, so an old report
+    cannot remove blade passages or the hub: a family of 'balance cuts' that repeats N-fold (N = n_fold,
+    the blade / tooth count, or any regular N >= 3) is periodic and not excluded, and a large uncertain
+    region (ring, > 90 deg span) is flagged and kept inspected.  Features skipped this way are appended
+    to `flagged` (a list) with a short reason when one is given.
     """
     if not convert_report:
         return []
@@ -291,9 +297,35 @@ def face_feature_zones(convert_report):
     except (OSError, ValueError):
         return []
     ff = rep.get("face_features") or {}
+    if not n_fold:
+        nb = (rep.get("impeller") or {}).get("blades") or (rep.get("gear") or {}).get("teeth")
+        n_fold = int(nb) if isinstance(nb, (int, float)) and nb >= 3 else None
+    from .face_features import periodic_group, FaceFeatureConfig, _flag_instead_of_exclude
+    cfg = FaceFeatureConfig()
+    feats = [f for f in (ff.get("exclusions") or ff.get("features") or [])
+             if (f.get("exclude") or f.get("class") in ("a", "uncertain"))]
+    skip = set()
+    for face in sorted({f.get("face") for f in feats}, key=str):
+        idx = [i for i, f in enumerate(feats) if f.get("face") == face and f.get("class") == "a"]
+        grp = periodic_group([feats[i] for i in idx], n_blades=n_fold, cfg=cfg)
+        if grp is not None:
+            mem = [idx[j] for j in grp["members"]]
+            skip.update(mem)
+            if flagged is not None:
+                flagged.append({"label": f"{grp['N']}-fold family of {len(mem)} 'balance cuts' on the {face} face",
+                                "reason": f"repeats {grp['N']}-fold about the axis (blade passages / periodic "
+                                          "geometry, not balance cuts): kept inspected"})
+    for i, f in enumerate(feats):
+        if i in skip or f.get("class") != "uncertain":
+            continue
+        if _flag_instead_of_exclude(f, None, cfg):
+            skip.add(i)
+            if flagged is not None:
+                flagged.append({"label": f.get("label") or "uncertain end-face region",
+                                "reason": "large uncertain region (ring or > 90° span): flagged, kept inspected"})
     out = []
-    for f in ff.get("exclusions") or ff.get("features") or []:
-        if not (f.get("exclude") or f.get("class") in ("a", "uncertain")):
+    for i, f in enumerate(feats):
+        if i in skip:
             continue
         z = dict(f.get("boundary") or {})
         if z.get("type") not in ("sector", "cyl", "box"):

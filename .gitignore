@@ -1,26 +1,25 @@
-.venv/
+# Python
 __pycache__/
-*.pyc
-out/
-.pytest_cache/
-data/real/*.stl/
-data/real/*.zip
-data/real/*.stl
-
-# user's private scan meshes: never commit
-tests/user_scans/*
-!tests/user_scans/MAPPING.txt
-
-# derived meshes of user parts (geometry) stay out of git too
-results/user_scans/*.ply
-results/user_scans/*.stl
-results/user_scans/*.step
-fusion_addin/MeshSolid/settings.json
-freecad_addin/MeshSolid/settings.json
-freecad_addin/MeshSolid/mslib/
-
-# public test parts downloaded for personal testing (third-party licences): never commit
-data/public/
-
-# built install zips (rebuild via scripts/pack_install_zip.py)
+*.py[cod]
+*.egg-info/
+build/
 dist/
+.pytest_cache/
+
+# scans, models and outputs
+*.stl
+*.ply
+*.obj
+*.3mf
+*.step
+*.stp
+*.f3d
+*.npz
+*.npy
+runs/
+*.zip
+
+# local env
+.venv/
+.vscode/
+.idea/

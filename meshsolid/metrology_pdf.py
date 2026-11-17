@@ -13,6 +13,7 @@ Every page has a footer with the page number.
 """
 from __future__ import annotations
 
+import textwrap
 import time
 from pathlib import Path
 
@@ -84,6 +85,16 @@ def _section_title(fig, y, text, size=14):
     fig.text(0.06, y, text, fontsize=size, fontweight="bold", color=INK)
 
 
+def report_warnings(st):
+    """Same list as the add-in banner: the engine's warnings, else the > 5 % excluded warning."""
+    st = st or {}
+    w = list(st.get("warnings") or [])
+    if not w and st.get("pct_excluded") is not None and float(st["pct_excluded"]) > 5.0:
+        w.append(f"{float(st['pct_excluded']):.1f} % of the scan is EXCLUDED (limit 5 %): the statistics cover only "
+                 "part of the surface — check the grey regions and the Not inspected page")
+    return w
+
+
 def write_pdf(report, out_dir, dv=None, section=None, path=None):
     """Write report.pdf into out_dir (or path). dv: inspected signed deviations for the histogram.
     section: the section dict from metrology.section_points (u_mm, v_mm, deviation_mm) or None."""
@@ -114,8 +125,24 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
     hdr = [["Part", part], ["Date / time (local)", when], ["Operator", meta.get("operator") or "—"],
            ["Scan", _short(report.get("scan"), 52)], ["Solid", _short(report.get("solid"), 52)],
            ["Software", f"MeshSolid {meta.get('version') or _version()}"], ["Units", "millimetres (mm)"]]
-    ax = fig.add_axes([0.06, 0.66, 0.88, 0.26])
-    _table(ax, hdr, [0.3, 0.7], fontsize=T, row_h=2.0)
+    warns = report_warnings(st)
+    if warns:
+        # prominent red WARNING banner above everything else (exclusion > 5 %, flagged regions, alignment pose)
+        lines = []
+        for w_ in warns[:4]:
+            lines += textwrap.wrap("\u26a0 " + w_, 92)
+        bh = 0.026 + 0.016 * len(lines)
+        fig.patches.append(Rectangle((0.06, 0.945 - bh), 0.88, bh, transform=fig.transFigure, facecolor=FAIL_C,
+                                     edgecolor="none"))
+        fig.text(0.075, 0.938, "WARNING", fontsize=13, fontweight="bold", color="white", va="top")
+        for j, line in enumerate(lines):
+            fig.text(0.075, 0.918 - 0.016 * j, line, fontsize=9, color="white", va="top")
+        top = 0.945 - bh - 0.01
+        ax = fig.add_axes([0.06, 0.66, 0.88, max(top - 0.66, 0.12)])
+        _table(ax, hdr, [0.3, 0.7], fontsize=T if top - 0.66 > 0.2 else 9, row_h=2.0 if top - 0.66 > 0.2 else 1.5)
+    else:
+        ax = fig.add_axes([0.06, 0.66, 0.88, 0.26])
+        _table(ax, hdr, [0.3, 0.7], fontsize=T, row_h=2.0)
     # two verdicts side by side: the honest target verdict (left, large) and the 1.0.1 engine-limit rule (right)
     vd = st.get("verdict") or {}
     tgt, eng = vd.get("target") or {}, vd.get("engine_limit") or {}
@@ -142,7 +169,11 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
     _section_title(fig, 0.495, "Summary", H)
     nin = report.get("not_inspected") or []
     sm = st.get("spec_metrics") or {}
-    rows = [["rms uncapped (verdict)", _fmt(sm.get("rms_uncapped"))],
+    rows = [["spec version", str(st.get("spec_version") or tgt.get("spec_version") or "—")],
+            ["rms uncapped (verdict)", _fmt(sm.get("rms_uncapped"))],
+            ["rms capped (spec cap)", _fmt(sm.get("rms_capped"))],
+            ["capped (beyond the spec cap)", f"{int(sm.get('capped_count') or 0):,} points "
+                                             f"({float(sm.get('pct_capped') or 0):.2f} % of inspected)"],
             [f"within ±{pass_tol:g} mm, beyond-cap = fail (verdict)", f"{sm.get('pass_pct_v1', 0):.2f} %"],
             ["excluded (named reasons)", f"{sm.get('pct_excluded', 0):.2f} % of the scan"],
             ["rms" + (" (beyond-cap dropped)" if st.get("cap_mm") else ""), _fmt(st.get("rms"))],
@@ -160,8 +191,18 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
              ]
     for r_, n_ in (st.get("excluded_by_reason") or {}).items():
         rows.append([f"   – {r_}", f"{n_:,} not inspected"])
+    ps = st.get("pose_summary") or ((report.get("alignment") or {}).get("final_pose")) or {}
+    if ps.get("rotation_about_axis_deg") is not None:
+        rows.append(["final alignment pose" + (" (WARNING)" if ps.get("warnings") else ""),
+                     f"rot {ps['rotation_about_axis_deg']:+.4f}° about the axis"
+                     + (f" (bound ±{ps['rotation_bound_deg']:g}°)" if ps.get("rotation_bound_deg") else "")
+                     + f", tilt {ps['tilt_deg']:.4f}°, shift {ps['translation_mm']:.4f} mm"])
+    for f_ in (st.get("face_features_flagged") or [])[:3]:
+        rows.append([f"   flagged, kept inspected", _short(f_.get("label"), 58)])
+    nr = len(rows)
     ax = fig.add_axes([0.06, 0.13, 0.88, 0.345])
-    _table(ax, rows, [0.42, 0.58], fontsize=12 if len(rows) <= 8 else 11, row_h=2.1 if len(rows) <= 8 else 1.75)
+    _table(ax, rows, [0.42, 0.58], fontsize=12 if nr <= 8 else 11 if nr <= 12 else 9 if nr <= 16 else 8,
+           row_h=2.1 if nr <= 8 else 1.75 if nr <= 12 else 1.45 if nr <= 16 else 1.25)
     fig.text(0.06, 0.09, "Signed deviation, scan to solid: positive = scan outside the solid (material the solid lacks);\n"
              "negative = scan inside the solid. Details of excluded regions: page 'Not inspected'.",
              fontsize=9, color=MUTED, va="top")
@@ -272,7 +313,6 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
         ax.axis("off")
         ax.text(0, 0.9, "Section not requested.", fontsize=T, color=MUTED, va="top")
     _section_title(fig, 0.50, "Not inspected: where the excluded points come from", H)
-    import textwrap
     if nin:
         n_scan = int(st.get("n", 0)) + int(st.get("n_excluded", 0))
         def _area(e):

@@ -42,7 +42,8 @@ def summary_html(rep):
     title = meta.get("title") or "Metrology inspection report"
     part = meta.get("part_name") or ""
     out.append(f"<h1>{e(title)}{(' — ' + e(part)) if part else ''}</h1>")
-    from .metrology_ui_defaults import verdict_parts
+    from .metrology_ui_defaults import verdict_parts, warnings_html
+    out.append(warnings_html(st))
     t_res, t_lab, e_res, e_lab, rule = verdict_parts(st)
     cls = "pass" if t_res == "PASS" else "fail" if t_res in ("FAIL", "REFUSED") else ""
     ecls = "pass" if e_res == "PASS" else "fail" if e_res in ("FAIL", "REFUSED") else ""

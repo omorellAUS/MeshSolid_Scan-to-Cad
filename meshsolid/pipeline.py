@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import os
 import json
+import sys
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -43,7 +44,7 @@ class Params:
     gear_build: str = "snapped"  # snapped (standard DP/module, PA, helix, tooth system) | free (as fitted)
     # N-fold bladed rotors (impellers): "auto" = probe before segmentation and, when found, build the hub as
     # a revolve + per-passage floor and one B-spline blade patterned N times (meshsolid.impeller)
-    impeller: str = "auto"
+    impeller: str = "auto"       # auto | off | on (on = Part type Impeller: build as an impeller or fail with the recogniser's reason; never fall through)
     # helical screw rotors (compressor male/female, pump screws, variable pitch): "auto" = detect (lobed
     # zone + one helicoid explains it) when no gear was found, build the fitted profile's exact helical
     # sweep into the turned body (meshsolid.screw); "off" skips detection.
@@ -210,6 +211,12 @@ def time_left(default=float("inf")):
     return default if left == float("inf") else left
 
 
+def _stage_cap(pr, frac, max_s):
+    """A stage's own cap: frac of the run's time budget, at most max_s (max_s when there is no budget)."""
+    tb = float(pr.time_budget_s or 0.0)
+    return min(max_s, max(30.0, frac * tb)) if tb > 0 else max_s
+
+
 def _stage(rep, name):
     import sys
     rep["last_stage"] = name
@@ -286,7 +293,15 @@ def _bearing_envelope(br, out_step):
 def run(input_path, out_step=None, report_path=None, params: Params | None = None,
         deviation_ply=None, preview_png=None, measurements: dict | None = None):
     from . import watchdog
+    from .power import keep_awake
     pr = params or Params()
+    with keep_awake():          # Windows: no system sleep while the job runs (released on exit / error)
+        return _run_guarded(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements, watchdog)
+
+
+def _run_guarded(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements, watchdog):
+    # NOTE: the time budget is wall clock (time.time() here, in budget.py and in the watchdog), so time the PC
+    # spends asleep counts against it; keep_awake() above prevents that sleep on Windows.
     wd = watchdog.start(pr.time_budget_s, report_path)
     from . import budget
     budget.set_deadline(time.time() + pr.time_budget_s if pr.time_budget_s and pr.time_budget_s > 0 else None)
@@ -487,7 +502,30 @@ def _recogniser(rep, name, status, ex=None, **kw):
         e["where"] = [f"{Path(f.filename).name}:{f.lineno} {f.name}" for f in _tb.extract_tb(ex.__traceback__)[-3:]]
         e["fell_through_to"] = kw.get("fell_through_to", "next method")
     rep.setdefault("recognisers", []).append(e)
+    if status not in ("ok",):
+        # 1.0.2a: every fall-through says why in the engine log (the job log), not only in the report
+        import sys as _sys
+        why = e.get("error") or e.get("reason") or "no reason given by the recogniser"
+        nxt = e.get("fell_through_to") or ("general method" if status in ("none", "failed") else "")
+        print(f"[recogniser] {name}: {status} - {why}" + (f" -> falls through to {nxt}" if nxt else ""),
+              file=_sys.stderr, flush=True)
     return e
+
+
+def _impeller_required_failure(rep, report_path, t0, mesh, why):
+    """Part type = Impeller (impeller='on'): the run fails with the recogniser's reason instead of falling
+    through to the general method (whose coaxial/freeform stages can take hours on a dense blade scan)."""
+    rep["status"] = "failed"
+    rep["failure"] = f"Part type Impeller: the impeller recogniser could not build this part - {why}"
+    rep.setdefault("warnings", []).append("Part type is Impeller, so the general method was not tried. "
+                                          "Set Part type to Auto to let it try (slow on dense scans).")
+    rep["seconds"] = time.time() - t0
+    import sys as _sys
+    print(f"FAILURE: {rep['failure']}", file=_sys.stderr, flush=True)
+    _stage(rep, "done")
+    if report_path:
+        Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+    return rep, None, mesh, [], np.zeros(len(mesh.faces), int)
 
 
 def _run(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements):
@@ -692,7 +730,8 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
             nb, pinfo = I.probe(mesh)
         except Exception as ex:  # noqa: BLE001
             nb, pinfo = None, {"reason": f"probe exception: {type(ex).__name__}: {ex}"}
-            _recogniser(rep, "impeller_probe", "failed", ex, fell_through_to="gear / screw / prismatic")
+            _recogniser(rep, "impeller_probe", "failed", ex,
+                        fell_through_to="none (Part type Impeller)" if pr.impeller == "on" else "gear / screw / prismatic")
         rep["stages"]["impeller_probe"] = pinfo | {"blades": nb, "seconds": round(time.time() - tp, 2)}
         if nb is not None:
             _stage(rep, "impeller")
@@ -703,7 +742,10 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                                           preview_png, input_path, measurements, pr.notes, nb, pinfo)
             except Exception as ex:  # noqa: BLE001
                 rep = rep_before
-                _recogniser(rep, "impeller", "failed", ex, blades=nb, fell_through_to="gear / screw / prismatic")
+                _recogniser(rep, "impeller", "failed", ex, blades=nb,
+                            fell_through_to="none (Part type Impeller)" if pr.impeller == "on" else "gear / screw / prismatic")
+                if pr.impeller == "on":
+                    return _impeller_required_failure(rep, report_path, t0, mesh, f"{type(ex).__name__}: {ex}")
                 rep.setdefault("warnings", []).append(
                     f"impeller recognition failed ({type(ex).__name__}: {ex}); continuing with the general method")
                 CURRENT.update(rep=rep, report_path=report_path, t0=t0)
@@ -716,7 +758,13 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                     Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
                 return rep, shape, mesh, [], np.zeros(len(mesh.faces), int)
         else:
-            _recogniser(rep, "impeller", "none", reason=pinfo.get("reason"))
+            why = pinfo.get("reason") or "probe found no N-fold blades"
+            if pinfo.get("votes") is not None:
+                why += f" (ring votes {pinfo.get('votes')}, tangential area {pinfo.get('tangential_area_frac')})"
+            _recogniser(rep, "impeller", "none", reason=why,
+                        fell_through_to="none (Part type Impeller)" if pr.impeller == "on" else "gear / screw / prismatic")
+            if pr.impeller == "on":
+                return _impeller_required_failure(rep, report_path, t0, mesh, why)
 
     # gear / screw rotor recognition works on the mesh alone, so it runs before segmentation; a screw
     # rotor's helicoid flanks are then left out of segmentation (they are modelled by the sweep)
@@ -766,7 +814,12 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
     _stage(rep, "coaxial_refit")
     g = MeshGraph(mesh)
     from .coaxial import coaxial_refit
-    rep["stages"]["coaxial_refit"] = coaxial_refit(g, labels, regions, tol)
+    from . import budget as _B
+    # 1.0.2a: capped to a share of the run's budget (KK&K run: 37 min here before freeform used the rest)
+    _cap = _B.stage_budget(_B.env_cap("MESHSOLID_COAXIAL_CAP_S", _stage_cap(pr, 0.10, 600.0)))
+    rep["stages"]["coaxial_refit"] = coaxial_refit(g, labels, regions, tol, deadline=time.time() + _cap)
+    if rep["stages"]["coaxial_refit"] and rep["stages"]["coaxial_refit"][-1].get("stopped"):
+        print(f"[stage] coaxial_refit stopped at its {_cap:.0f} s cap", file=sys.stderr, flush=True)
     # thread recognition: helical zones -> one cylinder (major dia external / minor internal) + spec
     _stage(rep, "threads")
     thread_specs = []
@@ -790,7 +843,12 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
     if pr.freeform:
         from .freeform import apply_freeform
         tf = time.time()
-        regions, labels, flog = apply_freeform(mesh, g, regions, labels, tol, region_points, faceted=faceted)
+        from . import budget as _B
+        _cap = _B.stage_budget(_B.env_cap("MESHSOLID_FREEFORM_CAP_S", _stage_cap(pr, 0.20, 1200.0)))
+        regions, labels, flog = apply_freeform(mesh, g, regions, labels, tol, region_points, faceted=faceted,
+                                               deadline=time.time() + _cap)
+        if flog and flog[-1].get("stopped"):
+            print(f"[stage] freeform stopped at its {_cap:.0f} s cap", file=sys.stderr, flush=True)
         rep["stages"]["freeform"] = {"accepted": sum(1 for x in flog if x.get("accepted")),
                                      "candidates": len(flog), "log": flog, "seconds": time.time() - tf,
                                      "regions_after": len(regions)}

@@ -249,6 +249,34 @@ def verdict_parts(st):
     return t_res, t_lab, e_res, e_lab, rule
 
 
+def report_warnings(st):
+    """Prominent warnings for the top of every report view: the engine's list (1.0.2a+), else derived from the
+    exclusion % so older reports still get the > 5 % excluded warning."""
+    st = st or {}
+    w = list(st.get("warnings") or [])
+    if not w:
+        ex = st.get("pct_excluded")
+        try:
+            if ex is not None and float(ex) > 5.0:
+                w.append(f"{float(ex):.1f} % of the scan is EXCLUDED (limit 5 %): the statistics cover only part "
+                         "of the surface — check the grey regions and the Not inspected list")
+        except (TypeError, ValueError):
+            pass
+    return w
+
+
+def warnings_html(st):
+    """Red WARNING banner (Qt rich text and browsers both honour a table bgcolor). '' when there is nothing."""
+    import html as _h
+    w = report_warnings(st)
+    if not w:
+        return ""
+    items = "<br>".join("&#9888; " + _h.escape(x) for x in w)
+    return ("<table width='100%' cellpadding='8' bgcolor='#b3261e' style='background:#b3261e; border-collapse:collapse;'>"
+            "<tr><td style='color:#ffffff; font-size:13pt;'><b style='font-size:15pt;'>WARNING</b><br>"
+            f"{items}</td></tr></table>")
+
+
 def verdict_html(st, big="20pt", small="12pt"):
     """Target verdict large, the 1.0.1 engine-limit result beside it; the exclusion % is in every label."""
     import html as _h

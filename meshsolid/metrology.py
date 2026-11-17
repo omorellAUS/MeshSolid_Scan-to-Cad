@@ -332,6 +332,10 @@ def align_scan(scan, solid_tm, samples=25000, seed=0):
     return out, T, med
 
 
+FF_ZONE_MAX_PCT = 5.0      # one end-face classifier zone above this share of the scan is flagged, not excluded
+FF_TOTAL_MAX_PCT = 5.0     # end-face classifier exclusions in total are capped at this share
+
+
 def pose_of(T):
     """Rotation angle (deg), its unit axis and the translation (mm) of a 4x4 rigid transform."""
     if T is None:
@@ -998,12 +1002,32 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
     elif features:
         notes.append("Hand-entered features were NOT excluded (--no-auto-exclude): " +
                      "; ".join(f["label"] for f in features))
-    ff_zones = X.face_feature_zones(conv)
+    ff_flagged = []
+    ff_zones = X.face_feature_zones(conv, n_fold=n_fold, flagged=ff_flagged)
     if ff_zones and auto_exclude:
-        for z in ff_zones:
-            _exclude(X.zone_mask(work.vertices, z), z.get("reason", "face feature"),
-                     z.get("detail") or X.zone_text(z),
+        # 1.0.2a: the end-face classifier can never silently remove a big region.  One zone above
+        # FF_ZONE_MAX_PCT of the scan, or zones that would take the classifier total above FF_TOTAL_MAX_PCT,
+        # are flagged and kept inspected (smallest zones are excluded first).
+        nsc = max(len(work.vertices), 1)
+        zm = [(z, X.zone_mask(work.vertices, z)) for z in ff_zones]
+        zm.sort(key=lambda t: int(t[1].sum()))
+        ff_total = np.zeros(len(work.vertices), bool)
+        for z, m in zm:
+            share = 100.0 * float(m.sum()) / nsc
+            grown = 100.0 * float((ff_total | m).sum()) / nsc
+            if share > FF_ZONE_MAX_PCT or grown > FF_TOTAL_MAX_PCT:
+                ff_flagged.append({"label": z.get("label") or "end-face feature",
+                                   "reason": (f"would exclude {share:.1f} % of the scan" if share > FF_ZONE_MAX_PCT
+                                              else f"would take end-face exclusions to {grown:.1f} % of the scan")
+                                   + f" (limit {FF_ZONE_MAX_PCT:g} % per region, {FF_TOTAL_MAX_PCT:g} % total): "
+                                     "flagged, kept inspected"})
+                continue
+            ff_total |= m
+            _exclude(m, z.get("reason", "face feature"), z.get("detail") or X.zone_text(z),
                      label=z.get("label") or "end-face feature")
+    if ff_flagged:
+        notes.append("End-face classifier: " + str(len(ff_flagged)) + " region(s) flagged and KEPT INSPECTED "
+                     "(not auto-excluded): " + "; ".join(f"{f['label']} — {f['reason']}" for f in ff_flagged))
     elif ff_zones:
         notes.append("End-face features were NOT excluded (--no-auto-exclude): " +
                      "; ".join(z.get("label", "feature") for z in ff_zones))
@@ -1069,7 +1093,9 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
                  label=label)
     if align_info is not None:
         dT, rinfo = AV.refine_on_deviation(work.vertices, solid_tm, mask=~excluded)
-        T = dT @ T
+        T, _hit, _a = AV.clamp_half_pitch(dT @ T, axis, n_fold, align_T0)
+        rinfo["clamped_to_half_pitch"] = bool(_hit)
+        align_info["bound_hit"] = bool(align_info.get("bound_hit") or _hit)
         work = scan.copy()
         work.apply_transform(T)
         dv, cp, _tri = signed_distances(work, solid_tm)
@@ -1099,7 +1125,9 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
             rec["depth_max_mm"] = r["depth_max_mm"]
         if m2.any() and align_info is not None:
             dT, rinfo = AV.refine_on_deviation(work.vertices, solid_tm, mask=~excluded)
-            T = dT @ T
+            T, _hit, _a = AV.clamp_half_pitch(dT @ T, axis, n_fold, align_T0)
+            rinfo["clamped_to_half_pitch"] = bool(_hit)
+            align_info["bound_hit"] = bool(align_info.get("bound_hit") or _hit)
             work = scan.copy()
             work.apply_transform(T)
             dv, cp, _tri = signed_distances(work, solid_tm)
@@ -1175,6 +1203,21 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
         st["verdict"] = vd
         st["pct_excluded"] = sm["pct_excluded"]
         st["excluded_over_5pct"] = bool(float(sm["pct_excluded"]) > 5.0)
+        st["spec_version"] = vd["target"].get("spec_version") or _spec.get("spec_version")
+        st["face_features_flagged"] = ff_flagged
+        _w = []
+        if st["excluded_over_5pct"]:
+            _w.append(f"{float(sm['pct_excluded']):.1f} % of the scan is EXCLUDED (limit 5 %): the statistics "
+                      "cover only part of the surface — check the grey regions and the Not inspected page")
+        if ff_flagged:
+            _w.append(f"{len(ff_flagged)} end-face region(s) were flagged as uncertain and kept inspected — "
+                      "check them on the map")
+        if align_info is not None:
+            _ps = AV.pose_summary(T, axis, n_fold, align_T0, bound_hit=bool(align_info.get("bound_hit")))
+            align_info["final_pose"] = _ps
+            st["pose_summary"] = _ps
+            _w += _ps["warnings"]
+        st["warnings"] = _w
         st["auto_exclusions_2mm"] = {k: ex2[k] for k in ("n_regions", "n_points", "pct_of_scan",
                                                          "over_5pct", "over_5pct_flag", "threshold_mm") if k in ex2}
         st["result"] = vd["target"]["result"]                       # the honest verdict
@@ -1447,6 +1490,12 @@ def main(argv=None):
     except RuntimeError as e:
         print(e, file=sys.stderr)
         return 2
+    from .power import keep_awake
+    with keep_awake():          # Windows: no system sleep while Metrology runs
+        return _main_run(a, scan, solid, tags)
+
+
+def _main_run(a, scan, solid, tags):
     rep = run(scan, solid, a.out, range_mm=a.range, symmetric=a.symmetric, pass_tol=a.pass_tol,
               n_bands=a.bands, band_json=a.band_json, exclude=tags, max_dist=a.max_dist,
               cap_rgb=_hex_rgb(a.cap_color),
@@ -1462,6 +1511,8 @@ def main(argv=None):
     print(f"status {rep['status']}  rms {st.get('rms')} mm  p95 {st.get('p95')} mm  "
           f"within ±{a.pass_tol:g}: {st.get('within_pass_pct')}%  device {rep.get('device_resolved')}  "
           f"{rep.get('seconds')} s")
+    for w in st.get("warnings") or []:
+        print("WARNING:", w)
     print("report", rep["files"].get("report_json"))
     if rep["files"].get("report_pdf"):
         print("pdf", rep["files"]["report_pdf"])

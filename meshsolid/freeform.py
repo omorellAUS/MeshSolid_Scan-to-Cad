@@ -400,7 +400,7 @@ def smooth_clusters(mesh, labels, regions, max_angle_deg=12.0, min_regions=3, fa
 
 
 def apply_freeform(mesh, g, regions, labels, tol, region_points, accept_rms=0.5, accept_p95=1.5, log=None,
-                   faceted=False):
+                   faceted=False, deadline=None):
     """Replace each smooth multi-primitive cluster by one B-spline region when the single surface fits
     the cluster within the tolerance (rms <= accept_rms*tol, p95 <= accept_p95*tol); small smooth
     neighbours (and unassigned faces) lying on the fitted surface are absorbed. Returns regions,
@@ -414,7 +414,12 @@ def apply_freeform(mesh, g, regions, labels, tol, region_points, accept_rms=0.5,
     work = list(smooth_clusters(mesh, labels, regions, faceted=faceted))
     diag = float(np.linalg.norm(np.ptp(np.asarray(mesh.vertices), axis=0)))
     ctr = mesh.bounds.mean(0)
+    import time as _time
     while work:
+        if deadline is not None and _time.time() > deadline:
+            # 1.0.2a stage cap: stop cleanly, the unfitted clusters keep their primitive regions
+            log.append({"regions": [], "accepted": False, "stopped": f"time cap reached, {len(work)} cluster(s) not tried"})
+            break
         cl = work.pop(0)
         faces = np.where(np.isin(labels, cl))[0]
         P, N = region_points(g, faces) if len(faces) else (np.zeros((0, 3)), np.zeros((0, 3)))

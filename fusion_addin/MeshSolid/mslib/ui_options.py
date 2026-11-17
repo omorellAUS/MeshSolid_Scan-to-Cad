@@ -5,7 +5,7 @@ flags against the engine's --help.  Nothing here invents engine behaviour: a par
 engine's existing recognisers on/off and picks the accuracy class."""
 from __future__ import annotations
 
-VERSION = "1.0.2"
+VERSION = "1.0.2a"
 
 # id, label, tooltip, engine options
 PART_TYPES = [
@@ -15,8 +15,9 @@ PART_TYPES = [
      {"gears": "off", "impeller": "off", "screws": "off"}),
     ("gear", "Gear", "Involute gear on a turned body (impeller and screw recognition off).",
      {"gears": "auto", "impeller": "off", "screws": "off"}),
-    ("impeller", "Impeller", "N-bladed rotor: hub revolve + patterned B-spline blade (gear and screw recognition off).",
-     {"impeller": "auto", "gears": "off", "screws": "off"}),
+    ("impeller", "Impeller", "N-bladed rotor: hub revolve + patterned B-spline blade (gear and screw recognition off). "
+     "If the impeller recogniser cannot build it, the run stops with the reason instead of trying the slow general method.",
+     {"impeller": "on", "gears": "off", "screws": "off"}),
     ("freeform", "Freeform", "Curved 3D-printed part (wings, ailerons, skins): printed accuracy class, "
      "which lets the engine try its section-loft builder first. Gear/impeller/screw recognition off.",
      {"gears": "off", "impeller": "off", "screws": "off", "accuracy": "printed"}),

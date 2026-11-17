@@ -42,13 +42,19 @@ def _coaxial_cone(P, N, axis, p0, slope=None):
     return F._finish(F.Primitive("cone", {"apex": apex, "axis": ax, "half_angle": alpha}), P, N)
 
 
-def coaxial_refit(g, labels, regions, tol, max_faces_frac=0.05):
-    """Returns a log of replacements. Only small cylinder/cone regions are candidates."""
+def coaxial_refit(g, labels, regions, tol, max_faces_frac=0.05, deadline=None):
+    """Returns a log of replacements. Only small cylinder/cone regions are candidates.
+    deadline (time.time() value): stop with a 'stopped' entry once passed (1.0.2a stage cap)."""
+    import time as _time
     by_id = {r.id: r for r in regions}
     nb = _adjacent(g, labels)
     total = sum(len(r.faces) for r in regions)
     log = []
-    for r in regions:
+    for k_r, r in enumerate(regions):
+        if deadline is not None and _time.time() > deadline:
+            log.append({"stopped": f"time cap reached after {k_r} of {len(regions)} regions; "
+                                   "the remaining regions keep their own fits"})
+            break
         p = r.primitive
         if p is None or p.kind not in ("cylinder", "cone") or len(r.faces) > max_faces_frac * total:
             continue

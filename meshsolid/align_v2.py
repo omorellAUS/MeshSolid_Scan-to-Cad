@@ -5,6 +5,8 @@ align_v2: point-to-plane ICP on >= 500k scan points (vertices, topped up with ar
 it starts from the identity (MeshSolid builds the solid in the scan's frame) or from a given transform, and the
 rotation about the part axis is bounded to half a pitch, so the pose can never jump to another blade/tooth copy.
 refine_on_deviation: the final rigid refinement on the signed deviation of the inspected scan vertices.
+clamp_half_pitch: re-applies the half-pitch bound after any refinement (1.0.2a), pose_summary: the final pose
+(rotation about the axis, tilt, translation) with warnings.
 direct_check: re-measures the trimmed rms at the final pose and at +/- small perturbations of every degree of
 freedom, so the sign of the correction is verified by measurement, not by a fitted normal convention.
 
@@ -174,6 +176,67 @@ def align_v2(scan, solid_tm, n_fold=None, axis=None, T0=None, min_points=MIN_POI
     info["trimmed_rms_mm"] = round(float(np.sqrt(np.mean(r[k] ** 2))), 6)
     info["history_last"] = hist[-3:]
     return T, info
+
+
+POSE_WARN_TILT_DEG = 0.5
+POSE_WARN_TRANSLATION_MM = 1.0
+
+
+def clamp_half_pitch(T, axis, n_fold, T_ref=None):
+    """Bound the rotation of T about the part axis to +/- half a pitch relative to T_ref (identity when None).
+
+    Applied after every refinement step (refine_on_deviation has no bound of its own), so no later stage can
+    undo the ICP clamp and land the scan on a neighbouring blade / tooth.  The excess rotation is removed
+    about the part axis line.  Returns (T, hit: bool, angle_deg before the clamp)."""
+    T = np.asarray(T, float)
+    if not n_fold or int(n_fold) < 2 or axis is None:
+        return T, False, None
+    c = np.asarray(axis[0], float)
+    u = np.asarray(axis[1], float)
+    u = u / np.linalg.norm(u)
+    pitch = 2 * np.pi / int(n_fold)
+    Tr = np.eye(4) if T_ref is None else np.asarray(T_ref, float)
+    a = axis_angle(T @ np.linalg.inv(Tr), u)
+    if abs(a) <= pitch / 2 + 1e-12:
+        return T, False, float(np.degrees(a))
+    excess = a - np.sign(a) * pitch / 2
+    return rigid(-excess * u, np.zeros(3), c) @ T, True, float(np.degrees(a))
+
+
+def pose_summary(T, axis, n_fold=None, T_ref=None, bound_hit=False):
+    """Final pose in part terms: rotation about the part axis (deg), tilt of the axis (deg) and translation
+    of the axis point (mm), with warnings when the rotation sits on the half-pitch bound, the tilt is above
+    0.5 deg or the translation above 1 mm.  T maps the scan onto the solid."""
+    T = np.asarray(T, float)
+    Tr = np.eye(4) if T_ref is None else np.asarray(T_ref, float)
+    Tm = T @ np.linalg.inv(Tr)
+    out = {"rotation_about_axis_deg": None, "tilt_deg": None, "translation_mm": None,
+           "translation_vec_mm": None, "rotation_bound_deg": None, "bound_hit": bool(bound_hit),
+           "n_fold": int(n_fold) if n_fold else None, "warnings": []}
+    if axis is None:
+        return out
+    c = np.asarray(axis[0], float)
+    u = np.asarray(axis[1], float)
+    u = u / np.linalg.norm(u)
+    rot = float(np.degrees(axis_angle(Tm, u)))
+    tilt = float(np.degrees(np.arccos(np.clip(float((Tm[:3, :3] @ u) @ u), -1.0, 1.0))))
+    tv = apply(Tm, c[None])[0] - c
+    out.update(rotation_about_axis_deg=round(rot, 6), tilt_deg=round(tilt, 6),
+               translation_mm=round(float(np.linalg.norm(tv)), 6),
+               translation_vec_mm=[round(float(x), 6) for x in tv])
+    if n_fold and int(n_fold) >= 2:
+        bound = 180.0 / int(n_fold)
+        out["rotation_bound_deg"] = round(bound, 6)
+        if bound_hit or abs(rot) >= bound - 1e-6:
+            out["bound_hit"] = True
+            out["warnings"].append(f"alignment rotation hit the half-pitch bound ({rot:+.3f}° of ±{bound:.3f}°, "
+                                   f"{int(n_fold)}-fold): the true pose may be outside it — check the start pose")
+    if tilt > POSE_WARN_TILT_DEG:
+        out["warnings"].append(f"alignment tilted the axis {tilt:.3f}° (> {POSE_WARN_TILT_DEG:g}°)")
+    if out["translation_mm"] > POSE_WARN_TRANSLATION_MM:
+        out["warnings"].append(f"alignment moved the part {out['translation_mm']:.3f} mm "
+                               f"(> {POSE_WARN_TRANSLATION_MM:g} mm)")
+    return out
 
 
 REFINE_GATE_SIGMA = 6.0

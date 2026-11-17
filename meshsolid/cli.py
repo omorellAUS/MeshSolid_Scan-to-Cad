@@ -56,8 +56,10 @@ def main(argv=None):
                     help="envelope: for a recognised catalogue bearing also write <out>.envelope.step (plain d x D x B ring)")
     ap.add_argument("--screws", choices=["auto", "off"], default="auto",
                     help="helical screw rotor recognition (exact helical sweep of the fitted transverse profile)")
-    ap.add_argument("--impeller", choices=["auto", "off"], default="auto",
-                    help="N-fold bladed rotor path (hub revolve + passage floor + one patterned B-spline blade)")
+    ap.add_argument("--impeller", choices=["auto", "off", "on"], default="auto",
+                    help="N-fold bladed rotor path (hub revolve + passage floor + one patterned B-spline blade); "
+                         "on = the part IS an impeller: fail with the recogniser's reason instead of falling through "
+                         "to the general method")
     ap.add_argument("--normalise", choices=["report", "apply"], default="report",
                     help="pre-recognition normalise stage: 'report' stores the scan->normalised 4x4 only; 'apply' builds "
                          "axis-up / nose-up in mm and maps the STEP + deviation map back to the scan frame")

@@ -473,9 +473,9 @@ def _num_txt(v, nd=4, signed=False):
 def summary_html(rep):
     """The key result, large and bold, for the top of the results window (Qt rich text: font-size works)."""
     st = rep.get("stats") or {}
-    from .metrology_ui_defaults import verdict_html
+    from .metrology_ui_defaults import verdict_html, warnings_html
     sm = st.get("spec_metrics") or {}
-    return (verdict_html(st) + "<br>"
+    return (warnings_html(st) + verdict_html(st) + "<br>"
             f"<span style='font-size:13pt'>{sm.get('pass_pct_v1', '—')} % within ±{st.get('pass_tol_mm', '—')} mm with "
             f"beyond-cap points as failures (target ≥ 90 %) &nbsp;·&nbsp; {st.get('within_pass_pct', '—')} % with them "
             f"dropped (1.0.1 needs ≥ {st.get('accept_pct', 95):g} %)</span><br>"
