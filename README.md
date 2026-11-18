@@ -66,6 +66,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.2.3 | Hirth coupling |
 | 1.3.0 | Batch runs |
 | 1.3.1 | API and AI assist |
+| 1.0.6 | Gates and closing the shell |
 | 1.0.5 | Test generator and noise limit |
 
 **Order:** reliability and measurement first, then the generic path for parts it has never seen, then impeller quality, then batch and API.
@@ -212,7 +213,18 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 
 **Tested on** PC with Ollama.
 
+## 1.0.6 Gates and closing the shell
+
+Fixed tolerance classes: machined, printed, organic, rough scan. No gates derived from the mesh.
+
+Shell-closing ladder: looser sewing tolerance, then shape healing, then the prismatic builder, then a freeform fallback that always gives a valid solid with areas marked approximate.
+
+Bracket round 3: fillet only edges the scan shows as rounded, keep sharp corners sharp, add the lip and floor fillets, snap the bore.
+
+Done when Stage 3 passes the machined gate, the five shell-failure jobs each give one valid solid, and the bracket passes its gate.
+
 ## After 1.3.1
+
 
 Parametric output (Fusion timeline features with editable dimensions), speed work on parallel blade and solid building, and the drone curved-skin backlog.
 
