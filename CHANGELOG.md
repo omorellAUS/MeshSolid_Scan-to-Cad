@@ -64,27 +64,19 @@ Smooth vanes (hard rule)
 
 # MeshSolid 1.1.1
 
-Slot and chamfer rules
 
-## What's new (1.1.1)
+# MeshSolid 1.1.2
 
-- **General slot rule:** two parallel planes joined by two cylinders (or a cylinder pair for keyhole slots).
-- **Chamfer rule:** a narrow plane strip between two faces at an angle, snapped to standard sizes.
+Feature builder and generic tab
 
-**Done when** Slot and chamfer recall and precision each at least 90% on generated parts.
+## What's new (1.1.2)
 
-**Tested on** Box: generator.
+- **Feature-by-feature build:** keep a feature only if its fit gain beats the measured scan noise, and prefer fewer faces.
+- **Generic tab in the add-in:** routes unknown parts through this path, with the freeform fallback underneath.
 
-Region connection map
+**Done when** On generated parts: feature recall at least 90%, precision at least 90%, volume error within 1%, and a valid solid on at least 95%. On the held-out real scans: a valid solid on every part.
 
-One shared map of regions, their surface types and how they meet (angle, tangency, convex or concave), built once per part.
-
-Existing hole, counterbore, fillet, thread and keyway recognisers moved onto the map, one at a time, with results checked against the old code.
-
-Done when All existing tests pass and generator scores are no worse than 1.0.6.
-
-Tested on Box: test suite plus generator.
-
+**Tested on** Generator plus held-out scans; bracket on the PC.
 # MeshSolid 1.0.4
 
 Traceability and baseline: every report tagged with spec version/hash/git_commit/run_id; one scoreboard CSV written per run; baseline re-measure of STG1, Stage 3 and pinion under spec v2; add-in fixes for decimal-comma parsing and display-mesh fallback warning.

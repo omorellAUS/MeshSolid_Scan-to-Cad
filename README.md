@@ -60,9 +60,12 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.2.0 | Smooth vanes (hard rule) |
 | 1.1.0 | Region connection map |
 | 1.1.1 | Slot and chamfer rules |
+| 1.1.2 | Feature builder and generic tab |
 | 1.1.0 | Region connection map |
 | 1.1.1 | Slot and chamfer rules |
+| 1.1.2 | Feature builder and generic tab |
 | 1.1.1 | Slot and chamfer rules |
+| 1.1.2 | Feature builder and generic tab |
 | 1.1.2 | Feature builder and generic tab |
 | 1.1.3 | Bounding box and cylinder |
 | 1.2.0 | Smooth vanes (hard rule) |
@@ -76,6 +79,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.2.0 | Smooth vanes (hard rule) |
 | 1.1.0 | Region connection map |
 | 1.1.1 | Slot and chamfer rules |
+| 1.1.2 | Feature builder and generic tab |
 | 1.0.5 | Test generator and noise limit |
 
 **Order:** reliability and measurement first, then the generic path for parts it has never seen, then impeller quality, then batch and API.
@@ -265,7 +269,17 @@ enhanced compatibility, and performance optimizations.
 
 **Tested on** Box: generator.
 
+## 1.1.2 Feature builder and generic tab
+
+1. Feature-by-feature build: keep a feature only if its fit gain beats the measured scan noise, and prefer fewer faces.
+2. Generic tab in the add-in that routes unknown parts through this path, with the freeform fallback underneath.
+
+**Done when** On generated parts: feature recall at least 90%, precision at least 90%, volume error within 1%, and a valid solid on at least 95%. On the held-out real scans: a valid solid on every part.
+
+**Tested on** Generator plus held-out scans; bracket on the PC.
+
 ## After 1.3.1
+
 
 
 
