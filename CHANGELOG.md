@@ -29,6 +29,19 @@ Gates and closing the shell: fixed tolerance classes (machined, printed, organic
 
 **Done when** Stage 3 passes the machined gate, the five shell-failure jobs each give one valid solid, and the bracket passes its gate.
 
+
+# MeshSolid 1.1.0
+
+Region connection map
+
+One shared map of regions, their surface types and how they meet (angle, tangency, convex or concave), built once per part.
+
+Existing hole, counterbore, fillet, thread and keyway recognisers moved onto the map, one at a time, with results checked against the old code.
+
+Done when All existing tests pass and generator scores are no worse than 1.0.6.
+
+Tested on Box: test suite plus generator.
+
 # MeshSolid 1.0.4
 
 Traceability and baseline: every report tagged with spec version/hash/git_commit/run_id; one scoreboard CSV written per run; baseline re-measure of STG1, Stage 3 and pinion under spec v2; add-in fixes for decimal-comma parsing and display-mesh fallback warning.

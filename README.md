@@ -57,6 +57,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.0.5 | Test generator and noise limit |
 | 1.0.6 | Gates and closing the shell |
 | 1.1.0 | Region connection map |
+| 1.1.0 | Region connection map |
 | 1.1.1 | Slot and chamfer rules |
 | 1.1.2 | Feature builder and generic tab |
 | 1.1.3 | Bounding box and cylinder |
@@ -67,6 +68,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.3.0 | Batch runs |
 | 1.3.1 | API and AI assist |
 | 1.0.6 | Gates and closing the shell |
+| 1.1.0 | Region connection map |
 | 1.0.5 | Test generator and noise limit |
 
 **Order:** reliability and measurement first, then the generic path for parts it has never seen, then impeller quality, then batch and API.
@@ -223,7 +225,18 @@ Bracket round 3: fillet only edges the scan shows as rounded, keep sharp corners
 
 Done when Stage 3 passes the machined gate, the five shell-failure jobs each give one valid solid, and the bracket passes its gate.
 
+## 1.1.0 Region connection map
+
+One shared map of regions, their surface types and how they meet (angle, tangency, convex or concave), built once per part.
+
+Existing hole, counterbore, fillet, thread and keyway recognisers moved onto the map, one at a time, with results checked against the old code.
+
+Done when All existing tests pass and generator scores are no worse than 1.0.6.
+
+Tested on Box: test suite plus generator.
+
 ## After 1.3.1
+
 
 
 Parametric output (Fusion timeline features with editable dimensions), speed work on parallel blade and solid building, and the drone curved-skin backlog.
