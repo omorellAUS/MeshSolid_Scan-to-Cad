@@ -5,7 +5,7 @@ flags against the engine's --help.  Nothing here invents engine behaviour: a par
 engine's existing recognisers on/off and picks the accuracy class."""
 from __future__ import annotations
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 
 # id, label, tooltip, engine options
 PART_TYPES = [

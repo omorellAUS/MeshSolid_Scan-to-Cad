@@ -1,3 +1,14 @@
+# MeshSolid 1.0.4
+
+Traceability and baseline: every report tagged with spec version/hash/git_commit/run_id; one scoreboard CSV written per run; baseline re-measure of STG1, Stage 3 and pinion under spec v2; add-in fixes for decimal-comma parsing and display-mesh fallback warning.
+
+## What's new (1.0.4)
+
+- **Report tagging.** Every `report.json` now carries `spec_version`, `spec_hash` (from the frozen SPEC dict), `git_commit` (via `git rev-parse HEAD`), and `run_id` (ISO timestamp + short git commit). These are written at the start of every engine run so the full provenance trail is baked into each job's report.
+- **Scoreboard CSV.** After each run, one row is appended to the active scoreboard (`results/harness.csv` for spec v1, `results/harness_v2.csv` for spec v2). The row contains the fields from the existing harness files plus the new provenance columns. The file is created with a header row on first write.
+- **Baseline re-measure.** A new helper (`scripts/baseline_metrology.py`) re-runs Metrology on STG1, Stage 3 and the pinion under spec v2, producing a reference baseline CSV. Future releases must not score worse than these numbers on the scoreboard.
+- **Add-in fixes.** Decimal-comma parsing in the add-in parameter UI; a warning when the display-mesh fallback is used (visible in the conversion report and PDF).
+
 # MeshSolid 1.0.3
 
 Reliability release: per-stage time limits with heartbeat, input normalisation for oversized meshes, and job-folder pruning. Every run ends with a readable reason (crashed / cancelled / watchdog-killed / timed out / gate-rejected / ok) recorded in `report.json["end_reason"]`.

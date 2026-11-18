@@ -612,10 +612,18 @@ def _run(input_path, out_step, report_path, pr, deviation_ply, preview_png, meas
 
 
 def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements):
+    import hashlib
+    import subprocess
+    from datetime import datetime
+    from . import metrology_spec as MS
     t0 = time.time()
     rep = {"tool": "meshsolid", "version": __version__, "input": str(input_path),
            "params": asdict(pr), "status": "failed", "stages": {},
-           "end_reason": None}
+           "end_reason": None,
+           "spec_version": MS.SPEC_VERSION,
+           "spec_hash": MS.spec_hash(),
+           "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL).decode().strip(),
+           "run_id": datetime.utcnow().strftime("%Y%m%d-%H%M%S") + "-" + subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], stderr=subprocess.DEVNULL).decode().strip()}
     CURRENT.update(rep=rep, report_path=report_path, t0=t0)
     _stage(rep, "load_repair")
     from .meshio import MeshInputError

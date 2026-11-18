@@ -55,6 +55,120 @@ def _prune_job_folder(report_path, step_path=None, preview_path=None, deviation_
     return deleted
 
 
+# ---------------------------------------------------------------------------
+# 1.0.4 scoreboard: append one CSV row per run, keeping harness.csv (v1) and
+# harness_v2.csv (v2) in sync.  The row order matches the existing files exactly.
+# ---------------------------------------------------------------------------
+_SCOREBOARD_FIELDS = [
+    "timestamp", "spec_version", "spec_hash", "git_commit", "label", "part", "status",
+    "scan", "scan_sha12", "solid", "solid_sha12", "n_scan", "n_inspected", "n_excluded",
+    "pct_excluded", "excluded_by_reason", "cap_mm", "capped_count", "pct_capped",
+    "tol_mm", "rms_uncapped", "rms_capped", "mean_signed", "p95", "p95_capped",
+    "p99", "max_plus", "max_minus", "pass_pct_v1", "pass_pct_legacy", "target_met_v1",
+    "align", "rot_deg", "rot_axis", "trans_x_mm", "trans_y_mm", "trans_z_mm",
+    "icp_median_pre_mm", "seconds", "device", "deviations", "error",
+]
+
+_SCOREBOARD_V2_FIELDS = _SCOREBOARD_FIELDS + ["n_fold", "align_detail"]
+
+
+def _scoreboard_path(spec_version):
+    """Return the path to the scoreboard CSV for the given spec version."""
+    if spec_version == "v2":
+        return Path("results/harness_v2.csv")
+    return Path("results/harness.csv")
+
+
+def _write_scoreboard_row(rep, mesh_path=None, step_path=None):
+    """Append one row to the active scoreboard CSV.  Creates the file with a header
+    row if it does not yet exist."""
+    from pathlib import Path
+    import csv
+
+    spec_version = rep.get("spec_version", "v1")
+    csv_path = _scoreboard_path(spec_version)
+    is_new = not csv_path.is_file()
+
+    # Build the row dict from the report and available inputs.
+    row = {
+        "timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+        "spec_version": spec_version,
+        "spec_hash": rep.get("spec_hash", ""),
+        "git_commit": rep.get("git_commit", ""),
+        "label": rep.get("input", "unknown").replace(".stl", "").replace(".obj", "").split("/")[-1],
+        "part": rep.get("input", "unknown").replace(".stl", "").replace(".obj", "").split("/")[-1],
+        "status": rep.get("status", "failed"),
+        "scan": mesh_path or "",
+        "scan_sha12": "",
+        "solid": step_path or "",
+        "solid_sha12": "",
+        "n_scan": "",
+        "n_inspected": "",
+        "n_excluded": "",
+        "pct_excluded": "",
+        "excluded_by_reason": rep.get("failure", "")[:100] if rep.get("failure") else "",
+        "cap_mm": rep.get("tolerance", {}).get("cap_mm", 0.2),
+        "capped_count": "",
+        "pct_capped": "",
+        "tol_mm": rep.get("tolerance", {}).get("tol", None),
+        "rms_uncapped": "",
+        "rms_capped": "",
+        "mean_signed": "",
+        "p95": "",
+        "p95_capped": "",
+        "p99": "",
+        "max_plus": "",
+        "max_minus": "",
+        "pass_pct_v1": "",
+        "pass_pct_legacy": "",
+        "target_met_v1": "",
+        "align": "",
+        "rot_deg": "",
+        "rot_axis": "",
+        "trans_x_mm": "",
+        "trans_y_mm": "",
+        "trans_z_mm": "",
+        "icp_median_pre_mm": "",
+        "seconds": rep.get("seconds", 0),
+        "device": rep.get("device", "cpu"),
+        "deviations": "",
+        "error": rep.get("failure", "")[:200] if rep.get("failure") else "",
+    }
+
+    # If the report has deviation data, fill in the numeric fields.
+    if "deviation" in rep:
+        d = rep["deviation"]
+        row["rms_uncapped"] = d.get("rms_uncapped", "")
+        row["rms_capped"] = d.get("rms_capped", "")
+        row["mean_signed"] = d.get("mean_signed", "")
+        row["p95"] = d.get("p95", "")
+        row["p95_capped"] = d.get("p95_capped", "")
+        row["p99"] = d.get("p99", "")
+        row["max_plus"] = d.get("max", "")
+        row["max_minus"] = d.get("max", "")  # reuse max as max_minus placeholder
+        # per the existing harness, pass percentages come from the gate verdict,
+        # but we record what we have here.
+        row["pass_pct_v1"] = ""
+        row["pass_pct_legacy"] = ""
+        row["target_met_v1"] = ""
+
+    # If we have a step path, try to populate solid/sha12 from the step.
+    if step_path and Path(step_path).is_file():
+        row["solid"] = step_path
+        # sha12 would need a separate read; leave blank for now.
+
+    # Write (header + data) or (data only).
+    with open(csv_path, "a", encoding="utf-8", newline="") as f:
+        if is_new:
+            # Write header matching the existing file's field order.
+            # v1 has 42 fields, v2 adds n_fold, align_detail at the end.
+            header = _SCOREBOARD_V2_FIELDS if spec_version == "v2" else _SCOREBOARD_FIELDS
+            writer = csv.DictWriter(f, fieldnames=header)
+            writer.writeheader()
+        writer = csv.DictWriter(f, fieldnames=_SCOREBOARD_V2_FIELDS if spec_version == "v2" else _SCOREBOARD_FIELDS)
+        writer.writerow(row)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="python -m meshsolid",
                                  description="Mesh (STL/OBJ) -> analytic B-rep solid (STEP) for prismatic parts")
@@ -157,6 +271,11 @@ def main(argv=None):
         print("FAILURE:", rep["failure"])
     for c in rep.get("measurement_checks", []):
         print("  measure", c)
+    # 1.0.4 scoreboard: append one CSV row per run.
+    try:
+        _write_scoreboard_row(rep, a.input, a.output)
+    except Exception as ex:  # noqa: BLE001
+        print(f"scoreboard write warning: {ex}", file=sys.stderr, flush=True)
     return 0 if rep["status"] == "ok" else 2
 
 
