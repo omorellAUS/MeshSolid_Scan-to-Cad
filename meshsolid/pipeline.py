@@ -62,6 +62,25 @@ class Params:
     drop_faceless_area_frac: float = 0.01
     normalise: str = "report"    # "report": compute + store the scan->normalised 4x4 only; "apply": work axis-up/nose-up in mm, outputs mapped back to the scan frame
     time_budget_s: float = 0.0   # wall-clock budget (0 = none): a watchdog process marks the report "timeout" with the stage and stops the run; stages with their own budgets scale to it
+    # 1.0.3 per-stage limits: seconds each named stage may use before the run ends with a readable reason.
+    stage_limits: dict = field(default_factory=lambda: {
+        "load_repair": 120.0,
+        "normalise": 60.0,
+        "segmentation": 300.0,
+        "coaxial_refit": 600.0,
+        "threads": 120.0,
+        "freeform": 1200.0,
+        "snapping": 120.0,
+        "blends": 120.0,
+        "consolidate": 60.0,
+        "fit_stats": 60.0,
+        "build": 600.0,
+        "deviation": 300.0,
+        "preview": 60.0,
+    })
+    stage_heartbeat_s: float = 5.0        # heartbeat file update interval (s); 0 disables
+    decimate_for_recognition: int = 300_000   # meshes above this face count are decimated for recognition;
+                                              # the full mesh is kept for deviation
     consolidate: bool = True     # pre-build: merge same-surface regions, absorb explained slivers, drop degenerate slivers
     rim_slots: str = "auto"      # flat-floored end-face pockets open to the rim: auto = cut each confident slot on non-impellers (not on a recognised impeller: face_features classifies them) | on | off
 
@@ -217,15 +236,57 @@ def _stage_cap(pr, frac, max_s):
     return min(max_s, max(30.0, frac * tb)) if tb > 0 else max_s
 
 
+# ---------------------------------------------------------------------------
+# 1.0.3 heartbeat: a small JSON file next to the report that names the current
+# stage and when it was last touched.  A watcher (or the next stage) can tell
+# a run is stuck when the heartbeat is older than the stage limit.
+# ---------------------------------------------------------------------------
+def _heartbeat_path(report_path):
+    if not report_path:
+        return None
+    return str(Path(report_path).with_suffix(".heartbeat.json"))
+
+
+def _write_heartbeat(stage_name):
+    rp = CURRENT.get("report_path")
+    hp = _heartbeat_path(rp) if rp else None
+    if not hp or not CURRENT.get("t0"):
+        return
+    try:
+        hb = {
+            "stage": stage_name,
+            "ts": time.time(),
+            "elapsed_s": round(time.time() - CURRENT["t0"], 2),
+        }
+        tmp = hp + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(hb, f)
+        os.replace(tmp, hp)
+    except (OSError, ValueError):
+        pass
+
+
+def _stage_deadline(pr, stage_name):
+    """Seconds this stage may use: its own limit, shortened by the run budget left."""
+    stage_cap = float(pr.stage_limits.get(stage_name, pr.stage_limits.get("default", 300.0)))
+    left = time_left()
+    if left == float("inf"):
+        return stage_cap
+    return max(5.0, min(stage_cap, left - max(30.0, 0.2 * left)))
+
+
 def _stage(rep, name):
     import sys
     rep["last_stage"] = name
     rep.setdefault("stage_times", {})[name] = round(time.time() - CURRENT["t0"], 2) if CURRENT["t0"] else 0.0
     print(f"[{rep['stage_times'][name]:8.1f}s] {name}", file=sys.stderr, flush=True)
+    _write_heartbeat(name)
     if CURRENT.get("report_path") and name != "done":
         # checkpoint: if the process dies (e.g. a segfault inside OCC) the report still says how far it got
         import json as _json
-        part = dict(rep, status="incomplete", failure=f"process ended during stage '{name}' (crash or kill)")
+        part = dict(rep, status="incomplete",
+                    failure=f"process ended during stage '{name}' (crash or kill)",
+                    end_reason="crashed")
         try:
             Path(CURRENT["report_path"]).write_text(_json.dumps(part, indent=2, default=_js))
         except (TypeError, ValueError, OSError):
@@ -475,6 +536,7 @@ def _run_bodies(input_path, mb, out_step, report_path, pr, preview_png):
         rep["step"] = str(out_step)
     if ok == n:
         rep["status"] = "ok"
+        rep["end_reason"] = "ok"
     elif ok:
         rep["status"] = "partial"
         rep["failure"] = f"{n - ok} of {n} bodies not built: " + "; ".join(
@@ -552,7 +614,8 @@ def _run(input_path, out_step, report_path, pr, deviation_ply, preview_png, meas
 def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements):
     t0 = time.time()
     rep = {"tool": "meshsolid", "version": __version__, "input": str(input_path),
-           "params": asdict(pr), "status": "failed", "stages": {}}
+           "params": asdict(pr), "status": "failed", "stages": {},
+           "end_reason": None}
     CURRENT.update(rep=rep, report_path=report_path, t0=t0)
     _stage(rep, "load_repair")
     from .meshio import MeshInputError
@@ -562,11 +625,30 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         rep["status"] = "failed"
         rep["failure"] = f"input mesh: {e}. No STEP written."
         rep["input_error"] = str(e)
+        rep["end_reason"] = "crashed"
         rep["seconds"] = time.time() - t0
         _stage(rep, "done")
         if report_path:
             Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
         return rep, None, None, [], None
+    # 1.0.3 input normalisation: decimate oversized meshes for recognition.
+    if len(mesh.faces) > pr.decimate_for_recognition:
+        try:
+            from . import normalise as _NZ
+            before = len(mesh.faces)
+            mesh = _NZ.decimate_for_recognition(mesh, target=pr.decimate_for_recognition)
+            rep["decimation"] = {"from_faces": before,
+                                 "to_faces": len(mesh.faces),
+                                 "target": pr.decimate_for_recognition,
+                                 "note": "recognition runs on the decimated mesh; deviation on the same mesh"}
+        except Exception as ex:  # noqa: BLE001
+            rep.setdefault("warnings", []).append(f"decimation skipped ({type(ex).__name__}: {ex})")
+    # 1.0.3 scale / units check: flag a ~1,650 mm mesh (could be mm or inches) before recognition.
+    try:
+        from . import normalise as _NZ
+        rep["units"] = _NZ.check_units(mesh)
+    except Exception as ex:  # noqa: BLE001
+        rep.setdefault("warnings", []).append(f"units check skipped ({type(ex).__name__}: {ex})")
     _stage(rep, "normalise")
     try:
         from . import normalise as _NZ
@@ -700,6 +782,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                         write_step(lres.shape, out_step)
                         rep["step"] = str(out_step)
                         rep["status"] = "ok"
+                        rep["end_reason"] = "ok"
                     elif accepted:
                         rep["status"] = "ok_no_output"
                     else:
@@ -794,23 +877,44 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                               if screw_spec is not None else {"detected": False} | sinfo)
         rep["screw_rotor"]["seconds"] = round(time.time() - tg, 2)
     special = gear_spec is not None or screw_spec is not None
+    # 1.0.3 per-stage deadline: stop before segmentation if there isn't enough time left.
+    _seg_dl = _stage_deadline(pr, "segmentation")
+    if time_left() != float("inf") and time_left() < _seg_dl + 30.0:
+        rep["stages"]["segmentation"] = {"skipped": True,
+                                         "reason": f"not enough time left ({time_left():.0f}s < {_seg_dl:.0f}s limit + reserve)"}
+        rep["end_reason"] = "timed_out"
+        rep["failure"] = f"timed out before segmentation (stage limit {_seg_dl:.0f}s, {time_left():.0f}s left)"
+        rep["seconds"] = time.time() - t0
+        _stage(rep, "done")
+        if report_path:
+            Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        return rep, None, mesh, [], None
     _stage(rep, "segmentation")
-    sp = SegParams(sharp_deg=pr.sharp_deg, tol=tol, strict_torus=bool(fst.get("cad_tessellation")))
-    ts = time.time()
-    if screw_spec is not None:
-        from .gear import cyl as _cyl
-        r_, _, z_ = _cyl(np.asarray(mesh.triangles_center), np.asarray(screw_spec.axis_point), np.asarray(screw_spec.axis_dir))
-        zone = (z_ > screw_spec.z_a - 0.3) & (z_ < screw_spec.z_b + 0.3) & (r_ > screw_spec.r_root - 0.5)
-        keep = np.flatnonzero(~zone)
-        sub = mesh.submesh([keep], append=True, repair=False)
-        regions, sub_labels, sinfo = segment(sub, sp, rng_seed=pr.seed)
-        labels = -np.ones(len(mesh.faces), int); labels[keep] = sub_labels
-        for r_reg in regions:
-            r_reg.faces = keep[r_reg.faces]
-        sinfo = sinfo | {"screw_zone_faces_not_segmented": int(zone.sum())}
-    else:
-        regions, labels, sinfo = segment(mesh, sp, rng_seed=pr.seed)
-    rep["stages"]["segmentation"] = sinfo | {"regions": len(regions), "seconds": time.time() - ts}
+    try:
+        sp = SegParams(sharp_deg=pr.sharp_deg, tol=tol, strict_torus=bool(fst.get("cad_tessellation")))
+        ts = time.time()
+        if screw_spec is not None:
+            from .gear import cyl as _cyl
+            r_, _, z_ = _cyl(np.asarray(mesh.triangles_center), np.asarray(screw_spec.axis_point), np.asarray(screw_spec.axis_dir))
+            zone = (z_ > screw_spec.z_a - 0.3) & (z_ < screw_spec.z_b + 0.3) & (r_ > screw_spec.r_root - 0.5)
+            keep = np.flatnonzero(~zone)
+            sub = mesh.submesh([keep], append=True, repair=False)
+            regions, sub_labels, sinfo = segment(sub, sp, rng_seed=pr.seed)
+            labels = -np.ones(len(mesh.faces), int); labels[keep] = sub_labels
+            for r_reg in regions:
+                r_reg.faces = keep[r_reg.faces]
+            sinfo = sinfo | {"screw_zone_faces_not_segmented": int(zone.sum())}
+        else:
+            regions, labels, sinfo = segment(mesh, sp, rng_seed=pr.seed)
+        rep["stages"]["segmentation"] = sinfo | {"regions": len(regions), "seconds": time.time() - ts}
+    except Exception as ex:  # noqa: BLE001
+        rep["end_reason"] = "crashed"
+        rep["failure"] = f"segmentation crashed ({type(ex).__name__}: {ex}). No STEP written."
+        rep["seconds"] = time.time() - t0
+        _stage(rep, "done")
+        if report_path:
+            Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        return rep, None, mesh, [], None
     _stage(rep, "coaxial_refit")
     g = MeshGraph(mesh)
     from .coaxial import coaxial_refit
@@ -961,6 +1065,18 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         rep.setdefault("warnings", []).append(f"bearing/seal recognition failed: {type(ex).__name__}: {ex}")
         _recogniser(rep, "bearing_seal", "failed", ex)
 
+    # 1.0.3 per-stage deadline: stop before build if there isn't enough time left.
+    _build_dl = _stage_deadline(pr, "build")
+    if time_left() != float("inf") and time_left() < _build_dl + 30.0:
+        rep["stages"]["build"] = {"skipped": True,
+                                  "reason": f"not enough time left ({time_left():.0f}s < {_build_dl:.0f}s limit + reserve)"}
+        rep["end_reason"] = "timed_out"
+        rep["failure"] = f"timed out before build (stage limit {_build_dl:.0f}s, {time_left():.0f}s left)"
+        rep["seconds"] = time.time() - t0
+        _stage(rep, "done")
+        if report_path:
+            Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        return rep, None, mesh, regions, labels
     _stage(rep, "build")
     # build
     prims_unique = []
@@ -1256,6 +1372,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
             write_step(b.shape, out_step)
             rep["step"] = str(out_step)
             rep["status"] = "ok"
+            rep["end_reason"] = "ok"
             if pr.bearing_build == "envelope" and rep.get("bearing"):
                 try:
                     rep["bearing"]["envelope"] = _bearing_envelope(rep["bearing"], out_step)
@@ -1263,6 +1380,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                     rep["bearing"]["envelope"] = {"error": f"{type(ex).__name__}: {ex}"}
         elif not accepted:
             rep["status"] = "failed"
+            rep["end_reason"] = "gate_rejected"
             rep["failure"] = ("solid is valid but deviates from the mesh beyond acceptance limits; "
                               "STEP not written (likely missing/incorrect surfaces)")
         else:
@@ -1270,6 +1388,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
     else:
         why = "; ".join(f"{a.get('method', 'local_trim')}: {a.get('reason')}" for a in attempts if not a.get("ok"))
         rep["failure"] = f"analytic solid construction failed ({why or b.reason}). No STEP written."
+        rep["end_reason"] = "crashed"
 
     _stage(rep, "preview")
     if preview_png:

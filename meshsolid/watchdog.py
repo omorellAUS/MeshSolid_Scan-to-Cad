@@ -62,6 +62,7 @@ def mark_timeout(report_path, budget):
     rep["status"] = "timeout"
     rep["failure"] = f"time budget of {budget:g} s exceeded during stage '{stage}'; the engine was stopped. No STEP written."
     rep["timeout"] = {"budget_s": budget, "stage": stage, "by": "watchdog"}
+    rep["end_reason"] = "watchdog_killed"
     tmp = str(report_path) + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(rep, f, indent=2)

@@ -7,8 +7,8 @@ from .pipeline import Params, run
 
 
 def _install_timeout_report():
-    """On SIGTERM (e.g. `timeout`), write the partial report with status "timeout" and the last stage
-    reached, then exit 124. Never reports success."""
+    """On SIGTERM (e.g. `timeout` / user cancel), write the partial report with status "timeout"
+    and the last stage reached, then exit 124. Never reports success."""
     import signal
     from . import pipeline as P
 
@@ -16,12 +16,43 @@ def _install_timeout_report():
         rep = P.CURRENT.get("rep")
         if rep is not None and P.CURRENT.get("report_path"):
             rep["status"] = "timeout"
-            rep["failure"] = f"killed by signal {signum} during stage '{rep.get('last_stage')}'"
+            rep["end_reason"] = "cancelled"
+            rep["failure"] = f"cancelled by user (signal {signum}) during stage '{rep.get('last_stage')}'"
             from pathlib import Path
             Path(P.CURRENT["report_path"]).write_text(json.dumps(rep, indent=2, default=P._js))
-        print(f"TIMEOUT during stage {rep.get('last_stage') if rep else None}", file=sys.stderr, flush=True)
+        print(f"CANCELLED during stage {rep.get('last_stage') if rep else None}", file=sys.stderr, flush=True)
         os._exit(124)
     signal.signal(signal.SIGTERM, h)
+
+
+# ---------------------------------------------------------------------------
+# 1.0.3 job-folder pruning: after a successful run, delete intermediate files
+# (preview PNG, deviation PLY, heartbeat) and keep only STEP, reports and logs.
+# ---------------------------------------------------------------------------
+def _prune_job_folder(report_path, step_path=None, preview_path=None, deviation_ply_path=None):
+    """Remove intermediate files beside the report, keeping only STEP, the report JSON and the
+    engine log.  Returns the list of deleted paths."""
+    from pathlib import Path
+    deleted = []
+    base = Path(report_path).parent if report_path else None
+    candidates = []
+    if preview_path:
+        candidates.append(preview_path)
+    if deviation_ply_path:
+        candidates.append(deviation_ply_path)
+    if report_path:
+        # heartbeat file next to the report
+        candidates.append(str(Path(report_path).with_suffix(".heartbeat.json")))
+        candidates.append(str(Path(report_path).with_suffix(".heartbeat.json.tmp")))
+    for c in candidates:
+        p = Path(c)
+        if p.exists() and p.is_file():
+            try:
+                p.unlink()
+                deleted.append(str(p))
+            except OSError:
+                pass
+    return deleted
 
 
 def main(argv=None):
@@ -92,6 +123,11 @@ def main(argv=None):
         print("status: failed")
         print("FAILURE:", rep["failure"])
         return 2
+    # 1.0.3 pruning: on success, delete intermediates, keep only STEP, reports and logs.
+    if rep.get("status") == "ok":
+        deleted = _prune_job_folder(a.report, a.output, a.preview, a.deviation_ply)
+        if deleted:
+            print(f"pruned: deleted {len(deleted)} intermediate file(s)")
     b = rep["stages"].get("build", {})
     print(f"status: {rep['status']}")
     print(f"tol: {rep['tolerance']['tol']:.4f} (noise est {rep['tolerance']['noise_sigma_est']})  method: {b.get('method')}")

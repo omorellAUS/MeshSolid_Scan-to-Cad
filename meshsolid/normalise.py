@@ -136,6 +136,47 @@ def apply(mesh, mode="report"):
     return m, rep
 
 
+def decimate_for_recognition(mesh, target=300_000):
+    """1.0.3: reduce a mesh to about `target` triangles for recognition using quadric edge collapse
+    (pymeshlab).  Returns a new Trimesh with at most `target` faces, preserving topology and normals
+    as far as the decimator allows.  Raises RuntimeError if pymeshlab is unavailable or decimation
+    fails; the caller falls back to the undecimated mesh."""
+    import pymeshlab
+    ms = pymeshlab.MeshSet()
+    ms.add_mesh(pymeshlab.Mesh(mesh.vertices, mesh.faces), mesh="in")
+    ms.apply_filter("simplification_quadric_edge_collapse_decimation",
+                    targetfacenum=target, preservetopology=True)
+    out = ms.current_mesh()
+    return trimesh.Trimesh(vertices=out.vertex_matrix(), faces=out.face_matrix(),
+                           process=False)
+
+
+def check_units(mesh):
+    """1.0.3: flag scale/units ambiguity.  Returns a dict with the largest extent, the assumed unit,
+    and a flag when the part is large enough that mm vs inches is ambiguous (e.g. ~1,650 mm could be
+    a 1,650 mm part or a ~65 inch part exported as mm).  Never rescalts automatically."""
+    ext = float(np.linalg.norm(np.ptp(np.asarray(mesh.vertices, axis=0), axis=0)))
+    info = {"largest_extent_mm": round(ext, 3)}
+    if ext >= 1000.0:
+        info["unit"] = "mm"
+        info["ambiguous_inches"] = True
+        info["note"] = (f"part is {ext:.0f} mm across; if the source was inches this is "
+                        f"{ext / 25.4:.0f} in — confirm units before build")
+    elif 2.0 <= ext <= 20.0:
+        info["unit"] = "mm"
+        info["possible_inches"] = True
+        info["note"] = "small part; a mm export and an inch export look the same by size alone"
+    elif 0 < ext < 1.0:
+        info["unit"] = "m (scaled x1000 to mm)"
+        info["ambiguous_inches"] = False
+        info["note"] = "largest extent < 1: interpreted as metres and scaled to mm"
+    else:
+        info["unit"] = "mm"
+        info["ambiguous_inches"] = False
+        info["note"] = "mm"
+    return info
+
+
 def _trsf(M):
     """gp_Trsf for x -> M[:3,:3] x + M[:3,3] with M[:3,:3] = s * rotation (uniform scale s)."""
     from OCP.gp import gp_Trsf

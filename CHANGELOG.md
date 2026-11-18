@@ -1,3 +1,14 @@
+# MeshSolid 1.0.3
+
+Reliability release: per-stage time limits with heartbeat, input normalisation for oversized meshes, and job-folder pruning. Every run ends with a readable reason (crashed / cancelled / watchdog-killed / timed out / gate-rejected / ok) recorded in `report.json["end_reason"]`.
+
+## What's new (1.0.3)
+
+- **Per-stage time limits and heartbeat.** Each named stage (segmentation, build, deviation, freeform, ...) has its own time cap, scaled from the run budget. A heartbeat file next to the report names the current stage and its last touch time, so a stuck run is detectable. The checkpoint report written at every stage still says how far the run got if the process dies.
+- **Separate end reasons.** `report.json["end_reason"]` is one of: `ok`, `crashed`, `cancelled`, `watchdog_killed`, `timed_out`, `gate_rejected`. A cancelled run (SIGTERM / user cancel) writes a partial report and exits 124 without claiming success.
+- **Input normalisation.** Meshes over ~300k faces are reduced with quadric edge-collapse decimation for recognition; the full mesh is kept for deviation. Scale and units are checked: a part ~1,650 mm across is flagged as potentially mm-or-inches and must be confirmed before build.
+- **Job-folder pruning.** On success, intermediate files (preview PNG, deviation PLY, heartbeat) are deleted; only STEP, reports and logs are kept.
+
 # MeshSolid 1.0.2a
 
 Bug-fix release on top of 1.0.2, from the user's 1.0.2 test runs (X2-B1941 STG1, KK&K stage 1, LS pinion).
