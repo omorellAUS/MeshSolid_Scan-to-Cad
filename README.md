@@ -57,6 +57,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.0.5 | Test generator and noise limit |
 | 1.0.6 | Gates and closing the shell |
 | 1.0.7 | Quality and compatibility refinement |
+| 1.2.0 | Smooth vanes (hard rule) |
 | 1.1.0 | Region connection map |
 | 1.1.0 | Region connection map |
 | 1.1.1 | Slot and chamfer rules |
@@ -70,6 +71,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.3.1 | API and AI assist |
 | 1.0.6 | Gates and closing the shell |
 | 1.0.7 | Quality and compatibility refinement |
+| 1.2.0 | Smooth vanes (hard rule) |
 | 1.1.0 | Region connection map |
 | 1.0.5 | Test generator and noise limit |
 
@@ -242,7 +244,17 @@ Tested on Box: test suite plus generator.
 Quality and compatibility refinement release with bug fixes, stability improvements, 
 enhanced compatibility, and performance optimizations.
 
+## 1.2.0 Smooth vanes (hard rule)
+
+1. Vanes built from 5–7 smooth blade sections with few control points, lofted hub to tip; ruled vanes used automatically when the scan fits.
+2. Curvature ripple check: a rippled vane is refit with fewer control points; if smoothing cannot meet tolerance, the build ends as a fail, never a rippled pass.
+
+**Done when** Zero ripple flags on Stage 3, Stage 1 and KK&K, filtered rms rises by no more than 0.005 mm against the 1.0.4 baseline, and Stage 3 still passes the machined gate.
+
+**Tested on** PC: Stage 3, Stage 1, KK&K, each twice.
+
 ## After 1.3.1
+
 
 
 

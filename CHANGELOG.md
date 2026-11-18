@@ -45,6 +45,21 @@ Quality and compatibility refinement release.
 **Done line.** Based on user feedback and testing; stability and compatibility confirmed.
 
 ## After 1.0.7
+
+# MeshSolid 1.2.0
+
+Smooth vanes (hard rule)
+
+## What's new (1.2.0)
+
+- **Vanes built from 5–7 smooth blade sections** with few control points, lofted hub to tip; ruled vanes used automatically when the scan fits.
+- **Curvature ripple check:** a rippled vane is refit with fewer control points; if smoothing cannot meet tolerance, the build ends as a fail, never a rippled pass.
+
+**Done when** Zero ripple flags on Stage 3, Stage 1 and KK&K, filtered rms rises by no more than 0.005 mm against the 1.0.4 baseline, and Stage 3 still passes the machined gate.
+
+**Tested on** PC: Stage 3, Stage 1, KK&K, each twice.
+
+## After 1.3.1
 # MeshSolid 1.1.0
 
 Region connection map
