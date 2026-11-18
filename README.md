@@ -66,6 +66,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.2.3 | Hirth coupling |
 | 1.3.0 | Batch runs |
 | 1.3.1 | API and AI assist |
+| 1.0.5 | Test generator and noise limit |
 
 **Order:** reliability and measurement first, then the generic path for parts it has never seen, then impeller quality, then batch and API.
 
@@ -218,3 +219,11 @@ Parametric output (Fusion timeline features with editable dimensions), speed wor
 Then an optional **Make Drawing** step using draftwright 0.6 (github.com/pzfreo/draftwright): STEP to a dimensioned SVG, PDF or DXF drawing. It is called as a separate installed program because of its AGPL-3.0 licence, unless a commercial licence is bought.
 
 The numeric bars (90% recall and precision, 1% volume, 0.005 mm vane allowance, 80% overnight valid solids) are starting proposals; change any of them and I'll update the page.
+
+## 1.0.5 Test generator and noise limit
+
+Procedural generation of 100+ synthetic parts with nasty cases (tiny fillets, thin walls, near-tangent faces, holes in the scan); noise limit measured from a repeat scan of one impeller, deciding whether 0.03 mm is reachable; scoring on feature recall and precision, valid solid, volume error, run time and rms, written to the scoreboard.
+
+**Done line.** One command scores 100+ generated parts and names the broken layer for each failure, and the repeat-scan noise figure is recorded.
+
+**Tested on** Box at low resolution, plus one repeat scan from you.

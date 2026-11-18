@@ -2,7 +2,7 @@
 <package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
   <name>MeshSolid</name>
   <description>Mesh (scan, STL) to one Part solid with the meshsolid engine, with review and recorded parameters</description>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <date>2026-11-16</date>
   <maintainer email="">Olly Ross</maintainer>
   <license>GPL-3.0-or-later</license>
