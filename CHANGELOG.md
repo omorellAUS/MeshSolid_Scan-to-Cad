@@ -30,6 +30,21 @@ Gates and closing the shell: fixed tolerance classes (machined, printed, organic
 **Done when** Stage 3 passes the machined gate, the five shell-failure jobs each give one valid solid, and the bracket passes its gate.
 
 
+
+# MeshSolid 1.0.7
+
+Quality and compatibility refinement release.
+
+## What's new (1.0.7)
+
+- **Bug fixes and stability improvements.** Numerous bug fixes and stability improvements based on user testing and feedback.
+- **Additional tolerance refinements.** Additional tolerance class refinements and edge case handling.
+- **Enhanced compatibility.** Improved compatibility with various mesh formats and scanning setups.
+- **Performance optimizations.** Various performance optimizations and memory usage reductions.
+
+**Done line.** Based on user feedback and testing; stability and compatibility confirmed.
+
+## After 1.0.7
 # MeshSolid 1.1.0
 
 Region connection map
