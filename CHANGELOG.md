@@ -62,6 +62,19 @@ Smooth vanes (hard rule)
 ## After 1.3.1
 # MeshSolid 1.1.0
 
+# MeshSolid 1.1.1
+
+Slot and chamfer rules
+
+## What's new (1.1.1)
+
+- **General slot rule:** two parallel planes joined by two cylinders (or a cylinder pair for keyhole slots).
+- **Chamfer rule:** a narrow plane strip between two faces at an angle, snapped to standard sizes.
+
+**Done when** Slot and chamfer recall and precision each at least 90% on generated parts.
+
+**Tested on** Box: generator.
+
 Region connection map
 
 One shared map of regions, their surface types and how they meet (angle, tangency, convex or concave), built once per part.

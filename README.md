@@ -59,7 +59,9 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.0.7 | Quality and compatibility refinement |
 | 1.2.0 | Smooth vanes (hard rule) |
 | 1.1.0 | Region connection map |
+| 1.1.1 | Slot and chamfer rules |
 | 1.1.0 | Region connection map |
+| 1.1.1 | Slot and chamfer rules |
 | 1.1.1 | Slot and chamfer rules |
 | 1.1.2 | Feature builder and generic tab |
 | 1.1.3 | Bounding box and cylinder |
@@ -73,6 +75,7 @@ Generic recognition now comes before the impeller polish. Nothing starts until y
 | 1.0.7 | Quality and compatibility refinement |
 | 1.2.0 | Smooth vanes (hard rule) |
 | 1.1.0 | Region connection map |
+| 1.1.1 | Slot and chamfer rules |
 | 1.0.5 | Test generator and noise limit |
 
 **Order:** reliability and measurement first, then the generic path for parts it has never seen, then impeller quality, then batch and API.
@@ -253,7 +256,17 @@ enhanced compatibility, and performance optimizations.
 
 **Tested on** PC: Stage 3, Stage 1, KK&K, each twice.
 
+## 1.1.1 Slot and chamfer rules
+
+1. General slot rule: two parallel planes joined by two cylinders (or a cylinder pair for keyhole slots).
+2. Chamfer rule: a narrow plane strip between two faces at an angle, snapped to standard sizes.
+
+**Done when** Slot and chamfer recall and precision each at least 90% on generated parts.
+
+**Tested on** Box: generator.
+
 ## After 1.3.1
+
 
 
 
