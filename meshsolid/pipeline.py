@@ -21,6 +21,7 @@ from .meshio import load_mesh
 from .occ_util import write_step
 from .segment import MeshGraph, SegParams, region_points, segment
 from .snap import snap
+from .shell_ladder import _shell_closing_ladder
 
 
 @dataclass
@@ -1214,6 +1215,30 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         except Exception as ex:  # noqa: BLE001
             rep["rim_slots"] = {"error": f"{type(ex).__name__}: {ex}"}
     rep["stages"]["build"] = final | {"attempts": attempts, "seconds": time.time() - tb}
+
+    # --- 1.0.6 shell-closing ladder: always try to produce a valid solid ---
+    # Order: looser sewing tolerance -> shape healing -> prismatic builder -> freeform fallback.
+    if b is None or not b.ok:
+        _ladder_ok, _ladder_shape, _ladder_approx, _ladder_reason = _shell_closing_ladder(
+            mesh, regions, labels, tol, pr
+        )
+        if _ladder_ok:
+            b = _ladder_shape
+            rep["stages"]["build"] = {
+                "method": "shell_closing_ladder",
+                "ok": True,
+                "attempts": attempts,
+                "ladder_reason": _ladder_reason,
+                "approximate_faces": sorted(_ladder_approx),
+                "seconds": time.time() - tb,
+            }
+            rep["warnings"] = rep.get("warnings", [])
+            rep["warnings"].append(_ladder_reason)
+            if _ladder_shape is not None and _ladder_ok:
+                rep["end_reason"] = "ok"
+            else:
+                rep["end_reason"] = "gate_rejected"
+
     _stage(rep, "deviation")
     # facet sag: distance of mesh face centroids to their region's surface (chordal error of the
     # tessellation + noise); solid->mesh distances include it, so it widens that acceptance limit

@@ -121,7 +121,7 @@ def resolve_gates(accuracy: str | None, tol: float | None,
     elif cls == "printed":
         rms_def = PRINTED_RMS_MM
         p95_def = PRINTED_P95_MM
-        basis = f"printed: rms≤{rss_def:.2f} mm, p95≤{p95_def:.2f} mm"
+        basis = f"printed: rms≤{rms_def:.2f} mm, p95≤{p95_def:.2f} mm"
     elif cls == "organic":
         rms_def = ORGANIC_RMS_MM
         p95_def = ORGANIC_P95_MM
@@ -135,16 +135,18 @@ def resolve_gates(accuracy: str | None, tol: float | None,
         p95_def = None
         basis = "unknown"
 
-    # Now apply the Dict we had before (from user overrides or class defaults)
-    out = {"class": cls, "basis": basis, "rms_limit": rms_def, "p95_limit": p95_def}
-
     # If the caller passed explicit accept_rms/accept_p95, they always win
     if accept_rms is not None:
-        out["rms_limit"] = accept_rms
+        rms_def = float(accept_rms)
+        basis += f"; overridden accept_rms={accept_rms}"
     if accept_p95 is not None:
-        out["p95_limit"] = accept_p95
+        p95_def = float(accept_p95)
+        basis += f"; overridden accept_p95={accept_p95}"
 
-    # Re-compute basis string reflecting the final values
-    out["basis"] = (f"{cls}: rms≤{out['rms_limit']:.2f} mm, "
-                    f"p95≤{out['p95_limit']:.2f} mm")
-    return out
+    return {
+        "class": cls,
+        "rms_limit": float(rms_def),
+        "p95_limit": float(p95_def),
+        "tol": float(tol) if tol else None,
+        "basis": basis,
+    }
