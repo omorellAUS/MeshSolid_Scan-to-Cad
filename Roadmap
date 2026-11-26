@@ -1,0 +1,318 @@
+MeshSolid build plan
+Revised 26 Nov 2026: restarts from 1.0.2a as the 2.0 line, with a front-end tool router (BuildAgentOllama vs MeshSolid) and a parked BuildAgentOllama metrology refinement track to follow the mesh-to-solid upgrades. Nothing starts until you say go.
+On this page
+Pain points and fixes
+Roadmap
+Rules for every release
+Scans needed from you
+2.0.0 Reliability and traceability
+2.0.1 Honest checks (spec v3)
+2.0.2 Test parts and gate classes
+2.0.3 Faster fuse and always a solid
+2.0.4 Prismatic auto-construct
+2.0.5 Fillets that don't fail
+2.0.6 Turned parts and scan merging
+2.1.0 Generic parts
+Show all 20
+Pain points and fixes
+
+| Pain point                      | Fix                              | Release      |
+| ------------------------------- | -------------------------------- | ------------ |
+| No trustworthy baseline         | Tags and a working scoreboard    | 2.0.0        |
+| Stage 3 build takes 21 minutes  | Profile the fuse, then fix it    | 2.0.1, 2.0.3 |
+| Volume reads 8.8% low           | Subtract the hand-entered bore   | 2.0.1        |
+| Support check fails on the bore | Ignore hand-entered features     | 2.0.1        |
+| Engine and Metrology disagree   | One shared exclusion list        | 2.0.1        |
+| Gate says pass when it isn't    | Fixed classes from a repeat scan | 2.0.2        |
+| Noise misread from facets       | Repeat-scan measurement          | 2.0.2        |
+| Shells fail to close            | Split, keep on scan, sew         | 2.0.3        |
+| Unseen parts give no STEP       | _APPROX fallback, LOW ACCURACY   | 2.0.3        |
+| Bracket fails in local_trim     | Section sketch per step          | 2.0.4        |
+| Fillets fail or are missing     | Fillet ladder with max radius    | 2.0.5        |
+| Pinion's two scans not merged   | Open3D registration              | 2.0.6        |
+| Vane ripple                     | Section curves, surface network  | 2.1.1        |
+| Not truly parametric            | Timeline, rule-based fillets     | 2.2.0        |
+
+The Stage 3 volume gap (3,578 mm³) matches the hand-entered Ø14.275 mm bore about 22 mm long, which the scan doesn't have, and the mean deviation is only −0.0065 mm, so it is a check error, not missing material. 3DSRE ideas are reimplemented from its release notes; its code is proprietary and none is copied.
+Roadmap
+
+| Release | Focus                            |      Status |
+| ------- | -------------------------------- | ----------: |
+| 2.0.0   | Reliability and traceability     |     Planned |
+| 2.0.1   | Honest checks (spec v3)          |     Planned |
+| 2.0.2   | Test parts and gate classes      |     Planned |
+| 2.0.3   | Faster fuse and always a solid   |     Planned |
+| 2.0.4   | Prismatic auto-construct         | Provisional |
+| 2.0.5   | Fillets that don't fail          | Provisional |
+| 2.0.6   | Turned parts and scan merging    | Provisional |
+| 2.1.0   | Generic parts                    | Provisional |
+| 2.1.1   | Smooth vanes and surface network | Provisional |
+| 2.1.2   | Refine and impeller finish       | Provisional |
+| 2.2.0   | Parametric Fusion timeline       | Provisional |
+| 2.3.0   | Batch runs                       | Provisional |
+| 2.3.1   | API and AI assist                | Provisional |
+
+Reliability and a trusted baseline first, then honest checks and the fuse profile, then fixed gate classes, then speed and always-a-solid. What follows may be reordered once the profile shows where the time and failures really are. The 2.0 numbering avoids the old 1.0.7 to 1.3.0 tags on GitHub.
+Rules for every release
+1.
+If a release misses its done line, stop and replan before the next one starts.
+2.
+Each release ships as a lossless Windows zip and a source zip, with release notes; test builds install as MeshSolid Test Net alongside the working install.
+3.
+Runs are deterministic, so every run records its STEP hash and the scoreboard compares hashes automatically. A second run is needed for one part per release, and for any part whose hash changes without a code reason.
+4.
+Figures are never compared across spec versions; any change to exclusion or measurement rules bumps the spec version.
+5.
+The scoreboard must not get worse on any part without a written reason.
+6.
+Measure before redesigning: no rewrite of a stage starts without a profile or failure table that shows the cause.
+7.
+A new path replaces an old one only behind a flag, and only after it beats the old path on the test set.
+8.
+Every feature is kept only if it lowers the deviation; a build that can't meet the rules fails with a reason or ships as _APPROX, never a fake pass.
+9.
+Gate class numbers are fixed constants, never recomputed per run from a mesh.
+10.
+KK&K is now a development part, because its results have been looked at too often. Holdouts are fresh scans, one per part family, never tuned against and run once at the end of a release.
+11.
+Reports show capped and uncapped rms, scan noise, missing material, balance cuts and other exclusions on separate lines, spec version, run time, engine version, run ID and commit.
+12.
+Standing rules stay: balance cuts excluded within their own cap, Hirth teeth modelled, 2 mm auto-exclusion with overrides, smooth vanes, Python 3.10 left as the default.
+13.
+Coding agents work on branches with tests that really run. Branch protection on main in GitHub (no force-push, pull requests required) enforces it, and is turned on before 2.0.0 starts.
+Scans needed from you
+1.
+Repeat scans of one impeller and one turned or prismatic part, with the scan setup noted, before 2.0.2, to set the noise floor and the gate classes.
+2.
+A fresh holdout scan for each family slot (prismatic, turned, impeller, freeform), named on this page once you pick them, before 2.0.4.
+3.
+The source of each other existing test mesh (scan or CAD export), entered in parts.csv. Stage 3 is done: a real scan.
+4.
+A fresh scan with Hirth teeth, before 2.1.2.
+2.0.0 Reliability and traceability
+1.
+Step 0, with no engine code changes, on 1.0.2a as it stands (1.0.2a has no scoreboard; that code exists only in the 1.0.3 to 1.0.6 builds): add parts.csv; add a separate scoreboard script that reads the job folders (report JSON, input mesh SHA-256, STEP hash) and appends one row per job, tagged with engine, spec and solid version, run ID and commit, so baselines stay pure 1.0.2a; copy the five shell-failure jobs and the gate-rejection jobs (input meshes and reports) to a permanent regression folder; then record 1.0.2a baseline rows for s3, x2b1941, kk-and-k-s1, x2b1872-pinion and light-bracket. Existing 1.0.2a job folders are harvested first, since runs are deterministic: s3 from 20261117-125215 (stable) and 20261119-100520 (Test Net), both with a STEP; light-bracket from 20261119-092755 (Test Net, failed, 109 unsewn edges); and kk-and-k-s1-nohirth from 20261117-141200 (failed in local_trim). Each is checked for engine version, mesh hash and settings before it becomes a row, so only x2b1941, x2b1872-pinion and kk-and-k-s1 (with Hirth) need new runs. Each baseline run has a per-part wall-clock cap of about 2x that part's last good run: about 45 minutes for s3 (21.6 minutes on Test Net) and 110 minutes for x2b1941 (53.8 minutes on 1.0.1); 30 minutes for kk-and-k-s1, which has always failed, and for any part with no good run on record. (The earlier 3.85M-face jobs ran about two hours before timing out.) A row with no STEP and its end reason (crashed, timed out, rejected) is a valid baseline; kk-and-k-s1 failed in the impeller stage on every 1.0.1 attempt (the 1.0.2a no-Hirth run failed earlier, in local_trim, and never reached the impeller path), and the bracket may fail too. Step 1 does not start until these rows exist.
+2.
+Regression folder, exact jobs. Shell failures (local_trim): 20261112-193232, 20261115-084633, 20261115-104523, 20261117-115717 (light-bracket, 4,560 faces) and 20261117-141200 (kk-and-k-s1-nohirth, 3.85M faces). Gate rejections: 20261111-211336, 20261111-211953, 20261115-103933, 20261116-225133 and 20261117-111100 (the last two are Stage 3 on 1.0.2). The input meshes total about 300 MB, mostly two of 60 MB and 184 MB, so drive space is checked first.
+3.
+Source for 1.0.2a: GitHub shows 'Upload Base Code V1.0.2', and the installed 1.0.2a is a bug-fix build on top of it. Before step 1, the repo commit whose source matches the installed 1.0.2a is found by comparing file hashes and tagged (with your OK, since tags are only changed with your confirmation); if none matches, the installed 1.0.2a source is committed first. Without that, the baselines can't be reproduced from the source step 1 restarts from.
+4.
+Step 1: start again from 1.0.2a. The 1.0.3 to 1.0.6 tags are not built on; only their time limits and units check are ported. Per-stage time limits with clear end reasons (crashed, cancelled, timed out, rejected by gate); meshes over about 300k faces reduced for recognition, with the full mesh kept for deviation; a heartbeat proven by a test to update during a long stage (it didn't in Test Net); then job folders pruned to STEP, reports and logs, only after the regression folder from step 0 exists.
+5.
+Gate reporting only: the verdict says plainly which rule accepted the solid (for example the 1.5x blade-scatter rule) and that it fails the class limit, with the ratio (Stage 3 was 5.6x over 0.009 mm). Acceptance behaviour does not change in 2.0.0, so Stage 3 still writes its STEP; it changes in 2.0.2 once the signed-off class constants exist.
+6.
+New tests: a deliberately mis-scaled mesh (s3 x 25.4 and x 1000) must be flagged by the units check; and a part whose display name contains '&' runs cleanly through the add-in and the batch runner, with its safe ID used in every file name.
+7.
+Part IDs: one parts.csv in the repo lists every test part under a safe ID with no '&': s3, x2b1941, kk-and-k-s1, kk-and-k-s1-nohirth, x2b1872-pinion, light-bracket, stone-holder. These IDs are used in file names, scoreboard keys and batch settings. Every scoreboard row stores the input mesh's SHA-256. Same triangle count doesn't mean same scan: every Stage 3 mesh_body.stl is 6,488,384 bytes, but the first 1.0.1 run (14 Nov 03:33) hashed 9a7462f3… and every run from 14 Nov 04:27 onward hashed f92ddfe9…, so parts.csv records f92ddfe9… for s3. 'Stage 1' always means KK&K Stage 1 (the 'stage 1 test' document in Roteq > 'KKK Blower Impellor Scans'; the folder keeps the old name). X2-B1941 is a different part.
+8.
+Baseline check: your earlier note had Stage 3 at 0.035 mm capped and 88% within ±0.05 mm; the Test Net 1.0.6 run measured 0.0449 mm and 78.9%. This is settled in step 0 without code changes: run Metrology with the same settings on the 14 Nov 04:27 1.0.1 STEP (same f92ddfe9… mesh as Test Net 1.0.6) and on the 17 Nov 12:52 1.0.2a STEP, plus the 14 Nov 03:33 1.0.1 STEP against its own mesh (9a7462f3…), about 4 minutes each. That shows whether quality dropped between 1.0.1 and 1.0.2a, and which 1.0.1 solid the old 0.035 mm figure came from. (1.0.2a did write a STEP for Stage 3, on 17 Nov and again in Test Net on 19 Nov; only 1.0.2 rejected it, twice.)
+9.
+Known bugs fixed, each with a test: scoreboard NameError ('Path' not imported) and units check TypeError (asarray axis), both in the 1.0.3 to 1.0.6 code, so their tests apply in step 1 when that code is ported; the accepted=True-at-5.6x report (reporting fix as above); heartbeat file not updating; solids=None logged; PDF 'shift 0.0124 m' unit label; PDF 'beyond-cap dropped' showing 78.91 where the JSON has 79.89.
+Done when
+Step 0: parts.csv is in the repo, the regression folder holds the ten named jobs, a repo commit is tagged as matching the installed 1.0.2a by file hashes, and the five 1.0.2a baseline rows are on the scoreboard with SHA-256 and either a STEP hash or 'no STEP' with its end reason, each run inside its per-part cap; and the s3 Metrology comparison (1.0.1 04:27, 1.0.1 03:33 on its own mesh, 1.0.2a) is recorded. Step 1: one 1.3M+ face mesh builds or fails with a readable reason inside its limit; the heartbeat test passes; s3 still writes a STEP, its verdict names the accepting rule and the class failure, and it gives the same solid (same STEP hash where the build is unchanged) with Metrology within ±1% of its step 0 row (no measurement rules change in this release); both mis-scaled meshes are flagged; the '&' part runs in the add-in and batch runner; and each of the seven known bugs has a test that failed before and passes now.
+Tested on
+Box: unit tests and the mis-scale and '&' tests. PC: step 0 baselines for the five parts, then s3 and one big mesh after step 1.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+2.0.1 Honest checks (spec v3)
+1.
+One exclusion list shared by the engine and Metrology (they disagreed on 6.76% vs 4.20% excluded and 0 vs 4 balance cuts). Balance cuts get their own cap on depth and total area, are reported on their own line beside the other-exclusions figure, and count against their own cap rather than the 5% one, so a chipped area can't be hidden as a balance cut.
+2.
+Hand-entered features are handled honestly: the volume check subtracts the design bore, and the solid-to-scan support check ignores it. 'Valid solid' is defined as exactly one closed solid that passes the kernel check, with the solid count always logged. Each mesh's source (scan or CAD export) is set by you per part in parts.csv. The engine's own classification is only a cross-check that warns when it disagrees, and it never sets a gate. (It labelled Stage 3, a real scan, as a CAD tessellation at 0.011 mm noise and set a 0.009 mm gate from that. Decimated scans, about 130k faces from 300k–1.5M, have exact vertices and fool the classifier.)
+3.
+Day one, before any rule changes: re-measure the 2.0.0 baseline solids under spec v3, so v2 and v3 figures exist for the same solids and every change can be traced to a documented rule.
+4.
+Fuse profile (measurement only): time each boolean in the Stage 3 build to find where the 1,112 s goes (pairwise fuses, one multi-argument boolean, or the vane surfaces), and try OpenCascade's parallel and glue options on the slowest one. If 2.0.1 runs long, the fuse profile splits into its own release.
+Done when
+Stage 3 gives the same solid; Metrology changes only by the documented rules, shown by the like-for-like v2 and v3 measurement of the 2.0.0 baseline solids, and is logged as spec v3; volume is within 1% once the bore is accounted for; the support check no longer fails on the bore; and a timing table shows where the fuse time goes.
+Tested on
+Box: unit tests. PC: s3, x2b1941 and x2b1872-pinion, with a second run of one part per the STEP-hash rule.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+2.0.2 Test parts and gate classes
+1.
+A demo-part generator in the 3DSRE style: noisy, tilted scans of a thin-walled housing with bosses, a domed cover, a lever, a pulley with a V-groove, a spur gear, a bent sheet bracket, a casting with drafts and a hex bolt, plus hundreds of random variants and a missing-material percentage in every report.
+2.
+Scan noise measured from repeat scans of an impeller and of a turned or prismatic part, not from each mesh, because the estimator read facet size as noise on Stage 3. The scan setup (scanner, spray or not, part size) is recorded with each part, and the class constants are tied to it.
+3.
+Noise budget for the 0.03 mm target (spec v2 figures, provisional): with noise about 0.013 mm, Stage 3's 0.0449 mm capped rms means a model error of about 0.043 mm, so the target needs about 0.027 mm (roughly a 60% cut in error variance), or about 0.025 mm if noise is 0.017 mm. Spec v3 excludes the 255° balance cut, which will lower the 0.0449 mm, so the model error and target are recomputed here from the v3 baseline and the repeat-scan noise, and labelled v3.
+4.
+Gate acceptance changes here, not earlier: once the class constants are signed off, a solid outside its class limit is rejected (or later ships as _APPROX), and no secondary rule such as blade scatter can override the class.
+5.
+Gate classes (machined, printed, organic, rough scan) set once from that figure as fixed constants you sign off. They are never recomputed per run; 0.009 mm machined is retired.
+Done when
+One command scores every demo part and names the failing stage, the repeat-scan noise figures for both parts are recorded and the model-error target for 0.03 mm is worked out from them, and the class constants are signed off and in the code.
+Tested on
+Box at low resolution; the two repeat scans from you.
+Built by
+Me: generator on standard effort; noise figure and gate classes on high effort.
+2.0.3 Faster fuse and always a solid
+1.
+Fuse fix chosen from the 2.0.1 profile: parallel or glue booleans, one multi-argument fuse, simpler vane surfaces, or combining copies where pieces really don't touch.
+2.
+Split and keep: surfaces cut each other, pieces that lie on the scan are kept, then sewn into a solid. local_trim stays behind a flag and remains the default until the new path beats it on the test set.
+3.
+Always give something: if every route fails, a freeform fallback writes a valid solid STEP named with an _APPROX suffix, with the verdict LOW ACCURACY (never PASS), the approximate areas marked in the report, and a visible warning when the add-in imports it.
+Done when
+Stage 3 total time under 5 minutes (was 1,299 s) with Metrology within ±1% of the 2.0.1 baseline; the five shell-failure jobs each give one valid solid; and no demo or held-out part ends without a STEP.
+Tested on
+Demo parts on the box; Stage 3 on the PC, with a second run only per the STEP-hash rule.
+Built by
+Me, on high effort (design-heavy). The local 14B model is not used to write it.
+2.0.4 Prismatic auto-construct (provisional)
+1.
+Build plan first: build direction, steps with section heights, holes with patterns, cross holes, slanted faces and drafts, shown as a report before anything is built.
+2.
+Section sketch per step, snapped to detected faces: lines lie on side planes, arcs on cylinders, corners are true intersections, then extrude. Curved tops are extruded to the crown and trimmed to the scan; slanted ribs become a sketch with a symmetric cut; side windows become pockets.
+3.
+Keep a feature only if it lowers the deviation, and never snap a contour if its area changes noticeably.
+Done when
+The light bracket gives one valid solid with volume within 1% and at least 95% of points within ±0.1 mm, and prismatic demo parts reach 90% feature recall.
+Tested on
+Demo parts on the box; bracket and a prismatic holdout on the PC.
+Built by
+Me, on high effort (design-heavy). The local 14B model is not used to write it.
+2.0.5 Fillets that don't fail (provisional)
+1.
+Radii measured from the scan by cylinder or sphere fit, with similar radii grouped; a fillet is kept only if it matches the scan better.
+2.
+Fillet ladder: try each edge chain alone, then all the good ones together; where a radius fails, use the largest radius that works there and report it; 12 s time limit per group. Edges that worked are remembered for rebuilds.
+Done when
+Bracket lip, floor and edge fillets and the Stage 3 vane root fillets all build with a valid solid inside the time limit, and no build fails because of a fillet.
+Tested on
+Demo parts; bracket and Stage 3 on the PC.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+2.0.6 Turned parts and scan merging (provisional)
+1.
+Turned profile from a real section through the axis, so grooves and recesses are kept; keyways as their own cut; hex, square or flat steps cut as a ring after the revolve.
+2.
+Cross holes found from sections in any direction, even when they cut a step edge, without spoiling the turned profile.
+3.
+Multiple scans merged with Open3D's global and fine registration rather than our own, with duplicate surface in the overlap removed.
+Done when
+turned_a passes, the pinion's two captures merge and its max error drops below 1 mm, and the pulley and hex bolt demo parts reach 95% within ±0.1 mm.
+Tested on
+Demo parts; pinion and a turned holdout on the PC.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+2.1.0 Generic parts (provisional)
+1.
+One shared map of regions, their surface types and how they meet, with the existing recognisers (holes, counterbores, slots, chamfers, threads) moved onto it.
+2.
+Per segment: a primitive surface where it fits within tolerance, otherwise a freeform surface; regular surfaces only snap where every point gets closer to the scan.
+3.
+Optional bounding box or cylinder from Fusion as starting references, and a Generic tab in the add-in.
+Done when
+Demo variants reach 90% feature recall and precision with a valid solid on 95%, and every held-out real scan gives a valid solid.
+Tested on
+Generator and held-out scans; bracket on the PC.
+Built by
+Me, on high effort (design-heavy). The local 14B model is not used to write it.
+2.1.1 Smooth vanes and surface network (provisional)
+1.
+Section curves cut through the scan as smooth curves with few control points (5 to 7 per vane), lofted hub to tip, or ruled where the scan fits.
+2.
+Surface network: one B-spline surface per patch with exactly shared edges and G1 joins, and a G2 blend from the vane tops into the nose.
+3.
+Curvature ripple check: a rippled vane is refit with fewer points, and a build that can't be smooth ends as a fail, never a rippled pass.
+Done when
+Zero ripple flags on s3 and kk-and-k-s1 (KK&K Stage 1), capped rms under the current spec rises by no more than 0.005 mm, Stage 3 still passes the machined gate, and the impeller holdout is then run once, untouched.
+Tested on
+PC: tuned on s3 and kk-and-k-s1, with a second run of one part per the STEP-hash rule; impeller holdout once at the end.
+Built by
+Me, on high effort (design-heavy). The local 14B model is not used to write it.
+2.1.2 Refine and impeller finish (provisional)
+1.
+Two-pass Metrology (raw, then noise-filtered over 3 to 5 times the point spacing), side by side.
+2.
+Refine: 2 to 3 rounds moving control points toward the filtered deviation, inside the smoothness limit, checked on half the points held back.
+3.
+Fitted nose profile and Hirth teeth on back faces, patterned and snapped to the standard, developed on a fresh Hirth scan.
+Done when
+Refine lowers filtered rms on the held-back half for s3 and kk-and-k-s1 without ripple, and the fresh Hirth scan builds with teeth inside the machined gate.
+Tested on
+PC: s3, kk-and-k-s1, the fresh Hirth scan; impeller holdout once.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+2.2.0 Parametric Fusion timeline (provisional)
+1.
+Output as Fusion timeline features: each step, hole, counterbore, rib and revolve with its own editable sketch and dimensions.
+2.
+Fillets and chamfers stored as rules (top, bottom, vertical, all) so they reapply after a dimension change instead of hunting for old edges.
+Done when
+The bracket and a turned demo part open as a timeline, and changing a hole diameter and a step height recomputes cleanly.
+Tested on
+PC in Fusion.
+Built by
+Me, on high effort (design-heavy). The local 14B model is not used to write it.
+2.3.0 Batch runs (provisional)
+1.
+Batch panel with per-part settings, 2 attempts plus a retry ladder, the PC kept awake, and 2 to 3 parallel jobs if cores and RAM allow.
+2.
+One batch folder with a summary log and a failure log that feeds new cases into the generator.
+Done when
+An overnight batch of 20 parts runs without crashing and every part ends with a STEP, at least 80% of them at full accuracy rather than _APPROX.
+Tested on
+PC overnight run.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+2.3.1 API and AI assist (provisional)
+1.
+Local MCP connector: analyse part (build plan only), build step, check deviation, batch submit and status, with one-line part-type recipes.
+2.
+Your local Qwen model does morning triage from a fixed menu; it never writes engine code.
+3.
+Locked down: localhost only, token required, no open debugging port, paths limited to the batch folder, no shell commands.
+Done when
+Qwen submits and reviews a batch end to end, and bad paths, settings and missing tokens are refused.
+Tested on
+PC with Ollama.
+Built by
+Me, on standard effort, with high effort for any part that turns into design work.
+Front-end tool router
+Scan mesh or part brief
+Front-end geometry check
+BuildAgentOllama
+Fast parametric script in Fusion
+MeshSolid
+Surface and solid reconstruction
+Hybrid split
+Prismatic base + freeform scan
+Metrology refinement loop
+Simple prismatic
+Complex or worn
+Mixed
+After 2.0.x
+
+| Part type           | Examples                                      | Route                       |
+| ------------------- | --------------------------------------------- | --------------------------- |
+| Simple prismatic    | Solid blocks, plates, brackets, frames        | BuildAgentOllama            |
+| Complex or freeform | Impellers, castings, curved skins, worn scans | MeshSolid                   |
+| Hybrid              | Simple mounting flange on a complex housing   | Flag both (manual override) |
+
+Before heavy processing runs, a quick front-end check inspects the input mesh and recommends the most efficient path, always with a manual override. Simple blocks and brackets go to BuildAgentOllama for an editable parametric build in seconds; complex, organic, or worn scans go straight to MeshSolid.
+Metrology refinement loop (parked)
+Parked on 26 Nov 2026: the add/remove feature is not built yet and comes after MeshSolid's mesh-to-solid upgrades land first. Estimated 3–4 weeks once started.
+
+| Phase   | Scope                                                                                           | Estimate | Status |
+| ------- | ----------------------------------------------------------------------------------------------- | -------- | -----: |
+| Phase 0 | Map one complete sample set and write ba_metro_spec.md                                          | 1–2 days | Parked |
+| Phase 1 | Plain-Python deviation STL reader (ba_deviations.py) and sortable table                         | 2–3 days | Parked |
+| Phase 2 | Fusion command (ba_zones_cmd.py) to click faces, tag trusted/ignore/fix, save zones             | 3–4 days | Parked |
+| Phase 3 | Rule-based correction checklist (ba_plan.py); AI joins once examples exist                      | 2–3 days | Parked |
+| Phase 4 | Apply approved fixes (ba_apply.py) via add/remove feature with grouped undo and validity checks | 3–4 days | Parked |
+| Phase 5 | Re-run metrology (ba_loop.py), compare rounds, roll back worse zones, stop on pass              | 2–3 days | Parked |
+| Phase 6 | Save zones, rules and working fixes into ba_examples.py                                         | 1–2 days | Parked |
+| Phase 7 | Before/after CSV and PDF reports (ba_reports.py) plus 3–5 part regression set                   | 2 days   | Parked |
+
+Prerequisites
+MeshSolid 2.0.x mesh-to-solid upgrades (including 2.0.5 fillets) and the add/remove feature.
+Phase 0 inputs
+One complete sample set (scan mesh, MeshSolid solid, Metrology output and deviation STLs, generating scripts) plus whether Metrology can be triggered from code.
+Reused from BuildAgentOllama v2.5.0
+Review-before-run approval flow, retry loop, job logs and example library.
+Later
+Quad remesh quality from 3DSRE's notes: quads follow curvature, creases kept sharp, and mesh defects pushed apart or to the boundary before surfacing. Then the drone curved-skin backlog.
+Then an optional Make Drawing step using draftwright 0.6 (github.com/pzfreo/draftwright), run as a separately installed program because of its AGPL-3.0 licence.
+Starting proposals you can change: 5 minutes for Stage 3, ±1% Metrology tolerance, 1% volume, 95% within ±0.1 mm, 90% recall, 80% overnight full-accuracy solids. The balance-cut depth and area caps and the gate class numbers are set with you in 2.0.1 and 2.0.2.
