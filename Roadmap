@@ -1,5 +1,5 @@
 MeshSolid build plan
-Revised 26 Nov 2026: restarts from 1.0.2a as the 2.0 line, with a front-end tool router (BuildAgentOllama vs MeshSolid) and a parked BuildAgentOllama metrology refinement track to follow the mesh-to-solid upgrades. Nothing starts until you say go.
+Revised 26 Nov 2026: restarts from 1.0.2a as the 2.0 line, with a front-end tool router (BuildAgentOllama vs MeshSolid) and a parked BuildAgentOllama metrology refinement track to follow the mesh-to-solid upgrades. 
 On this page
 Pain points and fixes
 Roadmap
