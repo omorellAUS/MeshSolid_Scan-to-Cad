@@ -103,7 +103,14 @@ def format_build_line(rep) -> str:
         b["n_faces"] = imp["n_faces"]
     valid = b.get("brepcheck_valid", b.get("valid", imp.get("valid", b.get("ok"))))
     volume = b.get("volume", 0) or 0
-    return (f"regions: {len(rep.get('regions', []))}  build: valid={valid} solids={b.get('n_solids')} "
+    n_solids = b.get("n_solids")
+    if n_solids is None:
+        n_solids = imp.get("n_solids")
+    if n_solids is None:
+        n_solids = 0
+    valid_solid = b.get("valid_solid", imp.get("valid_solid"))
+    return (f"regions: {len(rep.get('regions', []))}  build: valid={valid} valid_solid={valid_solid} "
+            f"solids={n_solids} "
             f"faces={b.get('n_faces')} volume={float(volume):.3f} (mesh {rep.get('mesh', {}).get('volume')})")
 
 
@@ -117,7 +124,17 @@ def main(argv=None):
     ap.add_argument("--preview", help="write preview PNG (input | solid | deviation)")
     ap.add_argument("--tol", type=float, default=None, help="fit tolerance mm (default: auto from noise estimate)")
     ap.add_argument("--accuracy", choices=["machined", "printed"], default=None,
-                    help="deviation gate class: machined=1.5/3*tol (default; unset also lets a low-res CAD tessellation loosen the gates to its facet size, see meshsolid.input_class); printed=0.05/0.10 mm absolute for FDM/SLA drone parts. Never auto-applied to machined parts.")
+                    help="deviation gate class: machined=1.5/3*tol (default); printed=0.05/0.10 mm absolute for FDM/SLA drone parts. The mesh classifier does not set or tighten this gate.")
+    ap.add_argument("--mesh-source", choices=["scan", "cad_export"], default=None,
+                    help="declared mesh source. Overrides parts.csv. The classifier is only a cross-check.")
+    ap.add_argument("--parts", default=None, help="parts.csv; the source column for this mesh hash is authoritative")
+    ap.add_argument("--balance-depth-cap", type=float, default=5.0,
+                    help="balance-cut depth cap in mm (own cap, not the 5%% exclusion cap)")
+    ap.add_argument("--balance-area-cap", type=float, default=2500.0,
+                    help="balance-cut total-area cap in mm^2 (own cap, not the 5%% exclusion cap)")
+    ap.add_argument("--fuse-bench", action="store_true",
+                    help="opt-in: time OpenCASCADE parallel and glue options on the impeller fuse. "
+                         "Off by default. The default solid is unchanged.")
     ap.add_argument("--sharp-deg", type=float, default=30.0)
     ap.add_argument("--round-tol", type=float, default=0.03)
     ap.add_argument("--no-split-bodies", action="store_true",
@@ -169,7 +186,9 @@ def main(argv=None):
     p = Params(tol=a.tol, sharp_deg=a.sharp_deg, round_tol=a.round_tol, do_round=not a.no_round, max_tools=a.max_tools, builder=a.builder, split_bodies=not a.no_split_bodies,
                balance_cuts=a.balance_cuts, rim_slots=a.rim_slots, gears=a.gears, gear_build=a.gear_build,
                impeller=a.impeller, normalise=a.normalise, screws=a.screws, bearing_build=a.bearing_build, notes=tuple(a.note),
-               time_budget_s=a.time_budget, accuracy=a.accuracy)
+               time_budget_s=a.time_budget, accuracy=a.accuracy, mesh_source=a.mesh_source, parts_csv=a.parts,
+               balance_depth_cap_mm=a.balance_depth_cap, balance_area_cap_mm2=a.balance_area_cap,
+               fuse_bench=a.fuse_bench)
     rep, *_ = run(a.input, a.output, a.report, p, a.deviation_ply, a.preview, meas or None)
     if rep.get("input_error"):
         print("status: failed")

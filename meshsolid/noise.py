@@ -30,12 +30,30 @@ def estimate_noise(mesh, n_patches=600, k=24, seed=0, pct=10, return_exact=False
     return float(1.2 * np.percentile(res, pct))
 
 
-def auto_tol(mesh, sigma=None):
-    """Returns (tol, sigma, exact_mesh)."""
+def auto_tol_detail(mesh, sigma=None):
+    """Fit-tolerance breakdown.
+
+    ``tol`` / ``sigma`` / ``exact`` match ``auto_tol`` (an exact mesh still returns sigma 0 and the
+    CAD floor). ``measured_sigma`` is the quadric estimate before that zeroing, and ``scan_tol`` is
+    ``max(4.5·measured_sigma, 5e-5·diag, 0.005)`` — the tolerance a declared scan keeps when the
+    exact-mesh floor would tighten the gate.
+    """
     exact = False
     if sigma is None:
-        sigma, exact = estimate_noise(mesh, return_exact=True)
+        measured, exact = estimate_noise(mesh, return_exact=True)
+    else:
+        measured = float(sigma)
     diag = float(np.linalg.norm(np.ptp(mesh.vertices, axis=0)))
+    scan_tol = max(4.5 * float(measured), 5e-5 * diag, 0.005)
     if exact:
-        return max(5e-5 * diag, 0.002), 0.0, True
-    return max(4.5 * sigma, 5e-5 * diag, 0.005), sigma, False
+        tol, reported = max(5e-5 * diag, 0.002), 0.0
+    else:
+        tol, reported = scan_tol, float(measured)
+    return {"tol": float(tol), "sigma": float(reported), "exact": bool(exact),
+            "measured_sigma": float(measured), "scan_tol": float(scan_tol), "diag": float(diag)}
+
+
+def auto_tol(mesh, sigma=None):
+    """Returns (tol, sigma, exact_mesh)."""
+    detail = auto_tol_detail(mesh, sigma)
+    return detail["tol"], detail["sigma"], detail["exact"]

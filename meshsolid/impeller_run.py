@@ -9,12 +9,17 @@ import numpy as np
 
 
 def impeller_build_stage(binfo):
-    """Build-stage record including the real solid count. The log used to print solids=None."""
-    n_solids = binfo.get("n_solids")
-    valid = bool(binfo.get("valid"))
-    return {"method": "impeller", "ok": bool(valid and n_solids == 1),
-            "brepcheck_valid": valid, "valid": valid, "n_solids": n_solids,
-            "n_faces": binfo.get("n_faces"), "volume": binfo.get("volume"), "seconds": binfo.get("seconds")}
+    """Build-stage record. ``valid_solid`` is exactly one closed BRepCheck solid. The count is always logged."""
+    from .solid_check import valid_solid_record
+    rec = valid_solid_record(binfo.get("n_solids"), binfo.get("valid"), binfo.get("closed"))
+    if "valid_solid" in binfo and "closed" in binfo:
+        rec["valid_solid"] = bool(binfo.get("valid_solid"))
+        rec["closed"] = bool(binfo.get("closed"))
+    return {"method": "impeller", "ok": bool(rec["brepcheck_valid"] and rec["n_solids"] == 1),
+            "brepcheck_valid": rec["brepcheck_valid"], "valid": rec["brepcheck_valid"],
+            "valid_solid": rec["valid_solid"], "closed": rec["closed"], "n_solids": rec["n_solids"],
+            "n_faces": binfo.get("n_faces"), "volume": binfo.get("volume"), "seconds": binfo.get("seconds"),
+            "fuse_profile": binfo.get("fuse_profile"), "fuse_bench": binfo.get("fuse_bench")}
 
 
 def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, deviation_ply=None,
@@ -47,7 +52,9 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
         print(msg, flush=True)
 
     try:
-        shape, binfo = I.build(spec, bore, log=_build_log)
+        import os
+        fuse_bench = bool(getattr(pr, "fuse_bench", False) or os.environ.get("MESHSOLID_FUSE_BENCH") == "1")
+        shape, binfo = I.build(spec, bore, log=_build_log, fuse_bench=fuse_bench)
     finally:
         imp["build_log"] = _blog[-200:]
     imp["build"] = binfo
@@ -184,10 +191,28 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
         rep["verdict"] = {"error": f"{type(_e).__name__}: {_e}"}
     try:
         from .support_gate import solid_to_scan, merge_into_verdict
-        rep["deviation"]["solid_to_scan_gate"] = solid_to_scan(mesh, solid_mesh, excluded_vertices=_ev if "_ev" in dir() else None)
+        he_zones = []
+        if str((imp.get("bore") or {}).get("source") or "").startswith("measure") and bore:
+            he_zones.append({"type": "cyl", "point": np.asarray(F.a0, float).tolist(),
+                             "dir": np.asarray(F.u, float).tolist(), "r": 0.5 * float(bore) + 0.1,
+                             "reason": "hand-entered feature", "kind": "bore"})
+        rep["deviation"]["solid_to_scan_gate"] = solid_to_scan(
+            mesh, solid_mesh, excluded_vertices=_ev if "_ev" in dir() else None, ignore_zones=he_zones)
         merge_into_verdict(rep.get("verdict"), rep["deviation"]["solid_to_scan_gate"])
     except Exception as _e:  # noqa: BLE001
         rep["deviation"]["solid_to_scan_gate"] = {"error": f"{type(_e).__name__}: {_e}"}
+    try:
+        from .exclusions import publish as _publish_exclusions, hand_entered_volume_mm3, volume_check
+        caps = {"depth_mm": getattr(pr, "balance_depth_cap_mm", 5.0),
+                "area_mm2": getattr(pr, "balance_area_cap_mm2", 2500.0)}
+        _publish_exclusions(rep, len(mesh.vertices), caps=caps)
+        length = abs(float((binfo.get("front_face") or {}).get("z") or 0.0))
+        he_vol = 0.0
+        if str((imp.get("bore") or {}).get("source") or "").startswith("measure") and bore and length:
+            he_vol = hand_entered_volume_mm3([{"kind": "bore", "d_mm": float(bore), "length_mm": length}])
+        rep["volume_check"] = volume_check(binfo.get("volume"), (rep.get("mesh") or {}).get("volume"), he_vol)
+    except Exception as _e:  # noqa: BLE001
+        rep.setdefault("warnings", []).append(f"exclusion / volume check skipped ({type(_e).__name__}: {_e})")
     from .pipeline import CURRENT
     full = CURRENT.get("deviation_mesh")
     ply_mesh = mesh

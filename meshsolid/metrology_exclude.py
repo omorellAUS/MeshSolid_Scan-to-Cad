@@ -340,6 +340,9 @@ def face_feature_zones(convert_report, n_fold=None, flagged=None):
         z["detail"] = "; ".join(detail_bits)
         z["feature_class"] = f.get("class")
         z["kind"] = f.get("kind")
+        z["area_mm2"] = f.get("area_mm2")
+        z["depth_mm"] = f.get("depth_mm")
+        z["n_points"] = f.get("n_points")
         z.setdefault("margin_mm", 2.0)
         out.append(z)
     return out

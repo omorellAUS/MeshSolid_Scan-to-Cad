@@ -18,7 +18,7 @@ enough), internet for the first `pip install` (about 180 MB of wheels for the pi
    prints that step's error. Options: `-Python <path\python.exe>`, `-VenvDir`, `-AddinsDir`,
    `-CheckOnly` (self-check an existing venv), `-QuickCheck` (imports only), `-NoAddinCopy`.
 3. In Fusion: Utilities > Add-Ins (Shift+S) > Add-Ins tab > MeshSolid > Run (tick "Run on Startup"
-   if wanted). From 1.0.2 a MESHSOLID 2.0.0 panel with a large "Mesh to Solid" button appears on the
+   if wanted). From 1.0.2 a MESHSOLID 2.0.1 panel with a large "Mesh to Solid" button appears on the
    Design workspace's UTILITIES and MESH tabs (it also stays in the Utilities > ADD-INS dropdown).
    Where it was placed is written to %LOCALAPPDATA%\meshsolid\addin_ui.log.
 
@@ -67,7 +67,7 @@ cancel. Each run gets a job folder in `%LOCALAPPDATA%\meshsolid\jobs\<time>` wit
 
 ## Not yet verified (first session on Windows)
 `MeshSolid.py` has not run inside Fusion. Check, in order:
-1. The add-in loads and the MESHSOLID 2.0.0 panel shows on the UTILITIES and MESH tabs (see addin_ui.log if not).
+1. The add-in loads and the MESHSOLID 2.0.1 panel shows on the UTILITIES and MESH tabs (see addin_ui.log if not).
 2. "engine not ready" appears if `settings.json` is wrong (rename it to test), and goes away when fixed.
 3. Mesh body export: a Fusion mesh body (Insert Mesh of a known STL) comes out the right size in mm.
    Compare `mesh_body.stl` in the job folder with the original.
