@@ -230,6 +230,9 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
             ["p95 |d|", _fmt(st.get("p95"))],
             ["max + / max − (inspected)", f"{_fmt(st.get('max_plus'), signed=True)} / {_fmt(st.get('max_minus'), signed=True)}"],
             [f"within ±{pass_tol:g} mm (beyond-cap dropped, 1.0.1)", f"{st.get('within_pass_pct', 0):.2f} %"]]
+    bal_line = (st.get("balance_cuts") or {}).get("line")
+    if bal_line:
+        rows.append(["balance cuts (own cap, not in the 5 %)", bal_line])
     if st.get("cap_mm"):
         rows += [["true max + / max − (all measured)",
                   f"{_fmt(st.get('true_max_plus'), signed=True)} / {_fmt(st.get('true_max_minus'), signed=True)}"],

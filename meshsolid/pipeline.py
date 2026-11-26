@@ -62,6 +62,11 @@ class Params:
     drop_faceless_area_frac: float = 0.01
     normalise: str = "report"    # "report": compute + store the scan->normalised 4x4 only; "apply": work axis-up/nose-up in mm, outputs mapped back to the scan frame
     time_budget_s: float = 0.0   # wall-clock budget (0 = none): a watchdog process marks the report "timeout" with the stage and stops the run; stages with their own budgets scale to it
+    mesh_source: str | None = None   # scan | cad_export from CLI; else parts.csv. The classifier cannot set the gate.
+    parts_csv: str | None = None
+    balance_depth_cap_mm: float = 5.0
+    balance_area_cap_mm2: float = 2500.0
+    fuse_bench: bool = False         # opt-in OpenCASCADE parallel/glue timings; off leaves the default solid
     # Per-stage caps (seconds). With a run budget the cap is shortened to the time still left.
     stage_limits: dict = field(default_factory=lambda: {
         "load_repair": 120.0,
@@ -505,7 +510,8 @@ def _run_bodies(input_path, mb, out_step, report_path, pr, preview_png):
     from OCP.BRep import BRep_Builder
     t0 = time.time()
     bodies, debris = mb
-    rep = {"tool": "meshsolid", "version": __version__, "input": str(input_path), "params": asdict(pr),
+    rep = {"tool": "meshsolid", "version": __version__, "spec_version": "v3", "input": str(input_path),
+           "params": asdict(pr),
            "status": "failed", "stages": {}, "multi_body": {"bodies": [], "debris": [
                {"faces": int(len(d.faces)), "area": round(float(d.area), 4)} for d in debris]}}
     CURRENT.update(rep=rep, report_path=report_path, t0=t0)
@@ -666,7 +672,7 @@ def _run(input_path, out_step, report_path, pr, deviation_ply, preview_png, meas
 
 def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements):
     t0 = time.time()
-    rep = {"tool": "meshsolid", "version": __version__, "input": str(input_path),
+    rep = {"tool": "meshsolid", "version": __version__, "spec_version": "v3", "input": str(input_path),
            "params": asdict(pr), "status": "failed", "stages": {}}
     CURRENT.update(rep=rep, report_path=report_path, t0=t0)
     _stage(rep, "load_repair")
@@ -733,23 +739,36 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         rep["tolerance"]["from"] = "facet chord sag (CAD tessellation)"
     from .accuracy import resolve_gates
     _gates = resolve_gates(pr.accuracy, tol, pr.accept_rms, pr.accept_p95)
-    # input class (scan / decimated / CAD tessellation / low-res tessellation): noise + gate policy, logged
+    # input class is a cross-check. The declared source (CLI or parts.csv) is authoritative.
+    # The classifier never sets or tightens the acceptance gate.
     try:
         from . import input_class as _IC
+        from .mesh_source import apply_cross_check, lookup_parts_csv, normalize_source
         _ic = _IC.classify(mesh, sigma, exact, fst)
         _ne, _nsrc = _IC.effective_noise(_ic, sigma)
         _ic["noise_sigma_effective_mm"] = None if _ne is None else round(_ne, 5)
         _ic["noise_source"] = _nsrc
         rep["tolerance"]["noise_sigma_effective"] = _ic["noise_sigma_effective_mm"]
-        if (_ic["class"] == "lowres_tessellation" and pr.accuracy in (None, "") and pr.accept_rms is None
-                and pr.accept_p95 is None):
-            _gates = _IC.lowres_gates(_ic, _gates, tol)
-            _ic["gates"] = "loosened to the facet size"
-        else:
-            _ic["gates"] = "unchanged"
+        declared = normalize_source(getattr(pr, "mesh_source", None))
+        if declared is None and getattr(pr, "parts_csv", None):
+            import hashlib
+            digest = hashlib.sha256(Path(input_path).read_bytes()).hexdigest()
+            declared = lookup_parts_csv(pr.parts_csv, digest)
+            _ic["parts_csv"] = str(pr.parts_csv)
+            _ic["input_mesh_sha256"] = digest
+        _gates, cross = apply_cross_check(_ic, _gates, declared)
+        _ic["declared_source"] = cross["source"]
+        _ic["cross_check"] = cross
+        _ic["gates"] = "unchanged"
+        _ic["source"] = cross["source"]
+        rep["mesh_source"] = cross["source"]
         rep["input_class"] = _ic
-        print(f"[input-class] {_ic['class']}: {_ic['reason']}; noise {_ic['noise_sigma_effective_mm']} mm "
-            f"({_nsrc}); gates {_ic['gates']} (rms<={_gates['rms_limit']:.4f}, p95<={_gates['p95_limit']:.4f})", flush=True)
+        if cross.get("warning"):
+            rep.setdefault("warnings", []).append(cross["warning"])
+            print("WARNING: " + cross["warning"], flush=True)
+        print(f"[input-class] classifier {_ic['class']}: {_ic['reason']}; declared source {cross['source']}; "
+              f"noise {_ic['noise_sigma_effective_mm']} mm ({_nsrc}); gates unchanged "
+              f"(rms<={_gates['rms_limit']:.4f}, p95<={_gates['p95_limit']:.4f})", flush=True)
     except Exception as _e:  # noqa: BLE001
         rep["input_class"] = {"error": f"{type(_e).__name__}: {_e}"}
     accept_rms = _gates["rms_limit"]
@@ -1391,10 +1410,43 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
             rep["verdict"] = {"error": f"{type(_e).__name__}: {_e}"}
         try:
             from .support_gate import solid_to_scan, merge_into_verdict
-            rep["deviation"]["solid_to_scan_gate"] = solid_to_scan(mesh, solid_mesh, excluded_vertices=_ev if "_ev" in dir() else None)
+            he_zones = []
+            bore_m = (measurements or {}).get("bore_d") if measurements else None
+            ax = _rotor_axis(b, regions) if bore_m else None
+            if bore_m and ax is not None:
+                he_zones.append({"type": "cyl", "point": [float(x) for x in np.asarray(ax[0], float)],
+                                 "dir": [float(x) for x in np.asarray(ax[1], float)],
+                                 "r": 0.5 * float(bore_m) + 0.1,
+                                 "reason": "hand-entered feature", "kind": "bore"})
+            rep["deviation"]["solid_to_scan_gate"] = solid_to_scan(
+                mesh, solid_mesh, excluded_vertices=_ev if "_ev" in dir() else None, ignore_zones=he_zones)
             merge_into_verdict(rep.get("verdict"), rep["deviation"]["solid_to_scan_gate"])
         except Exception as _e:  # noqa: BLE001
             rep["deviation"]["solid_to_scan_gate"] = {"error": f"{type(_e).__name__}: {_e}"}
+        try:
+            from .exclusions import publish as _publish_exclusions
+            _publish_exclusions(rep, len(mesh.vertices), caps={
+                "depth_mm": getattr(pr, "balance_depth_cap_mm", 5.0),
+                "area_mm2": getattr(pr, "balance_area_cap_mm2", 2500.0)})
+        except Exception as _e:  # noqa: BLE001
+            rep.setdefault("warnings", []).append(f"shared exclusion tally skipped ({type(_e).__name__}: {_e})")
+        if b is not None and getattr(b, "shape", None) is not None:
+            try:
+                from .solid_check import assess_shape
+                rec = assess_shape(b.shape)
+                stage = rep["stages"].get("build") or {}
+                stage["n_solids"] = rec["n_solids"]
+                stage["closed"] = rec["closed"]
+                stage["valid_solid"] = rec["valid_solid"]
+                stage["brepcheck_valid"] = rec["brepcheck_valid"]
+                rep["stages"]["build"] = stage
+                print(f"[solid] solids={rec['n_solids']} valid_solid={rec['valid_solid']}", flush=True)
+            except Exception as _e:  # noqa: BLE001
+                stage = rep.setdefault("stages", {}).get("build") or {}
+                stage["n_solids"] = 0 if stage.get("n_solids") is None else stage.get("n_solids")
+                stage["valid_solid"] = False
+                stage["solid_check_error"] = f"{type(_e).__name__}: {_e}"
+                print(f"[solid] solids={stage['n_solids']} valid_solid=False", flush=True)
         unassigned = labels < 0
         if unassigned.any():
             rep["deviation"]["unassigned_faces_max_dev"] = float(face_dev[unassigned].max())

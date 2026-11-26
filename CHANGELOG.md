@@ -1,3 +1,14 @@
+# MeshSolid 2.0.1
+
+Honest checks on the 2.0.0 engine. Stage 3 solid-building geometry is unchanged: the impeller fuse still uses the same booleans, and the STEP gate still uses the same deviation mask. What changed is measurement and reporting.
+
+- **One exclusion list.** `meshsolid.exclusions` is the policy the engine and Metrology both call. Balance cuts have their own depth cap (5 mm) and total-area cap (2500 mm²), are reported on their own line, and do not count toward the general 5 % exclusion cap.
+- **Hand-entered features.** Volume error % subtracts them (a design bore) from the mesh volume. The solid-to-scan support check ignores samples on those features.
+- **`valid_solid`.** Exactly one closed solid that passes `BRepCheck_Analyzer`. The solid count is always logged.
+- **Mesh source.** `parts.csv` has a `source` column (`scan` or `cad_export`). The declared source is authoritative. The mesh classifier only warns when it disagrees and cannot set or tighten a gate.
+- **Spec v3.** New reports and scoreboard rows are tagged `spec_version = v3`. `python -m meshsolid.remeasure` re-measures an existing STEP + mesh under v3 and lists every metric that moved versus v2.
+- **Fuse profile.** Each impeller fuse boolean is timed into the report. `--fuse-bench` (off by default) times OpenCASCADE parallel and glue options and discards those shapes.
+
 # MeshSolid 2.0.0
 
 Reliability and traceability on the 1.0.2a engine. Solid-building geometry and the gate that decides whether a STEP is written are unchanged, so a Stage 3 run still writes its STEP.

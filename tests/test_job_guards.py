@@ -104,4 +104,4 @@ def test_part_type_impeller_maps_to_impeller_on():
     sys.path.insert(0, str(ROOT / "fusion_addin" / "MeshSolid"))
     from mslib import ui_options as UO
     assert UO.engine_options("impeller")["impeller"] == "on"
-    assert UO.VERSION == "2.0.0"
+    assert UO.VERSION == "2.0.1"

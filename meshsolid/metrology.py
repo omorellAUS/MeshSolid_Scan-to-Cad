@@ -896,7 +896,8 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
         do_section=True, zones_text="", exclude_faces=(), convert_report=None, auto_exclude=True,
         accept_pct=95.0, meta=None, pdf=True, cap_rgb=CAP_RGB, exclude_mask=None,
         exclude_mask_reason="external vertex mask", keep_arrays=False, ang=0.1, align_method="v2",
-        n_fold=None, align_T0=None, align_min_points=None, auto_exclude_2mm=True):
+        n_fold=None, align_T0=None, align_min_points=None, auto_exclude_2mm=True,
+        spec_version="v3", balance_caps=None):
     """meta: report header strings (title, part_name, operator). zones_text: typed exclusion zones.
     exclude_faces: STL files (mm) of solid faces to disregard. convert_report: the MeshSolid conversion
     report that built the solid (found beside the STEP when omitted); hand-entered features in it are
@@ -994,8 +995,10 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
     if conv_matched:
         notes.append(conv_matched)
     features = X.hand_entered_features(conv)
+    he_zones = []
     if features and auto_exclude:
         for z in X.hand_entered_zones(features, solid_path, solid_tm):
+            he_zones.append(z)
             _exclude(X.zone_mask(work.vertices, z), "hand-entered feature",
                      f"{z['label']}: scan inside {X.zone_text(z)}",
                      label=f"{z.get('kind', 'feature')} Ø{z['d_mm']:g} mm" if z.get("d_mm") else z["label"])
@@ -1004,7 +1007,45 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
                      "; ".join(f["label"] for f in features))
     ff_flagged = []
     ff_zones = X.face_feature_zones(conv, n_fold=n_fold, flagged=ff_flagged)
-    if ff_zones and auto_exclude:
+    balance_vertex_mask = np.zeros(len(dv), bool)
+    ff_decision = None
+    if ff_zones and auto_exclude and spec_version == "v3":
+        from .exclusions import apply_policy
+        nsc = max(len(work.vertices), 1)
+        zm = [(z, X.zone_mask(work.vertices, z)) for z in ff_zones]
+        other_zm = [(z, m) for z, m in zm if z.get("kind") != "balance_cut"]
+        bal_zm = [(z, m) for z, m in zm if z.get("kind") == "balance_cut"]
+        other_zm.sort(key=lambda t: int(t[1].sum()))
+        ff_total = np.zeros(len(work.vertices), bool)
+        for z, m in other_zm:
+            share = 100.0 * float(m.sum()) / nsc
+            grown = 100.0 * float((ff_total | m).sum()) / nsc
+            if share > FF_ZONE_MAX_PCT or grown > FF_TOTAL_MAX_PCT:
+                ff_flagged.append({"label": z.get("label") or "end-face feature",
+                                   "reason": (f"would exclude {share:.1f} % of the scan" if share > FF_ZONE_MAX_PCT
+                                              else f"would take end-face exclusions to {grown:.1f} % of the scan")
+                                   + f" (limit {FF_ZONE_MAX_PCT:g} % per region, {FF_TOTAL_MAX_PCT:g} % total): "
+                                     "flagged, kept inspected"})
+                continue
+            ff_total |= m
+            _exclude(m, z.get("reason", "face feature"), z.get("detail") or X.zone_text(z),
+                     label=z.get("label") or "end-face feature")
+        live_items = [{"id": i, "category": "balance_cut", "n": int(m.sum()),
+                       "area_mm2": float(z.get("area_mm2") or 0.0),
+                       "depth_mm": float(z.get("depth_mm") or 0.0),
+                       "label": z.get("label")} for i, (z, m) in enumerate(bal_zm)]
+        ff_decision = apply_policy(live_items, nsc, caps=balance_caps)
+        accepted_bal = set(ff_decision["accepted_ids"])
+        for (z, m), item in zip(bal_zm, live_items):
+            if item["id"] not in accepted_bal:
+                ff_flagged.append({"label": z.get("label") or "balance cut",
+                                   "reason": "over the balance-cut depth or total-area cap: flagged, kept inspected"})
+                continue
+            balance_vertex_mask |= np.asarray(m, bool)
+            rec = _exclude(m, "balance cut", z.get("detail") or X.zone_text(z),
+                           label=z.get("label") or "balance cut")
+            rec["category"] = "balance_cut"
+    elif ff_zones and auto_exclude:
         # 1.0.2a: the end-face classifier can never silently remove a big region.  One zone above
         # FF_ZONE_MAX_PCT of the scan, or zones that would take the classifier total above FF_TOTAL_MAX_PCT,
         # are flagged and kept inspected (smallest zones are excluded first).
@@ -1028,7 +1069,7 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
     if ff_flagged:
         notes.append("End-face classifier: " + str(len(ff_flagged)) + " region(s) flagged and KEPT INSPECTED "
                      "(not auto-excluded): " + "; ".join(f"{f['label']} — {f['reason']}" for f in ff_flagged))
-    elif ff_zones:
+    elif ff_zones and not auto_exclude:
         notes.append("End-face features were NOT excluded (--no-auto-exclude): " +
                      "; ".join(z.get("label", "feature") for z in ff_zones))
     for k, fpath in enumerate(exclude_faces or []):
@@ -1189,14 +1230,35 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
         st["pass_tol_mm"] = float(pass_tol)
         st["accept_pct"] = float(accept_pct)
         from .metrology_spec import SPECS, metrics as _metrics, verdict as _verdict
-        _spec = SPECS["v2" if align_method == "v2" else "v1"]
+        _spec = SPECS.get(spec_version) or SPECS["v2" if align_method == "v2" else "v1"]
         _cap_v = beyond_cap if cap is not None else (~face_zone_excluded & (np.abs(dv) > _spec["outlier_cap"]["cap_mm"]))
-        sm = _metrics(dv, face_zone_excluded, _cap_v, tol=pass_tol)
+        sm = _metrics(dv, face_zone_excluded, _cap_v, tol=pass_tol,
+                      balance_excluded=balance_vertex_mask if spec_version == "v3" else None)
+        if spec_version == "v3":
+            try:
+                _crep_ex = json.loads(Path(conv).read_text()) if conv else {}
+            except (OSError, ValueError, TypeError):
+                _crep_ex = {}
+            if (_crep_ex.get("exclusions") or {}).get("items"):
+                from .exclusions import metrology_summary
+                published = metrology_summary(_crep_ex, caps=balance_caps)
+                sm["pct_excluded"] = published["pct_excluded"]
+                _t = _spec["pass"]["target"]
+                sm["target_met_v1"] = bool(sm["rms_uncapped"] is not None and sm["rms_uncapped"] <= _t["rms_mm"]
+                                           and sm["pass_pct_v1"] >= _t["pass_pct_v1"]
+                                           and sm["pct_excluded"] <= _t["max_pct_excluded"])
+                st["exclusions"] = published
+                st["balance_cuts"] = published["balance_cuts"]
+            elif ff_decision is not None:
+                st["balance_cuts"] = ff_decision["balance_cuts"]
+                st["exclusions"] = ff_decision
         vd = _verdict(sm, st["within_pass_pct"], accept_pct, spec=_spec)
         st["spec_metrics"] = sm
         try:
             from .support_gate import solid_to_scan, merge_into_verdict
-            st["solid_to_scan_gate"] = solid_to_scan(work, solid_tm, excluded_vertices=face_zone_excluded)
+            st["solid_to_scan_gate"] = solid_to_scan(
+                work, solid_tm, excluded_vertices=face_zone_excluded,
+                ignore_zones=he_zones if spec_version == "v3" else None)
             merge_into_verdict(vd, st["solid_to_scan_gate"])
         except Exception as _e:  # noqa: BLE001
             st["solid_to_scan_gate"] = {"error": f"{type(_e).__name__}: {_e}"}
@@ -1204,6 +1266,20 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
         st["pct_excluded"] = sm["pct_excluded"]
         st["excluded_over_5pct"] = bool(float(sm["pct_excluded"]) > 5.0)
         st["spec_version"] = vd["target"].get("spec_version") or _spec.get("spec_version")
+        if spec_version == "v3":
+            from .exclusions import hand_entered_volume_mm3, volume_check
+            length = None
+            if he_zones:
+                origin = np.asarray(he_zones[0]["point"], float)
+                direction = np.asarray(he_zones[0]["dir"], float)
+                direction = direction / max(float(np.linalg.norm(direction)), 1e-12)
+                axial = (np.asarray(work.vertices, float) - origin) @ direction
+                length = float(axial.max() - axial.min()) if axial.size else None
+            he_vol = hand_entered_volume_mm3(
+                [{"kind": f.get("kind"), "d_mm": f.get("d_mm"), "length_mm": length} for f in features], length)
+            solid_vol = float(solid_tm.volume) if getattr(solid_tm, "is_watertight", False) else None
+            mesh_vol = float(work.volume) if getattr(work, "is_watertight", False) else None
+            st["volume_check"] = volume_check(solid_vol, mesh_vol, he_vol)
         st["face_features_flagged"] = ff_flagged
         _w = []
         if st["excluded_over_5pct"]:
@@ -1329,6 +1405,7 @@ def run(scan_path, solid_path, out_dir, range_mm=None, symmetric=True, pass_tol=
 
     report = {
         "status": "ok",
+        "spec_version": (st or {}).get("spec_version") or spec_version,
         "scan": str(scan_path),
         "solid": str(solid_path),
         "solid_kind": solid_kind,
@@ -1447,6 +1524,10 @@ def main(argv=None):
     ap.add_argument("--align", action="store_true", help="best-fit ICP of a scan copy onto the solid (off by default)")
     ap.add_argument("--align-method", choices=["v1", "v2"], default="v2",
                     help="v1 = 1.0.1 ICP; v2 = spec-v2 point-to-plane, bounded, refined, verified")
+    ap.add_argument("--spec", choices=["v1", "v2", "v3"], default="v3",
+                    help="measurement spec (default v3: balance-cut cap, hand-entered volume and support)")
+    ap.add_argument("--balance-depth-cap", type=float, default=None, help="balance-cut depth cap, mm (spec v3)")
+    ap.add_argument("--balance-area-cap", type=float, default=None, help="balance-cut total-area cap, mm^2 (spec v3)")
     ap.add_argument("--n-fold", type=int, default=None, help="blade / tooth count (default: report or estimate)")
     ap.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     ap.add_argument("--lin", type=float, default=0.01, help="STEP tessellation linear deflection (mm)")
@@ -1505,6 +1586,9 @@ def _main_run(a, scan, solid, tags):
               do_section=not a.no_section_plot, zones_text=a.zones, exclude_faces=a.exclude_faces,
               convert_report=a.convert_report, auto_exclude=not a.no_auto_exclude,
               auto_exclude_2mm=not a.no_auto_exclude_2mm, accept_pct=a.accept_pct,
+              spec_version=a.spec,
+              balance_caps=({"depth_mm": a.balance_depth_cap, "area_mm2": a.balance_area_cap}
+                            if a.balance_depth_cap is not None or a.balance_area_cap is not None else None),
               meta={"title": a.title, "part_name": a.part_name or Path(solid).stem, "operator": a.operator},
               pdf=not a.no_pdf)
     st = rep.get("stats") or {}

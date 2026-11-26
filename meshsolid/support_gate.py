@@ -31,7 +31,7 @@ def scan_boundary_vertices(scan):
     return np.unique(e[one].ravel()) if len(one) else np.zeros(0, int)
 
 
-def solid_to_scan(scan, solid_tm, cfg=None, seed=7, excluded_vertices=None):
+def solid_to_scan(scan, solid_tm, cfg=None, seed=7, excluded_vertices=None, ignore_zones=None):
     """scan: trimesh of the (aligned) scan; solid_tm: trimesh of the solid.  excluded_vertices: scan vertices
     left out of the deviation (named exclusions); solid samples whose nearest scan point is excluded are left
     out here too.  Returns the gate dict."""
@@ -67,6 +67,9 @@ def solid_to_scan(scan, solid_tm, cfg=None, seed=7, excluded_vertices=None):
     exc = np.zeros(len(Q), bool)
     if excluded_vertices is not None and np.any(excluded_vertices):
         exc = (~sup) & np.asarray(excluded_vertices, bool)[j]
+    if ignore_zones:
+        from .exclusions import mask_on_cylinders
+        exc = exc | mask_on_cylinders(Q, ignore_zones)
     unc = (~sup) & (~exc) & near_b[j]
     uns = (~sup) & (~exc) & (~near_b[j])
     pct = lambda m: round(100.0 * float(m.sum()) / len(Q), 4)  # noqa: E731

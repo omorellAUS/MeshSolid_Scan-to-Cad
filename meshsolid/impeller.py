@@ -1463,11 +1463,14 @@ def _splitter_region(spec, p_split, vr=(-0.3, 1.3), n=60):
     return _region_beyond_line(spec.frame, np.c_[R, Z], spec.r_te + 20.0, z_low)
 
 
-def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=True, floor=True, floor_delta=0.4):
+def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=True, floor=True, floor_delta=0.4,
+          fuse_bench=False):
     """Hub (revolved profile) + N blades (slab trimmed to the blade envelope, patterned), fused into one
     solid.  Returns (shape, info)."""
     import time
     from OCP.BRepAlgoAPI import BRepAlgoAPI_Common, BRepAlgoAPI_Fuse
+    from .fuse_profile import FuseProfile, bench_enabled, bench_fuse
+    prof = FuseProfile()
     from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform
     from OCP.gp import gp_Trsf, gp_Ax1, gp_Dir
     from OCP.TopoDS import TopoDS_Compound
@@ -1543,7 +1546,7 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
     fslab = None
     if use_floor:
         fs = floor_slab(spec, floor_delta)
-        fslab = BRepAlgoAPI_Common(fs, env).Shape()
+        fslab = prof.call("common_floor_envelope", lambda: BRepAlgoAPI_Common(fs, env).Shape())
         log(f"[impeller] floor slab ({time.time() - t0:.1f}s) vol {U_volume(fslab):.1f}")
     ax = gp_Ax1(_P(F.a0), gp_Dir(*map(float, F.u)))
 
@@ -1558,7 +1561,7 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
     if fslab is not None:
         # staged: the floor slabs first (they do not touch each other), then the blades (one compound
         # with overlapping blades and floors does not fuse correctly)
-        hf = BRepAlgoAPI_Fuse(hub, pattern(fslab)).Shape()
+        hf = prof.call("fuse_hub_floors", lambda: BRepAlgoAPI_Fuse(hub, pattern(fslab)).Shape())
         log(f"[impeller] hub + floors ({time.time() - t0:.1f}s) valid={one_valid(hf)}")
         if one_valid(hf):
             base = hf
@@ -1598,10 +1601,13 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
         log(f"[impeller] splitter build: {fam['n_full']} full + {fam['n_splitter']} splitter, p_split {fam['p_split']}")
     else:
         blades = pattern(blade)
-    fu = BRepAlgoAPI_Fuse(base, blades)
-    fu.Build()
-    shape = fu.Shape()
+    def _fuse_base_blades():
+        fu = BRepAlgoAPI_Fuse(base, blades)
+        fu.Build()
+        return fu.Shape()
+    shape = prof.call("fuse_base_blades", _fuse_base_blades)
     log(f"[impeller] fused ({time.time() - t0:.1f}s) valid={BRepCheck_Analyzer(shape).IsValid()}")
+    log("[impeller] fuse profile\n" + prof.format_table())
     spec.info["fuse_valid_before_unify"] = bool(BRepCheck_Analyzer(shape).IsValid())
     if unify:
       try:
@@ -1615,7 +1621,30 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
             "front_face": {"z": zf, "r_outer": r_f}, "rim_hub_z": z_te, "bore_d": bore_d,
             "le_round": le_info, "splitter": split_info, "floor": ({"delta": floor_delta, "slab_volume": U.volume(fslab), "h_range": spec.floor.get("h_range")}
                                            if fslab is not None else None),
-            "seconds": round(time.time() - t0, 1)}
+            "seconds": round(time.time() - t0, 1),
+            "fuse_profile": prof.table()}
+    try:
+        from .solid_check import assess_shape
+        rec = assess_shape(shape)
+        info["n_solids"] = rec["n_solids"]
+        info["closed"] = rec["closed"]
+        info["valid_solid"] = rec["valid_solid"]
+        info["valid"] = rec["brepcheck_valid"]
+    except Exception as ex:  # noqa: BLE001
+        info["n_solids"] = 0 if info.get("n_solids") is None else info["n_solids"]
+        info["closed"] = bool(info.get("valid"))
+        info["valid_solid"] = bool(info.get("valid") and info.get("n_solids") == 1 and info["closed"])
+        info["solid_check_error"] = f"{type(ex).__name__}: {ex}"
+    log(f"[impeller] solids={info['n_solids']} valid_solid={info['valid_solid']} brepcheck={info['valid']}")
+    if bench_enabled(fuse_bench):
+        try:
+            info["fuse_bench"] = bench_fuse(base, blades)
+            log("[impeller] fuse bench (discarded; default solid unchanged): "
+                + ", ".join(f"{r['variant']} {r['seconds']:.3f}s" for r in info["fuse_bench"]["variants"]))
+        except Exception as ex:  # noqa: BLE001
+            info["fuse_bench"] = {"ran": False, "error": f"{type(ex).__name__}: {ex}"}
+    else:
+        info["fuse_bench"] = {"ran": False, "reason": "off by default"}
     return shape, info
 
 

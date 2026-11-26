@@ -6,7 +6,7 @@
   "description": {
     "": "Mesh body or STL/OBJ file -> one solid body via the meshsolid engine (personal use)"
   },
-  "version": "2.0.0",
+  "version": "2.0.1",
   "runOnStartup": false,
   "supportedOS": "windows",
   "editEnabled": true

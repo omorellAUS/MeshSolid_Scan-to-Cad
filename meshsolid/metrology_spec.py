@@ -82,7 +82,35 @@ SPEC_V2["alignment"] = {
             "by the pose by design; only the remaining blade-to-blade scatter is left in the deviation",
 }
 
-SPECS = {"v1": SPEC_V1, "v2": SPEC_V2}
+# ---- spec v3 (MeshSolid 2.0.1): alignment stays v2. Exclusions, volume, support and valid_solid change.
+SPEC_V3 = _copy.deepcopy(SPEC_V2)
+SPEC_V3["spec_version"] = "v3"
+SPEC_V3["exclusions"] = {
+    "rule": "named exclusions, with balance cuts on their own line. Balance cuts use a depth cap and a "
+            "total-area cap and are NOT counted in the general 5 % exclusion cap. The engine and Metrology "
+            "share meshsolid.exclusions.apply_policy.",
+    "general_cap_pct": 5.0,
+    "balance_cuts": {
+        "depth_cap_mm": 5.0,
+        "area_cap_mm2": 2500.0,
+        "counted_in_general_cap": False,
+    },
+    "pct_excluded_basis": "general named exclusions / all scan vertices x 100. Accepted balance cuts are "
+                          "left out of the deviation and out of this percentage.",
+    "default_zone_tags": [],
+}
+SPEC_V3["volume"] = {
+    "error_pct": "100 * (V_solid - (V_mesh - V_hand_entered)) / |V_mesh - V_hand_entered|. "
+                 "A hand-entered feature such as the design bore is subtracted from the mesh volume.",
+}
+SPEC_V3["support"] = {
+    "rule": "solid samples that lie on a hand-entered feature (the design bore) are ignored, so that "
+            "feature cannot fail the solid-to-scan support check",
+}
+SPEC_V3["valid_solid"] = {
+    "rule": "exactly 1 closed solid that passes BRepCheck_Analyzer. The solid count is always logged.",
+}
+SPECS = {"v1": SPEC_V1, "v2": SPEC_V2, "v3": SPEC_V3}
 
 
 def spec_hash(spec=None):
@@ -95,14 +123,20 @@ def _q(a, p):
     return float(np.percentile(a, p)) if a.size else float("nan")
 
 
-def metrics(dv, excluded, beyond_cap, tol=None):
-    """Spec-v1 numbers from per-vertex signed deviations.
+def metrics(dv, excluded, beyond_cap, tol=None, balance_excluded=None):
+    """Spec numbers from per-vertex signed deviations.
 
     dv: signed deviation per scan vertex (mm). excluded: bool mask of vertices removed by a NAMED reason
-    (not the cap). beyond_cap: bool mask of |d| > cap among the inspected. Returns a flat dict."""
+    (not the cap). beyond_cap: bool mask of |d| > cap among the inspected. balance_excluded: vertices that
+    are balance cuts. They stay out of the inspected set and out of pct_excluded (spec v3)."""
     tol = float(SPEC["pass"]["tol_mm"] if tol is None else tol)
     dv = np.asarray(dv, float)
     excluded = np.asarray(excluded, bool)
+    if balance_excluded is not None:
+        bal = np.asarray(balance_excluded, bool)
+        excluded = excluded | bal
+    else:
+        bal = np.zeros(len(dv), bool)
     beyond_cap = np.asarray(beyond_cap, bool) & ~excluded
     insp = ~excluded
     d = dv[insp]
@@ -112,9 +146,12 @@ def metrics(dv, excluded, beyond_cap, tol=None):
     n_cap = int(beyond_cap.sum())
     kept = insp & ~beyond_cap
     dk = dv[kept]
+    general = excluded & ~bal
     out = {
-        "n_scan": n_scan, "n_inspected": n_insp, "n_excluded": int(excluded.sum()),
-        "pct_excluded": round(100.0 * float(excluded.sum()) / max(n_scan, 1), 4),
+        "n_scan": n_scan, "n_inspected": n_insp, "n_excluded": int(general.sum()),
+        "n_balance_cuts": int((excluded & bal).sum()),
+        "pct_excluded": round(100.0 * float(general.sum()) / max(n_scan, 1), 4),
+        "pct_balance_cuts": round(100.0 * float((excluded & bal).sum()) / max(n_scan, 1), 4),
         "capped_count": n_cap, "pct_capped": round(100.0 * n_cap / max(n_insp, 1), 4),
         "rms_uncapped": round(float(np.sqrt(np.mean(d * d))), 5) if d.size else None,
         "mean_signed": round(float(np.mean(d)), 5) if d.size else None,
@@ -179,7 +216,7 @@ def verdict(m, legacy_within_pct=None, accept_pct=95.0, spec=None):
     return out
 
 
-def engine_verdict(dv, excluded_vertices, accepted, gate_basis="", spec=None):
+def engine_verdict(dv, excluded_vertices, accepted, gate_basis="", spec=None, balance_excluded=None):
     """Conversion report: the honest target verdict on the scan-vertex -> solid deviations next to the engine's
     own acceptance gate (engine-limit result). excluded_vertices: vertices the gate left out (threads, scan-only
     stubs, balance cuts, ...): they are named exclusions, so their % is shown and a PASS above 5 % is refused."""
@@ -187,7 +224,7 @@ def engine_verdict(dv, excluded_vertices, accepted, gate_basis="", spec=None):
     dv = np.asarray(dv, float)
     ex = np.zeros(len(dv), bool) if excluded_vertices is None else np.asarray(excluded_vertices, bool)
     cap = (~ex) & (np.abs(dv) > spec["outlier_cap"]["cap_mm"])
-    m = metrics(dv, ex, cap)
+    m = metrics(dv, ex, cap, balance_excluded=balance_excluded)
     out = verdict(m, spec=spec)
     exp = m["pct_excluded"]
     lim = spec["pass"]["target"]["max_pct_excluded"]
