@@ -1,14 +1,72 @@
 # quadremesh-fusion / meshsolid — milestone 1 (prismatic path)
-
+# MeshSolid
 Mesh (STL/OBJ) → segmented regions → fitted analytic primitives → snapped design intent →
 watertight Open CASCADE B-rep → STEP + JSON metrology report. Core library + CLI so a Fusion 360
 add-in can call it later (subprocess or import). License intent: GPL (personal use).
-
+MeshSolid is an Autodesk Fusion 360 add-in and a standalone Python engine that turns a 3D scan into a clean, watertight solid. It reads a triangle mesh (STL, OBJ, or PLY), builds an Open CASCADE B-rep, writes a STEP file, and reports how far that solid sits from the scan. Optional NVIDIA CUDA acceleration covers the heavy closest-point queries. The same engine also drives a FreeCAD workbench.
 **Honesty rule:** a STEP file is written only if the B-rep is a single solid, `BRepCheck_Analyzer`
 is valid, and mesh↔solid deviation passes acceptance (rms ≤ 1.5·tol, p95 ≤ 3·tol both directions).
 Otherwise `status: failed` with a reason, exit code 2, and no STEP.
-
+Generic quad remeshers leave the scan as another mesh. The quads can still be noisy, non-manifold, or a long way from a solid a CAD system can edit and machine. MeshSolid fits surfaces, builds one validated solid, and measures it under a fixed tolerance class. A run that misses its class stays a failure: the report says why, and Fusion imports nothing.
 ## Run
+The current package version is **2.0.1**, recorded in `meshsolid/__init__.py`, `fusion_addin/MeshSolid/MeshSolid.manifest`, and `package.xml` (GPL-3.0-or-later).
+## Current release (2.0.1)
+**[MeshSolid 2.0.1](https://github.com/omorellAUS/MeshSolid_Scan-to-Cad/releases/tag/2.0.1)** is the current release. 2.0.0 put a reliability and traceability layer on the 1.0.2a engine. 2.0.1 adds honest measurement (spec v3) and Stage 3 fuse timing. Stage 3 solid-building geometry is unchanged: the impeller fuse and the STEP deviation gate are the 1.0.2a path. Full notes are in `CHANGELOG.md`. The measurement contract is `docs/measurement_spec_v3.md`.
+### 2.0.0 — reliability and traceability
+2.0.0 restarted from the 1.0.2a engine. A Stage 3 run that passes the gate still writes its STEP.
+- Every report ends as one of `ok`, `crashed`, `cancelled`, `timed_out`, or `rejected_by_gate`, including a user cancel (SIGTERM) and a watchdog timeout (`END_REASONS` in `meshsolid/pipeline.py`).
+- Each stage has its own time limit (`Params.stage_limits`). With a run budget the limit shrinks to the time still left, so the stage stops with a reason (`meshsolid/budget.py`, `meshsolid/watchdog.py`).
+- A child process keeps rewriting the heartbeat during a long Open CASCADE call. A thread inside the engine cannot run while that call holds the interpreter (`meshsolid/heartbeat.py`).
+- Above 300,000 faces, recognition uses a reduced copy. Deviation is measured on the full-resolution mesh, taken before decimation (`recognition_meshes` in `meshsolid/normalise.py`).
+- The units check flags a mesh whose size looks scaled by 25.4 or by 1,000. The coordinates stay as stored (`check_units`).
+- Finished job folders drop the copied mesh, the deviation PLY, and the heartbeat. The STEP, the reports, the logs, and the preview PNG stay (`prune_job_folder` in `meshsolid/cli.py`). The Fusion review opens that PNG as soon as the run returns.
+- A display name may contain `&`. Reports keep it. File names use a safe id from `meshsolid/names.py` (`Hub & Cover` becomes `Hub_and_Cover`).
+- Seven report bugs from that baseline are fixed: the scoreboard `Path` import, the units-check `asarray` axis, gate text that hid a blade-scatter keep, the stalled heartbeat, an impeller build line that printed `solids=None`, a PDF shift labelled in metres, and a PDF beyond-cap percentage that disagreed with the JSON.
+When the blade-scatter rule keeps a solid that missed the class limit, the verdict says so. The accept boolean, and whether the STEP is written, stays the same.
+### 2.0.1 — honest checks (spec v3) and fuse profile
+New reports carry `spec_version = v3`. `python -m meshsolid.remeasure` re-measures an existing STEP and mesh under v3 and lists every metric that moved versus v2. It does not rebuild the solid.
+- **One exclusion list.** `meshsolid.exclusions` is the policy the engine and Metrology both call, so the excluded percentage and the balance-cut count stay in step.
+- **Balance-cut cap.** Billet balance cuts use their own limits, 5 mm depth and 2,500 mm² total area (`--balance-depth-cap`, `--balance-area-cap`). They are reported on their own line and left out of the general 5% exclusion cap.
+- **Bores.** Volume error is `100 * (V_solid - (V_mesh - V_hand)) / |V_mesh - V_hand|`. A hand-entered design bore is subtracted from the mesh volume. The solid-to-scan support check ignores samples that lie on that feature.
+- **`valid_solid`.** Exactly one closed solid that passes `BRepCheck_Analyzer`. The solid count is always logged (`meshsolid/solid_check.py`).
+- **Declared mesh source.** `parts.csv` has a `source` column, `scan` or `cad_export`. That declaration is authoritative (`--mesh-source` overrides the file). The classifier warns when it disagrees. On a declared scan, exact-mesh and facet-sag tightening is ignored and the gate stays at the scan-noise tolerance (`meshsolid/mesh_source.py`).
+- **Uncapped and capped RMS.** `rms_uncapped` keeps distances past the 0.2 mm cap. `rms_capped` is the legacy clipped figure. Reports also list the capped count and percentage (`meshsolid/metrology_spec.py`, `meshsolid/metrology_pdf.py`).
+- **`FuseProfile`.** Each Stage 3 impeller boolean (floor envelope, hub-and-floors fuse, base-and-blades fuse) is timed into the report. `--fuse-bench` is off by default. When it is on, Open CASCADE parallel and glue options are timed and those shapes are discarded. The solid that is kept is the ordinary serial fuse (`meshsolid/fuse_profile.py`).
+## Key capabilities and architecture
+```
+fusion_addin/     Fusion 360 add-in, dialog options, Windows installer
+freecad_addin/    FreeCAD workbench (same engine, shared mslib)
+meshsolid/        Python / Open CASCADE engine, Metrology, CLI
+scripts/          pack_install_zip.py, device bench, part generators
+scoreboard.py     SHA-256 job ledger (reads job folders only)
+parts.csv         part id, mesh SHA-256, source (scan | cad_export)
+tests/            engine, add-in, metrology, scoreboard, installer packer
+docs/             measurement specs (v1, v2, v3)
+```
+### Fusion 360 add-in
+`fusion_addin/MeshSolid/` is a Windows add-in. `MeshSolid.py` places a **MESHSOLID 2.0.1** panel on the Design workspace UTILITIES and MESH tabs, and keeps a command in the ADD-INS dropdown. The two commands are **Mesh to Solid** and **Metrology**.
+Dialog choices in `mslib/ui_options.py` map onto flags that exist on `python -m meshsolid`:
+| Part type | Engine request |
+| --- | --- |
+| Auto | All recognisers on |
+| Mechanical | Prismatic or turned. Gears, impeller, and screws off |
+| Gear | Involute gear on a turned body |
+| Impeller | Impeller path only. If the recogniser cannot build it, the run stops with that reason |
+| Freeform | Printed accuracy class, so the section-loft builder is tried first |
+Accuracy is **Machined** (vertex-to-solid rms ≤ 1.5·tol, p95 ≤ 3·tol) or **Printed** (rms ≤ 0.05 mm, p95 ≤ 0.10 mm). Compute is Auto, CPU, or GPU only. The time-limit slider runs from 5 to 180 minutes. Optional measurements use `NAME=VALUE`, for example `bore_d=14.29`.
+The engine runs in its own process (`mslib/engine_client.py`). On success the review dialog shows the outcome, deviation against the class limits, flags, the preview PNG, and one tick box per user-parameter group. Import brings the STEP in as one body and creates the ticked `ms_*` parameters. Those parameters record recognised design values (gear, thread, impeller, snapped dimensions) beside the body. The imported STEP stays a plain B-rep. A failure imports nothing and names the case: engine not ready, cancelled, timed out, crashed, missing report, outside the deviation limits, or the engine's own text, plus the job folder under `%LOCALAPPDATA%\meshsolid\jobs`.
+The pure-Python add-in library (`mslib/`) is covered by `tests/test_addin.py`. `MeshSolid.py` is the Fusion entry point; the repo records that it still needs its first live session inside Fusion. The checklist is in `fusion_addin/README.md`.
+### Engine
+`meshsolid/` is the library and the CLI (`python -m meshsolid`). `meshsolid/meshio.py` loads STL, OBJ, and PLY (the loader also names 3MF), merges vertices, drops degenerate and duplicate faces, and fills holes of up to 32 edges. Open CASCADE comes from `cadquery-ocp`. A STEP file is written only when the report status is `ok`: one valid solid, and deviation inside the selected class. Any other ending leaves no STEP. The CLI returns exit code 2. A cancel (SIGTERM) exits 124.
+Stages, in order, are load and repair, the units check, recognition (with the 300,000-face reduction), normalise, segmentation, coaxial refit, threads, freeform, snapping, blends, consolidate, build, deviation, and preview. `--builder` selects `auto`, `extrude`, `local`, `revolve`, or `cell`. Recognisers already in the tree cover prismatic cell decomposition, 2.5D extrude, turned bodies, involute gears, threads, screws, splines, keys, catalogue bearings, impellers, and freeform B-splines.
+The Windows installer builds a private virtual environment at `%LOCALAPPDATA%\meshsolid\venv` with Python 3.13 (3.12 is also accepted). That environment is the only interpreter the add-in launches. System Python and PATH stay as they were. See [Installation](#installation-and-quick-start).
+CUDA is optional. `requirements-gpu.txt` installs NVIDIA Warp. `--device auto` uses CUDA when a driver and a device are present, and the CPU otherwise. `--device cuda` stops with a clear error when no GPU is usable. The deviation stage's closest-point query runs on the GPU; the distance is recomputed in float64 on the chosen face, so it matches the CPU path (`meshsolid/device.py`). `report.json` records the device under `device`. `scripts/bench_device.py` times a scan.
+On Windows, a conversion or Metrology job blocks system sleep for the length of the job and releases that request when the job ends, including on error (`meshsolid/power.py`). The display can still turn off.
+### Metrology
+`python -m meshsolid.metrology SCAN.stl SOLID.step --out DIR` writes a signed deviation map (positive means the scan is outside the solid), zone and histogram views, a PDF (`meshsolid/metrology_pdf.py`), and JSON stats. Spec v3 keeps spec v2 alignment. Points past the 0.2 mm cap stay inside `rms_uncapped` and count as failures in the pass percentage. `rms_capped` is the legacy clipped number.
+Connected scan regions more than 2 mm from the solid become named exclusions (`meshsolid/exclude_2mm.py`). `--no-auto-exclude-2mm` puts those regions back into the inspection. The solid-to-scan support check (`meshsolid/support_gate.py`) flags solid area the scan does not back. The default limit is 0.5% of the solid area. Samples on a hand-entered bore are ignored. The Fusion **Metrology** command (`mslib/metrology_cmd.py`) runs this same module.
+### Scoreboard and tests
+`parts.csv` is the part index: `part_id`, `input_mesh_sha256`, `source` (`scan` or `cad_export`), face count, file size, and notes. `scoreboard.py` reads job folders and never writes back into the engine. Each row stores the report fields, the SHA-256 of the input mesh, and the SHA-256 of the STEP when one was written, plus the engine, spec, solid version, run id, and commit. A job with no STEP and an end reason is a valid row.
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python -m meshsolid part.stl -o part.step --report report.json \
@@ -16,8 +74,9 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python -m pytest            # fast suite (13 tests)
 .venv/bin/python -m pytest -m slow    # real coupling mesh (expected: honest failure)
 .venv/bin/python scripts/run_synthetic.py out   # truth-vs-recovered table + previews
+python scoreboard.py --jobs DIR [DIR ...] --parts parts.csv -o scoreboard.csv \
+    --engine 2.0.1 --spec v3 --solid-version 2.0.1 [--commit SHA] [--append] [--recursive]
 ```
-
 ## Pipeline (meshsolid/)
 | module | does |
 |---|---|
@@ -29,197 +88,6 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 | `deviation.py` | mesh→solid and solid→mesh distances (max/mean/rms/p95, Hausdorff), per-region and per-vertex signed deviation, colour PLY |
 | `pipeline.py` | orchestration + report.json (per-region params raw & snapped, fit residuals, per-region deviation, confidence/flags, named dimensions D1..Dn, measurement checks) |
 | `synthetic.py` | known-dimension CAD parts → isotropic remesh (pymeshlab) → Gaussian normal noise |
-
+`pytest.ini` skips tests marked `slow` unless you ask for them. Release behaviour is covered by `tests/test_step1_reliability.py` (2.0.0), `tests/test_v201_honest.py` (2.0.1), `tests/test_scoreboard.py`, `tests/test_pack_install_zip.py`, `tests/test_addin.py`, `tests/test_metrology.py`, `tests/test_exclude_2mm.py`, and `tests/test_device.py`, next to the recogniser and builder tests.
 ## Report fields for the refinement loop
 `regions[]`: id, kind, params (snapped), params_unsnapped, fit{rms,max,normal_err_deg}, deviation{max,mean,rms,p95},
-confidence, flags, low_confidence. `dimensions[]`: name (D1..), type (diameter/distance/span/cone angle), regions,
-value (snapped), fit_value (raw LS). `measurement_checks[]` from `--measure NAME=VALUE` (check only — not yet fed
-back as constraints).
-
-## Known limits (milestone 1)
-* No torus / freeform surfaces → parts with toroidal blends (e.g. the six-lobed coupling) fail honestly.
-* Cell decomposition uses untrimmed surfaces; cost grows with surface count (`--max-tools`, default 80).
-* Synthetic tests use round truth dims; the non-round rotated test runs with rounding off.
-
----
-
-# MeshSolid build plan
-
-Releases **1.0.3 → 1.3.1**, each with two or three significant changes, a measurable done line, and a test target.
-Generic recognition now comes before the impeller polish. Nothing starts until you say go.
-
-## Roadmap
-
-| Release | Focus |
-|---------|-------|
-| 1.0.3 | Reliability |
-| 1.0.4 | Traceability and baseline |
-| 1.0.5 | Test generator and noise limit |
-| 1.0.6 | Gates and closing the shell |
-| 1.1.0 | Region connection map |
-| 1.1.1 | Slot and chamfer rules |
-| 1.1.2 | Feature builder and generic tab |
-| 1.1.3 | Bounding box and cylinder |
-| 1.2.0 | Smooth vanes (hard rule) |
-| 1.2.1 | Metrology v3 and Refine |
-| 1.2.2 | Impeller fillets and nose |
-| 1.2.3 | Hirth coupling |
-| 1.3.0 | Batch runs |
-| 1.3.1 | API and AI assist |
-| 1.0.6 | Gates and closing the shell |
-| 1.0.5 | Test generator and noise limit |
-
-**Order:** reliability and measurement first, then the generic path for parts it has never seen, then impeller quality, then batch and API.
-
-## Rules for every release
-
-1. If a release misses its done line, stop and replan before the next one starts.
-2. Each release ships as a lossless Windows zip and a source zip, with release notes.
-3. Every part is run twice; KK&K stays the untuned holdout.
-4. Reports show capped and uncapped rms, the capped count and %, final pose with warnings, spec version, run time, named exclusions, engine version, run ID and commit.
-5. Figures are never compared across spec versions, and the scoreboard must not get worse.
-6. Standing rules stay: no balance cuts, Hirth teeth modelled, 2 mm auto-exclusion with overrides, smooth vanes, Python 3.10 left as the default.
-7. Development uses small generated parts at low resolution on my computer; big real parts run on your PC at release time.
-
-## 1.0.3 Reliability (shipped)
-
-1. Per-stage time limits and a heartbeat, with separate end reasons: crashed, cancelled by user, killed by watchdog, timed out, rejected by gate.
-2. Input normalisation: meshes over about 300k faces are reduced for recognition, with the full mesh kept for deviation; scale and units are checked (such as a mesh about 1,650 mm across that should be mm or inches).
-3. Job-folder pruning: successful intermediates are deleted and only STEP, reports and logs are kept.
-
-**Done when** one of the 1.3M–5.3M-face meshes builds or fails with a readable reason inside its limit, the 1,650 mm mesh is normalised or flagged, and the failure table comes straight from the logs.
-
-**Tested on** Box: unit tests. PC: one big mesh plus Stage 3 to check nothing regressed.
-
-## 1.0.4 Traceability and baseline
-
-1. Every report and CSV row tagged with engine, spec and solid version, run ID and git commit; one scoreboard CSV; the repo copied to your PC.
-2. Baseline re-measure of the existing STG1, Stage 3 and pinion solids under spec v2 before anything else changes.
-3. Add-in fixes: decimal-comma parsing and a warning when the display-mesh fallback is used.
-
-**Done when** the scoreboard holds tagged spec v2 baselines for STG1, Stage 3 and the pinion, and the add-in fixes pass their tests.
-
-**Tested on** PC: three Metrology runs, each twice.
-
-## 1.0.5 Test generator and noise limit
-
-1. Procedural generator that randomises the synthetic parts into hundreds of variants, plus nasty cases: tiny fillets, thin walls, near-tangent faces, holes in the scan.
-2. Noise limit measured from a repeat scan of one impeller, which sets the noise model and decides whether 0.03 mm is reachable; a held-out set of real scans that is never tuned against.
-3. Scoring on feature recall and precision, valid solid, volume error, run time and rms, written to the scoreboard.
-
-**Done when** one command scores 100+ generated parts and names the broken layer for each failure, and the repeat-scan noise figure is recorded.
-
-**Tested on** Box at low resolution, plus one repeat scan from you.
-
-## 1.0.6 Gates and closing the shell
-
-1. Fixed tolerance classes chosen by you: machined, printed, organic, rough scan. No gates derived from the mesh.
-2. Shell-closing ladder: looser sewing tolerance, then shape healing, then the prismatic builder, then a freeform fallback that always gives a valid solid with areas marked approximate.
-3. Bracket round 3: fillet only edges the scan shows as rounded, keep sharp corners sharp, add the lip and floor fillets, snap the bore.
-
-**Done when** Stage 3 passes the machined gate, the five shell-failure jobs each give one valid solid, and the bracket passes its gate.
-
-**Tested on** Generator suite on the box; Stage 3 and the bracket on the PC.
-
-## 1.1.0 Region connection map
-
-1. One shared map of regions, their surface types and how they meet (angle, tangency, convex or concave), built once per part.
-2. Existing hole, counterbore, fillet, thread and keyway recognisers moved onto the map, one at a time, with results checked against the old code.
-
-**Done when** all existing tests pass and generator scores are no worse than 1.0.6.
-
-**Tested on** Box: test suite plus generator.
-
-## 1.1.1 Slot and chamfer rules
-
-1. General slot rule: two parallel planes joined by two cylinders (or a cylinder pair for keyhole slots).
-2. Chamfer rule: a narrow plane strip between two faces at an angle, snapped to standard sizes.
-
-**Done when** slot and chamfer recall and precision each at least 90% on generated parts.
-
-**Tested on** Box: generator.
-
-## 1.1.2 Feature builder and generic tab
-
-1. Feature-by-feature build: keep a feature only if its fit gain beats the measured scan noise, and prefer fewer faces.
-2. Generic tab in the add-in that routes unknown parts through this path, with the freeform fallback underneath.
-
-**Done when** on generated parts: feature recall at least 90%, precision at least 90%, volume error within 1%, and a valid solid on at least 95%. On the held-out real scans: a valid solid on every part.
-
-**Tested on** Generator plus held-out scans; bracket on the PC.
-
-## 1.1.3 Bounding box and cylinder
-
-1. Auto box or cylinder fitted to the scan plus 2 mm and shown in Fusion; manual drag snapping in 1 mm or 0.1 mm steps, with axis tilt for cylinders.
-2. The engine takes axis, planes, radius and face heights from it as starting references, refines within a small window, warns where the scan disagrees, and excludes everything outside as a named region.
-
-**Done when** generated parts given a deliberately bad auto-axis are recovered when a box or cylinder is supplied, and the settings appear in the report.
-
-**Tested on** Generator; one impeller and one bracket on the PC.
-
-## 1.2.0 Smooth vanes (hard rule)
-
-1. Vanes built from 5–7 smooth blade sections with few control points, lofted hub to tip; ruled vanes used automatically when the scan fits.
-2. Curvature ripple check: a rippled vane is refit with fewer control points; if smoothing cannot meet tolerance, the build ends as a fail, never a rippled pass.
-
-**Done when** zero ripple flags on Stage 3, Stage 1 and KK&K, filtered rms rises by no more than 0.005 mm against the 1.0.4 baseline, and Stage 3 still passes the machined gate.
-
-**Tested on** PC: Stage 3, Stage 1, KK&K, each twice.
-
-## 1.2.1 Metrology v3 and Refine
-
-1. Two-pass Metrology (spec v3): raw base result, then a noise-filtered rerun over about 3–5 times the point spacing, side by side with the difference, and a raw/filtered map toggle.
-2. Refine with Metrology: 2–3 rounds moving control points toward the filtered deviation inside the smoothness limit, fitted on half the scan points and validated on the other half; a round that improves the fit half but not the check half is rolled back.
-
-**Done when** Refine lowers filtered rms on the validation half for Stage 3 and Stage 1 without tripping the ripple check.
-
-**Tested on** PC: Stage 3, Stage 1; KK&K as holdout.
-
-## 1.2.2 Impeller fillets and nose
-
-1. Variable-radius root fillets where the vanes meet the hub.
-2. Smooth transition from the vane tops into the nose cone, and a fitted nose cone profile.
-
-**Done when** the orange areas at the vane roots and nose on Stage 3 are gone from the filtered map and the solid stays valid.
-
-**Tested on** PC: Stage 3, Stage 1, KK&K.
-
-## 1.2.3 Hirth coupling
-
-1. Hirth tooth recognition on impeller back faces: tooth count, angle and height, snapped to the standard.
-2. Hirth teeth modelled as a patterned feature, with balance cuts still excluded.
-
-**Done when** KK&K stage 1 builds with Hirth teeth that match the scan within the machined gate, and balance cuts are listed as excluded.
-
-**Tested on** PC: KK&K, run twice.
-
-## 1.3.0 Batch runs
-
-1. Batch panel: load each part, set its box or cylinder and build settings, Add to Batch; settings saved beside each part.
-2. Run logic: 2 attempts per part, then a retry pass with 2 more, each retry changing settings from a fixed ladder in code; PC kept awake; 2–3 parallel jobs if cores and RAM allow.
-3. Output: one batch folder with every job folder, a focused batch summary log, and a failure log that feeds new cases into the generator.
-
-**Done when** an overnight batch of 20 parts runs without the runner crashing, every part ends as pass or logged fail, and at least 80% of parts give a valid solid.
-
-**Tested on** PC overnight run.
-
-## 1.3.1 API and AI assist
-
-1. Local job server and MCP connector (submit batch, status, report, rerun) so Claude or Ollama can drive MeshSolid.
-2. Your local Qwen model does the morning triage, grouping failures and writing the summary, choosing only from a fixed menu.
-3. Locked down: localhost only, token required, paths limited to the batch folder, every setting validated, no shell commands.
-
-**Done when** Qwen submits and reviews a batch end to end, and tests show bad paths, bad settings and missing tokens are refused.
-
-**Tested on** PC with Ollama.
-
-## 1.0.6 Gates and closing the shell
-
-Fixed tolerance classes: machined, printed, organic, rough scan. No gates derived from the mesh.
-
-Shell-closing ladder: looser sewing tolerance, then shape healing, then the prismatic builder, then a freeform fallback that always gives a valid solid with areas marked approximate.
-
-Bracket round 3: fillet only edges the scan shows as rounded, keep sharp corners sharp, add the lip and floor fillets, snap the bore.
-
-Done when Stage 3 passes the machined gate, the five shell-failure jobs each give one valid solid, and the bracket passes its gate.
-
