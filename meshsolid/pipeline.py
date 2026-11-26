@@ -15,7 +15,7 @@ from . import __version__
 from . import fit as F
 from .build import build_solid
 from .build_local import build_local
-from .noise import auto_tol
+from .noise import auto_tol, auto_tol_detail
 from .deviation import deviation, save_deviation_ply
 from .meshio import load_mesh
 from .occ_util import write_step
@@ -714,8 +714,10 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         rep["normalise"] = {"mode": getattr(pr, "normalise", "report"), "applied": False,
                             "error": f"{type(ex).__name__}: {ex}"}
     sigma, exact = None, None
+    _tol_detail = None
     if pr.tol is None:
-        tol, sigma, exact = auto_tol(mesh)
+        _tol_detail = auto_tol_detail(mesh)
+        tol, sigma, exact = _tol_detail["tol"], _tol_detail["sigma"], _tol_detail["exact"]
     else:
         tol = pr.tol
     from . import device as _D
@@ -743,7 +745,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
     # The classifier never sets or tightens the acceptance gate.
     try:
         from . import input_class as _IC
-        from .mesh_source import apply_cross_check, lookup_parts_csv, normalize_source
+        from .mesh_source import apply_cross_check, gates_for_declared_scan, lookup_parts_csv, normalize_source
         _ic = _IC.classify(mesh, sigma, exact, fst)
         _ne, _nsrc = _IC.effective_noise(_ic, sigma)
         _ic["noise_sigma_effective_mm"] = None if _ne is None else round(_ne, 5)
@@ -757,9 +759,22 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
             _ic["parts_csv"] = str(pr.parts_csv)
             _ic["input_mesh_sha256"] = digest
         _gates, cross = apply_cross_check(_ic, _gates, declared)
+        if _tol_detail is not None and cross["source"] == "scan":
+            _reason = "exact mesh" if _tol_detail["exact"] else (
+                "facet sag" if str((rep.get("tolerance") or {}).get("from") or "").startswith("facet")
+                else "classifier")
+            _gates, _gwarn = gates_for_declared_scan(cross["source"], _gates, _tol_detail["scan_tol"], reason=_reason)
+            if _gates.get("exact_mesh_gate_ignored"):
+                rep["tolerance"]["exact_mesh_tol"] = _tol_detail["tol"]
+                rep["tolerance"]["gate_tol"] = _gates["tol"]
+                rep["tolerance"]["gate_note"] = ("acceptance gate uses the scan-noise tolerance; "
+                                                 "exact-mesh / sag was not allowed to tighten it")
+            if _gwarn:
+                rep.setdefault("warnings", []).append(_gwarn)
+                print("WARNING: " + _gwarn, flush=True)
         _ic["declared_source"] = cross["source"]
         _ic["cross_check"] = cross
-        _ic["gates"] = "unchanged"
+        _ic["gates"] = "scan-noise (exact mesh did not tighten)" if _gates.get("exact_mesh_gate_ignored") else "unchanged"
         _ic["source"] = cross["source"]
         rep["mesh_source"] = cross["source"]
         rep["input_class"] = _ic
@@ -767,7 +782,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
             rep.setdefault("warnings", []).append(cross["warning"])
             print("WARNING: " + cross["warning"], flush=True)
         print(f"[input-class] classifier {_ic['class']}: {_ic['reason']}; declared source {cross['source']}; "
-              f"noise {_ic['noise_sigma_effective_mm']} mm ({_nsrc}); gates unchanged "
+              f"noise {_ic['noise_sigma_effective_mm']} mm ({_nsrc}); gates {_ic['gates']} "
               f"(rms<={_gates['rms_limit']:.4f}, p95<={_gates['p95_limit']:.4f})", flush=True)
     except Exception as _e:  # noqa: BLE001
         rep["input_class"] = {"error": f"{type(_e).__name__}: {_e}"}

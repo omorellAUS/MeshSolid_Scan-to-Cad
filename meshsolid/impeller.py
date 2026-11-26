@@ -1470,7 +1470,7 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
     import time
     from OCP.BRepAlgoAPI import BRepAlgoAPI_Common, BRepAlgoAPI_Fuse
     from .fuse_profile import FuseProfile, bench_enabled, bench_fuse
-    prof = FuseProfile()
+    fuse_prof = FuseProfile()
     from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform
     from OCP.gp import gp_Trsf, gp_Ax1, gp_Dir
     from OCP.TopoDS import TopoDS_Compound
@@ -1546,7 +1546,7 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
     fslab = None
     if use_floor:
         fs = floor_slab(spec, floor_delta)
-        fslab = prof.call("common_floor_envelope", lambda: BRepAlgoAPI_Common(fs, env).Shape())
+        fslab = fuse_prof.call("common_floor_envelope", lambda: BRepAlgoAPI_Common(fs, env).Shape())
         log(f"[impeller] floor slab ({time.time() - t0:.1f}s) vol {U_volume(fslab):.1f}")
     ax = gp_Ax1(_P(F.a0), gp_Dir(*map(float, F.u)))
 
@@ -1561,7 +1561,7 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
     if fslab is not None:
         # staged: the floor slabs first (they do not touch each other), then the blades (one compound
         # with overlapping blades and floors does not fuse correctly)
-        hf = prof.call("fuse_hub_floors", lambda: BRepAlgoAPI_Fuse(hub, pattern(fslab)).Shape())
+        hf = fuse_prof.call("fuse_hub_floors", lambda: BRepAlgoAPI_Fuse(hub, pattern(fslab)).Shape())
         log(f"[impeller] hub + floors ({time.time() - t0:.1f}s) valid={one_valid(hf)}")
         if one_valid(hf):
             base = hf
@@ -1605,9 +1605,9 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
         fu = BRepAlgoAPI_Fuse(base, blades)
         fu.Build()
         return fu.Shape()
-    shape = prof.call("fuse_base_blades", _fuse_base_blades)
+    shape = fuse_prof.call("fuse_base_blades", _fuse_base_blades)
     log(f"[impeller] fused ({time.time() - t0:.1f}s) valid={BRepCheck_Analyzer(shape).IsValid()}")
-    log("[impeller] fuse profile\n" + prof.format_table())
+    log("[impeller] fuse profile\n" + fuse_prof.format_table())
     spec.info["fuse_valid_before_unify"] = bool(BRepCheck_Analyzer(shape).IsValid())
     if unify:
       try:
@@ -1622,7 +1622,7 @@ def build(spec: Spec, bore_d, z_front=None, log=print, unify=False, le_round=Tru
             "le_round": le_info, "splitter": split_info, "floor": ({"delta": floor_delta, "slab_volume": U.volume(fslab), "h_range": spec.floor.get("h_range")}
                                            if fslab is not None else None),
             "seconds": round(time.time() - t0, 1),
-            "fuse_profile": prof.table()}
+            "fuse_profile": fuse_prof.table()}
     try:
         from .solid_check import assess_shape
         rec = assess_shape(shape)

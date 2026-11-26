@@ -16,7 +16,7 @@ from meshsolid.exclusions import (
 )
 from meshsolid.fuse_profile import BENCH_VARIANTS, FuseProfile, bench_enabled
 from meshsolid.impeller_run import impeller_build_stage
-from meshsolid.mesh_source import apply_cross_check, lookup_parts_csv, reconcile
+from meshsolid.mesh_source import apply_cross_check, gates_for_declared_scan, lookup_parts_csv, reconcile
 from meshsolid.metrology_spec import SPEC, SPEC_V2, SPEC_V3, SPECS, spec_hash
 from meshsolid.remeasure import compare_metrics, flat_metrics
 from meshsolid.solid_check import valid_solid_record
@@ -141,6 +141,41 @@ def test_parts_csv_marks_real_scans_and_lookup_uses_source():
     sha = rows[0]["input_mesh_sha256"]
     assert lookup_parts_csv(parts, sha) == "scan"
     assert reconcile("cad_export", "scan")["agree"] is False
+
+
+def test_fuse_profile_name_is_not_shadowed_by_the_hub_profile():
+    src = (ROOT / "meshsolid/impeller.py").read_text()
+    lines = src.splitlines()
+    assert any(line.strip() == "fuse_prof = FuseProfile()" for line in lines)
+    assert not any(line.strip() == "prof = FuseProfile()" for line in lines)
+    assert not any("prof.call(" in line and "fuse_prof.call(" not in line for line in lines)
+    assert 'fuse_prof.call("common_floor_envelope"' in src
+    assert 'fuse_prof.call("fuse_hub_floors"' in src
+    assert 'fuse_prof.call("fuse_base_blades"' in src
+    # the hub revolve profile list still uses the name prof, after the timer is created
+    assert src.index("fuse_prof = FuseProfile()") < src.index("prof = [")
+    timer = FuseProfile()
+    assert timer.call("common_floor_envelope", lambda: "shape") == "shape"
+    assert timer.table()["ops"][0]["op"] == "common_floor_envelope"
+
+
+def test_declared_scan_exact_mesh_cannot_tighten_the_gate():
+    # Stage 3 on the PC: exact-mesh tol 0.00598 mm logged rms<=0.00897, p95<=0.01794.
+    # Scan noise (4.5·sigma) is looser; a declared scan must keep that and only warn.
+    exact_tol = 0.00897 / 1.5
+    scan_tol = max(4.5 * 0.01, exact_tol, 0.005)
+    exact_gates = {"class": "machined", "rms_limit": 1.5 * exact_tol, "p95_limit": 3.0 * exact_tol,
+                   "tol": exact_tol, "basis": "machined: vertex→solid rms≤1.5·tol, p95≤3·tol"}
+    out, warning = gates_for_declared_scan("scan", exact_gates, scan_tol, reason="exact mesh")
+    assert abs(out["rms_limit"] - 1.5 * scan_tol) < 1e-12
+    assert abs(out["p95_limit"] - 3.0 * scan_tol) < 1e-12
+    assert out["rms_limit"] > exact_gates["rms_limit"]
+    assert warning and "exact mesh" in warning and "only warns" in warning
+    untouched, quiet = gates_for_declared_scan(None, exact_gates, scan_tol, reason="exact mesh")
+    assert untouched["rms_limit"] == exact_gates["rms_limit"] and quiet is None
+    text = (ROOT / "meshsolid/pipeline.py").read_text()
+    assert "gates_for_declared_scan" in text
+    assert "auto_tol_detail" in text
 
 
 def test_fuse_profile_is_timing_only_and_bench_is_off_by_default():

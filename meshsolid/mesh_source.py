@@ -65,6 +65,41 @@ def reconcile(declared, classifier_class):
     }
 
 
+def gates_for_declared_scan(declared, gates, scan_tol, reason="exact mesh"):
+    """Acceptance limits for a declared scan.
+
+    The fit tolerance used to build the solid is left alone. What this stops is the exact-mesh
+    (or facet-sag) tolerance tightening rms / p95 below the scan-noise tolerance
+    ``max(4.5·sigma, 5e-5·diag, 0.005)``. The classifier only produces a warning.
+    """
+    out = dict(gates)
+    if normalize_source(declared) != "scan":
+        return out, None
+    if out.get("class") == "printed":
+        return out, None
+    basis = out.get("basis") or ""
+    if "overridden accept_rms" in basis or "overridden accept_p95" in basis:
+        return out, None
+    scan_tol = float(scan_tol)
+    scan_rms = 1.5 * scan_tol
+    scan_p95 = 3.0 * scan_tol
+    rms = float(out.get("rms_limit") or 0.0)
+    p95 = float(out.get("p95_limit") or 0.0)
+    if rms + 1e-12 >= scan_rms and p95 + 1e-12 >= scan_p95:
+        return out, None
+    warning = (f"mesh source is scan; classifier ({reason}) would tighten the gate to "
+               f"rms<={rms:.5f} mm, p95<={p95:.5f} mm. The classifier only warns. "
+               f"Gate uses the scan-noise tolerance {scan_tol:.5f} mm "
+               f"(rms<={scan_rms:.5f}, p95<={scan_p95:.5f}).")
+    out["rms_limit"] = float(scan_rms)
+    out["p95_limit"] = float(scan_p95)
+    out["tol"] = scan_tol
+    out["basis"] = ("scan source: vertex→solid rms≤1.5·scan-noise tol, p95≤3·scan-noise tol; "
+                    f"{reason} was not allowed to tighten the gate")
+    out["exact_mesh_gate_ignored"] = True
+    return out, warning
+
+
 def apply_cross_check(classifier_record, gates, declared):
     """Return the same gate limits plus the cross-check record.
 
