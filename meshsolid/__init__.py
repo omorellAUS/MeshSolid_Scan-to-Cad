@@ -1,2 +1,2 @@
 """meshsolid: mesh-to-analytic-solid reconstruction (prismatic path)."""
-__version__ = "1.0.2a"
+__version__ = "2.0.0"

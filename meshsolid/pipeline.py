@@ -62,6 +62,24 @@ class Params:
     drop_faceless_area_frac: float = 0.01
     normalise: str = "report"    # "report": compute + store the scan->normalised 4x4 only; "apply": work axis-up/nose-up in mm, outputs mapped back to the scan frame
     time_budget_s: float = 0.0   # wall-clock budget (0 = none): a watchdog process marks the report "timeout" with the stage and stops the run; stages with their own budgets scale to it
+    # Per-stage caps (seconds). With a run budget the cap is shortened to the time still left.
+    stage_limits: dict = field(default_factory=lambda: {
+        "load_repair": 120.0,
+        "normalise": 60.0,
+        "segmentation": 300.0,
+        "coaxial_refit": 600.0,
+        "threads": 120.0,
+        "freeform": 1200.0,
+        "snapping": 120.0,
+        "blends": 120.0,
+        "consolidate": 60.0,
+        "fit_stats": 60.0,
+        "build": 600.0,
+        "deviation": 300.0,
+        "preview": 60.0,
+    })
+    stage_heartbeat_s: float = 5.0   # child-process heartbeat interval; 0 disables. A thread cannot tick during OCC.
+    decimate_for_recognition: int = 300_000  # above this, recognition uses a reduced copy; deviation keeps the full mesh
     consolidate: bool = True     # pre-build: merge same-surface regions, absorb explained slivers, drop degenerate slivers
     rim_slots: str = "auto"      # flat-floored end-face pockets open to the rim: auto = cut each confident slot on non-impellers (not on a recognised impeller: face_features classifies them) | on | off
 
@@ -217,15 +235,105 @@ def _stage_cap(pr, frac, max_s):
     return min(max_s, max(30.0, frac * tb)) if tb > 0 else max_s
 
 
+END_REASONS = ("ok", "crashed", "cancelled", "timed_out", "rejected_by_gate")
+
+
+def _stage_deadline(pr, stage_name):
+    """Seconds this stage may use: its own limit, shortened by the run budget still left."""
+    limits = getattr(pr, "stage_limits", None) or {}
+    stage_cap = float(limits.get(stage_name, limits.get("default", 300.0)))
+    left = time_left()
+    if left == float("inf"):
+        return stage_cap
+    return max(5.0, min(stage_cap, left - max(30.0, 0.2 * left)))
+
+
+def _stamp_end_reason(rep):
+    """Every report ends as ok, crashed, cancelled, timed_out or rejected_by_gate."""
+    cur = rep.get("end_reason")
+    if cur in END_REASONS:
+        return cur
+    status = str(rep.get("status") or "").lower()
+    failure = str(rep.get("failure") or "").lower()
+    if status in {"ok", "ok_no_output"}:
+        reason = "ok"
+    elif status in {"timeout", "timed_out"} or "time budget" in failure or "timed out" in failure:
+        reason = "timed_out"
+    elif status in {"cancelled", "canceled"} or "cancelled" in failure or "canceled" in failure:
+        reason = "cancelled"
+    elif status != "ok" and ("acceptance" in failure or "deviates" in failure or "beyond the acceptance" in failure):
+        reason = "rejected_by_gate"
+    else:
+        reason = "crashed"
+    rep["end_reason"] = reason
+    return reason
+
+
+def _save_report(rep, report_path):
+    _stamp_end_reason(rep)
+    if report_path:
+        Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+
+
+def _deviation(mesh, shape, labels=None, **kw):
+    """Same call as ``deviation``.
+
+    Face exclusions and labels belong to the recognition mesh, so this does not swap in the
+    full-resolution mesh mid-block (that would index the wrong face list). Full-resolution
+    distances are measured once, in ``_full_resolution_gate``, after this block.
+    """
+    return deviation(mesh, shape, labels, **kw)
+
+
+def _full_resolution_gate(mesh, shape, dev, dv, dkw=None):
+    """Remeasure on the untouched full mesh when recognition used a reduced copy.
+
+    Returns ``(dev, dv, ply_mesh)``. With no reduced copy this is ``(dev, dv, mesh)`` and the
+    acceptance boolean already stored on ``dev`` is left as it was, so Stage 3 still writes its STEP.
+    """
+    full = CURRENT.get("deviation_mesh")
+    if full is None or full is mesh or shape is None or not dev:
+        return dev, dv, mesh
+    dev_f, _, dv_f, _, _ = deviation(full, shape, None, **(dkw or {}))
+    dev["mesh_vertices_to_solid_recognition"] = dev.get("mesh_vertices_to_solid")
+    dev["solid_to_mesh_recognition"] = dev.get("solid_to_mesh")
+    dev["mesh_vertices_to_solid"] = dev_f["mesh_vertices_to_solid"]
+    dev["solid_to_mesh"] = dev_f["solid_to_mesh"]
+    dev["full_resolution"] = {"faces": int(len(full.faces)), "vertices": int(len(full.vertices)),
+                              "note": "deviation measured on the full-resolution mesh; recognition used the reduced copy"}
+    return dev, dv_f, full
+
+
+def _stop_for_stage_budget(rep, pr, stage, report_path, t0):
+    """End the run when the remaining budget cannot cover this stage. No budget: never stops."""
+    left = time_left()
+    if left == float("inf"):
+        return False
+    need = _stage_deadline(pr, stage)
+    if left + 1e-9 >= need + 30.0:
+        return False
+    rep["status"] = "timeout"
+    rep["end_reason"] = "timed_out"
+    rep["failure"] = (f"timed out before {stage} (stage limit {need:.0f}s, {left:.0f}s left). No STEP written.")
+    rep["seconds"] = time.time() - t0
+    _stage(rep, "done")
+    _save_report(rep, report_path)
+    return True
+
+
 def _stage(rep, name):
     import sys
     rep["last_stage"] = name
     rep.setdefault("stage_times", {})[name] = round(time.time() - CURRENT["t0"], 2) if CURRENT["t0"] else 0.0
     print(f"[{rep['stage_times'][name]:8.1f}s] {name}", file=sys.stderr, flush=True)
+    if CURRENT.get("report_path"):
+        from .heartbeat import set_stage
+        set_stage(CURRENT["report_path"], name)
     if CURRENT.get("report_path") and name != "done":
         # checkpoint: if the process dies (e.g. a segfault inside OCC) the report still says how far it got
         import json as _json
-        part = dict(rep, status="incomplete", failure=f"process ended during stage '{name}' (crash or kill)")
+        part = dict(rep, status="incomplete", end_reason="crashed",
+                    failure=f"process ended during stage '{name}' (crash or kill)")
         try:
             Path(CURRENT["report_path"]).write_text(_json.dumps(part, indent=2, default=_js))
         except (TypeError, ValueError, OSError):
@@ -303,6 +411,11 @@ def _run_guarded(input_path, out_step, report_path, pr, deviation_ply, preview_p
     # NOTE: the time budget is wall clock (time.time() here, in budget.py and in the watchdog), so time the PC
     # spends asleep counts against it; keep_awake() above prevents that sleep on Windows.
     wd = watchdog.start(pr.time_budget_s, report_path)
+    from . import heartbeat
+    try:
+        hb = heartbeat.start(report_path, getattr(pr, "stage_heartbeat_s", 5.0), time.time())
+    except Exception:  # noqa: BLE001
+        hb = None
     from . import budget
     budget.set_deadline(time.time() + pr.time_budget_s if pr.time_budget_s and pr.time_budget_s > 0 else None)
     try:
@@ -313,6 +426,8 @@ def _run_guarded(input_path, out_step, report_path, pr, deviation_ply, preview_p
         return _run(input_path, out_step, report_path, pr, deviation_ply, preview_png, measurements)
     finally:
         budget.set_deadline(None)
+        heartbeat.stop(hb)
+        CURRENT["deviation_mesh"] = None
         if wd is not None:
             wd.terminate()
             try:
@@ -487,7 +602,7 @@ def _run_bodies(input_path, mb, out_step, report_path, pr, preview_png):
     rep["seconds"] = time.time() - t0
     _stage(rep, "done")
     if report_path:
-        Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        _save_report(rep, report_path)
     return rep, None, None, [], None
 
 
@@ -524,7 +639,7 @@ def _impeller_required_failure(rep, report_path, t0, mesh, why):
     print(f"FAILURE: {rep['failure']}", file=_sys.stderr, flush=True)
     _stage(rep, "done")
     if report_path:
-        Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        _save_report(rep, report_path)
     return rep, None, mesh, [], np.zeros(len(mesh.faces), int)
 
 
@@ -545,7 +660,7 @@ def _run(input_path, out_step, report_path, pr, deviation_ply, preview_png, meas
             rep["status"] = "failed"
             rep["failure"] = f"could not map the output back to the scan frame: {nrep['restore_error']}"
         if report_path:
-            Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+            _save_report(rep, report_path)
     return out
 
 
@@ -562,15 +677,33 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         rep["status"] = "failed"
         rep["failure"] = f"input mesh: {e}. No STEP written."
         rep["input_error"] = str(e)
+        rep["end_reason"] = "crashed"
         rep["seconds"] = time.time() - t0
         _stage(rep, "done")
-        if report_path:
-            Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        _save_report(rep, report_path)
         return rep, None, None, [], None
+    from . import normalise as _NZ
+    try:
+        rep["units"] = _NZ.check_units(mesh)
+    except Exception as ex:  # noqa: BLE001
+        rep.setdefault("warnings", []).append(f"units check skipped ({type(ex).__name__}: {ex})")
+    CURRENT["deviation_mesh"] = None
+    try:
+        rec, dev, dinfo = _NZ.recognition_meshes(mesh, int(getattr(pr, "decimate_for_recognition", 300_000) or 300_000))
+    except Exception as ex:  # noqa: BLE001
+        rec, dev, dinfo = mesh, mesh, None
+        rep.setdefault("warnings", []).append(f"recognition reduction skipped ({type(ex).__name__}: {ex})")
+    if dinfo:
+        rep["decimation"] = dinfo
+        CURRENT["deviation_mesh"] = dev
+        mesh = rec
     _stage(rep, "normalise")
     try:
-        from . import normalise as _NZ
         mesh, rep["normalise"] = _NZ.apply(mesh, getattr(pr, "normalise", "report") or "report")
+        if dinfo and (rep.get("normalise") or {}).get("applied") and CURRENT.get("deviation_mesh") is not None:
+            full = CURRENT["deviation_mesh"].copy()
+            full.apply_transform(np.asarray(rep["normalise"]["transform_scan_to_normalised"], float))
+            CURRENT["deviation_mesh"] = full
     except Exception as ex:  # noqa: BLE001
         rep["normalise"] = {"mode": getattr(pr, "normalise", "report"), "applied": False,
                             "error": f"{type(ex).__name__}: {ex}"}
@@ -710,7 +843,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                         rep["seconds"] = time.time() - t0
                         _stage(rep, "done")
                         if report_path:
-                            Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+                            _save_report(rep, report_path)
                         return rep, lres.shape, mesh, [], np.zeros(len(mesh.faces), int)
                 else:
                     loft_info["reason"] = f"loft n_solids={nsol}"
@@ -755,7 +888,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                 rep["seconds"] = time.time() - t0
                 _stage(rep, "done")
                 if report_path:
-                    Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+                    _save_report(rep, report_path)
                 return rep, shape, mesh, [], np.zeros(len(mesh.faces), int)
         else:
             why = pinfo.get("reason") or "probe found no N-fold blades"
@@ -794,6 +927,8 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                               if screw_spec is not None else {"detected": False} | sinfo)
         rep["screw_rotor"]["seconds"] = round(time.time() - tg, 2)
     special = gear_spec is not None or screw_spec is not None
+    if _stop_for_stage_budget(rep, pr, "segmentation", report_path, t0):
+        return rep, None, mesh, [], None
     _stage(rep, "segmentation")
     sp = SegParams(sharp_deg=pr.sharp_deg, tol=tol, strict_torus=bool(fst.get("cad_tessellation")))
     ts = time.time()
@@ -961,6 +1096,8 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         rep.setdefault("warnings", []).append(f"bearing/seal recognition failed: {type(ex).__name__}: {ex}")
         _recogniser(rep, "bearing_seal", "failed", ex)
 
+    if _stop_for_stage_budget(rep, pr, "build", report_path, t0):
+        return rep, None, mesh, regions, labels
     _stage(rep, "build")
     # build
     prims_unique = []
@@ -1111,7 +1248,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         # helical rotor sweeps (long multi-turn B-spline faces) tessellate to tens of millions of
         # triangles at 2 um; 10 um sag is still far below tol and the measured sag widens the gate
         dkw = {"lin": 0.01, "ang": 0.1} if screw_spec is not None else {}
-        dev, per_region_dev, dv, face_dev, solid_mesh = deviation(mesh, b.shape, labels,
+        dev, per_region_dev, dv, face_dev, solid_mesh = _deviation(mesh, b.shape, labels,
                                                                   exclude_faces=exf if exf.any() else None, **dkw)
         # rotor balance planes: local material-removal cuts are not design geometry; the solid is
         # built to the nominal surfaces, the cuts are listed and kept out of the deviation gate
@@ -1131,7 +1268,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                     if bal_faces.any():
                         n_bal = int(bal_faces.sum())
                         exf |= bal_faces
-                        dev, per_region_dev, dv, face_dev, solid_mesh = deviation(mesh, b.shape, labels, exclude_faces=exf, **dkw)
+                        dev, per_region_dev, dv, face_dev, solid_mesh = _deviation(mesh, b.shape, labels, exclude_faces=exf, **dkw)
                 except Exception as ex:  # noqa: BLE001
                     rep["balance_cuts"] = {"error": f"{type(ex).__name__}: {ex}"}
         # internal scan faces (capture caps) of a solid turned part: scan-only test, excluded and listed
@@ -1143,7 +1280,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
             if caps.any():
                 n_caps = int(caps.sum())
                 exf |= caps
-                dev, per_region_dev, dv, face_dev, solid_mesh = deviation(mesh, b.shape, labels, exclude_faces=exf, **dkw)
+                dev, per_region_dev, dv, face_dev, solid_mesh = _deviation(mesh, b.shape, labels, exclude_faces=exf, **dkw)
         n_gear_tip = 0
         gear_zm = None
         if gear_spec is not None:
@@ -1156,7 +1293,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                 n_gear_tip = int(tip_f.sum())
                 if n_gear_tip:
                     exf = exf | tip_f
-                    dev, per_region_dev, dv, face_dev, solid_mesh = deviation(
+                    dev, per_region_dev, dv, face_dev, solid_mesh = _deviation(
                         mesh, b.shape, labels, exclude_faces=exf, **dkw)
             ev = np.zeros(len(mesh.vertices), bool)
             ev[mesh.faces[exf].ravel()] = True
@@ -1182,6 +1319,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         if use_cov:
             s2m = dev["solid_to_mesh_scanned"]
         lim_s2m = accept_p95 + sag95
+        class_rms, class_p95 = float(accept_rms), float(accept_p95)
         accepted = vd["rms"] <= accept_rms and vd["p95"] <= accept_p95 and s2m["p95"] <= lim_s2m
         gear_gate_note = ""
         # Involute gear solids: mid-flank must meet the noise gate; the hub/rest of the scan is
@@ -1217,6 +1355,11 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                       + gear_gate_note),
             "rms_limit": accept_rms, "p95_limit": accept_p95, "solid_to_mesh_p95_limit": lim_s2m,
             "facet_sag_p95": sag95, "passed": accepted}
+        from .acceptance import annotate_acceptance
+        annotate_acceptance(rep["deviation"]["acceptance"], accepted=bool(accepted),
+                            rms=float(vd["rms"]), p95=float(vd["p95"]),
+                            class_rms=class_rms, class_p95=class_p95,
+                            rule=rep["deviation"]["acceptance"]["basis"])
         try:
             from .metrology_spec import engine_verdict
             _ev = np.zeros(len(mesh.vertices), bool)
@@ -1236,8 +1379,14 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                         rep["deviation"]["acceptance"]["basis"] = basis + "; connected |d| > 2 mm regions excluded"
             if ex2.get("over_5pct_total") or ex2.get("over_5pct"):
                 rep.setdefault("warnings", []).append(ex2.get("over_5pct_flag") or "excluded over 5 % of the scan")
+            annotate_acceptance(rep["deviation"]["acceptance"], accepted=bool(accepted),
+                                rms=float((vd or {}).get("rms", 0.0)), p95=float((vd or {}).get("p95", 0.0)),
+                                class_rms=class_rms, class_p95=class_p95,
+                                rule=rep["deviation"]["acceptance"].get("basis") or "")
             rep["verdict"] = engine_verdict(dv, _ev, accepted,
                                             "engine acceptance gate: " + rep["deviation"]["acceptance"]["basis"])
+            if isinstance(rep.get("verdict"), dict):
+                rep["verdict"]["plain"] = rep["deviation"]["acceptance"].get("summary")
         except Exception as _e:  # noqa: BLE001
             rep["verdict"] = {"error": f"{type(_e).__name__}: {_e}"}
         try:
@@ -1249,13 +1398,15 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
         unassigned = labels < 0
         if unassigned.any():
             rep["deviation"]["unassigned_faces_max_dev"] = float(face_dev[unassigned].max())
-        if deviation_ply:
-            vmax = save_deviation_ply(mesh, dv, deviation_ply)
+        _, dv, ply_mesh = _full_resolution_gate(mesh, b.shape, rep["deviation"], dv, dkw)
+        if deviation_ply and dv is not None:
+            vmax = save_deviation_ply(ply_mesh, dv, deviation_ply)
             rep["deviation_map"] = {"path": str(deviation_ply), "color_range_mm": [-vmax, vmax]}
         if accepted and out_step:
             write_step(b.shape, out_step)
             rep["step"] = str(out_step)
             rep["status"] = "ok"
+            rep["end_reason"] = "ok"
             if pr.bearing_build == "envelope" and rep.get("bearing"):
                 try:
                     rep["bearing"]["envelope"] = _bearing_envelope(rep["bearing"], out_step)
@@ -1263,12 +1414,15 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
                     rep["bearing"]["envelope"] = {"error": f"{type(ex).__name__}: {ex}"}
         elif not accepted:
             rep["status"] = "failed"
+            rep["end_reason"] = "rejected_by_gate"
             rep["failure"] = ("solid is valid but deviates from the mesh beyond acceptance limits; "
                               "STEP not written (likely missing/incorrect surfaces)")
         else:
             rep["status"] = "ok_no_output"
+            rep["end_reason"] = "ok"
     else:
         why = "; ".join(f"{a.get('method', 'local_trim')}: {a.get('reason')}" for a in attempts if not a.get("ok"))
+        rep["end_reason"] = "crashed"
         rep["failure"] = f"analytic solid construction failed ({why or b.reason}). No STEP written."
 
     _stage(rep, "preview")
@@ -1303,7 +1457,7 @@ def _run_core(input_path, out_step, report_path, pr, deviation_ply, preview_png,
     rep["seconds"] = time.time() - t0
     _stage(rep, "done")
     if report_path:
-        Path(report_path).write_text(json.dumps(rep, indent=2, default=_js))
+        _save_report(rep, report_path)
     return rep, (b.shape if b.ok else None), mesh, regions, labels
 
 

@@ -60,6 +60,7 @@ def mark_timeout(report_path, budget):
         return False                                   # the run finished and wrote its own report
     stage = rep.get("last_stage")
     rep["status"] = "timeout"
+    rep["end_reason"] = "timed_out"
     rep["failure"] = f"time budget of {budget:g} s exceeded during stage '{stage}'; the engine was stopped. No STEP written."
     rep["timeout"] = {"budget_s": budget, "stage": stage, "by": "watchdog"}
     tmp = str(report_path) + ".tmp"

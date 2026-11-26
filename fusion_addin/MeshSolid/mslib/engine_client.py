@@ -49,7 +49,10 @@ class EngineJob:
     options: dict = field(default_factory=dict)          # e.g. {"impeller": "auto", "tol": 0.02}
 
     def paths(self):
-        base = os.path.join(self.out_dir, os.path.splitext(os.path.basename(self.mesh_path))[0])
+        from .names import safe_part_id
+        stem = os.path.splitext(os.path.basename(self.mesh_path))[0]
+        # The mesh on disk may be named "KK&K Stage 1.stl". Outputs use the safe id.
+        base = os.path.join(self.out_dir, safe_part_id(stem))
         return {"step": base + ".step", "report": base + ".report.json", "preview": base + ".preview.png",
                 "log": base + ".engine.log"}
 

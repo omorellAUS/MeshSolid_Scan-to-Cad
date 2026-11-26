@@ -1,15 +1,15 @@
 @echo off
 setlocal
 set "D=%~dp0"
-if not exist "%D%fusion_addin\install_windows.ps1" set "D=%USERPROFILE%\Downloads\MeshSolid-1.0.2a-windows\MeshSolid-1.0.2a\MeshSolid-1.0.2a\"
-if not exist "%D%fusion_addin\install_windows.ps1" set "D=%USERPROFILE%\Downloads\MeshSolid-1.0.2a-windows\MeshSolid-1.0.2a\"
-if not exist "%D%fusion_addin\install_windows.ps1" set "D=%USERPROFILE%\Downloads\MeshSolid-1.0.2a\"
+if not exist "%D%fusion_addin\install_windows.ps1" set "D=%USERPROFILE%\Downloads\MeshSolid-2.0.0-windows\MeshSolid-2.0.0\MeshSolid-2.0.0\"
+if not exist "%D%fusion_addin\install_windows.ps1" set "D=%USERPROFILE%\Downloads\MeshSolid-2.0.0-windows\MeshSolid-2.0.0\"
+if not exist "%D%fusion_addin\install_windows.ps1" set "D=%USERPROFILE%\Downloads\MeshSolid-2.0.0\"
 if not exist "%D%fusion_addin\install_windows.ps1" (
-  echo Could not find the MeshSolid folder. Move this file into the MeshSolid-1.0.2a folder and run it again.
+  echo Could not find the MeshSolid folder. Move this file into the MeshSolid-2.0.0 folder and run it again.
   pause & exit /b 1
 )
 cd /d "%D%"
-echo MeshSolid 1.0.2a installer. Your existing Python 3.10 is NOT changed.
+echo MeshSolid 2.0.0 installer. Your existing Python 3.10 is NOT changed.
 set "PYEXE="
 for %%V in (3.13 3.12) do if not defined PYEXE for /f "delims=" %%P in ('py -%%V -c "import sys;print(sys.executable)" 2^>nul') do if exist "%%P" set "PYEXE=%%P"
 if not defined PYEXE for %%V in (313 312) do if not defined PYEXE if exist "%LOCALAPPDATA%\Programs\Python\Python%%V\python.exe" set "PYEXE=%LOCALAPPDATA%\Programs\Python\Python%%V\python.exe"

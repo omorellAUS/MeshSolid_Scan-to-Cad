@@ -8,6 +8,15 @@ from pathlib import Path
 import numpy as np
 
 
+def impeller_build_stage(binfo):
+    """Build-stage record including the real solid count. The log used to print solids=None."""
+    n_solids = binfo.get("n_solids")
+    valid = bool(binfo.get("valid"))
+    return {"method": "impeller", "ok": bool(valid and n_solids == 1),
+            "brepcheck_valid": valid, "valid": valid, "n_solids": n_solids,
+            "n_faces": binfo.get("n_faces"), "volume": binfo.get("volume"), "seconds": binfo.get("seconds")}
+
+
 def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, deviation_ply=None,
                  preview_png=None, input_path="", measurements=None, notes=None, N=None, probe_info=None):
     from . import impeller as I
@@ -55,10 +64,10 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
                       "front_face": spec.info.get("eye")}
     if notes:
         imp["notes"] = list(notes)
-    rep["stages"]["build"] = {"method": "impeller", "ok": bool(binfo["valid"] and binfo["n_solids"] == 1),
-                              "volume": binfo["volume"], "seconds": binfo["seconds"]}
+    rep["stages"]["build"] = impeller_build_stage(binfo)
     if not rep["stages"]["build"]["ok"]:
         rep["status"] = "failed"
+        rep["end_reason"] = "crashed"
         rep["failure"] = f"impeller build: valid={binfo['valid']} solids={binfo['n_solids']}"
         return rep, None
     # Adaptive end-face classification (front/back): balance cuts and irregular slots are
@@ -112,6 +121,7 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
     rep["deviation"] = dev
     vd = dev.get("mesh_vertices_to_solid_excl", dev["mesh_vertices_to_solid"])
     gate_basis = "1.5 x / 3 x the scan-noise tolerance"
+    class_rms, class_p95 = float(accept_rms), float(accept_p95)
     if pr.accept_rms is None and pr.accept_p95 is None:
         # one blade patterned N times cannot fit the scan closer than the blades differ from each other:
         # the folded side fits' residual (blade-to-blade scatter + noise) bounds what an N-fold model can
@@ -140,6 +150,10 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
                                       "classified end-face features (balance cuts, irregular slots, uncertain) excluded",
                                       "rms_limit": accept_rms, "p95_limit": accept_p95, "limits_basis": gate_basis,
                                       "passed": bool(accepted)}
+    from .acceptance import annotate_acceptance
+    annotate_acceptance(rep["deviation"]["acceptance"], accepted=bool(accepted),
+                        rms=float(vd["rms"]), p95=float(vd["p95"]),
+                        class_rms=class_rms, class_p95=class_p95, rule=gate_basis)
     try:
         from .metrology_spec import engine_verdict
         _ev = np.zeros(len(mesh.vertices), bool)
@@ -158,8 +172,14 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
                 rep["deviation"]["acceptance"]["basis"] = basis + "; connected |d| > 2 mm regions excluded"
         if ex2.get("over_5pct_total") or ex2.get("over_5pct"):
             rep.setdefault("warnings", []).append(ex2.get("over_5pct_flag") or "excluded over 5 % of the scan")
+        vd_now = vd if isinstance(vd, dict) else {}
+        annotate_acceptance(rep["deviation"]["acceptance"], accepted=bool(accepted),
+                            rms=float(vd_now.get("rms", 0.0)), p95=float(vd_now.get("p95", 0.0)),
+                            class_rms=class_rms, class_p95=class_p95, rule=gate_basis)
         rep["verdict"] = engine_verdict(dv, _ev, accepted, "engine acceptance gate: " + rep["deviation"]["acceptance"]["basis"]
                                         + f" ({gate_basis})")
+        if isinstance(rep.get("verdict"), dict):
+            rep["verdict"]["plain"] = rep["deviation"]["acceptance"].get("summary")
     except Exception as _e:  # noqa: BLE001
         rep["verdict"] = {"error": f"{type(_e).__name__}: {_e}"}
     try:
@@ -168,16 +188,33 @@ def run_impeller(mesh, rep, pr, tol, accept_rms, accept_p95, out_step=None, devi
         merge_into_verdict(rep.get("verdict"), rep["deviation"]["solid_to_scan_gate"])
     except Exception as _e:  # noqa: BLE001
         rep["deviation"]["solid_to_scan_gate"] = {"error": f"{type(_e).__name__}: {_e}"}
+    from .pipeline import CURRENT
+    full = CURRENT.get("deviation_mesh")
+    ply_mesh = mesh
+    if full is not None and full is not mesh:
+        dev_f, _, dv_f, _, _ = deviation(full, shape, None, lin=0.01, ang=0.5)
+        rep["deviation"]["mesh_vertices_to_solid_recognition"] = rep["deviation"].get("mesh_vertices_to_solid")
+        rep["deviation"]["mesh_vertices_to_solid"] = dev_f["mesh_vertices_to_solid"]
+        rep["deviation"]["solid_to_mesh_recognition"] = rep["deviation"].get("solid_to_mesh")
+        rep["deviation"]["solid_to_mesh"] = dev_f["solid_to_mesh"]
+        rep["deviation"]["full_resolution"] = {
+            "faces": int(len(full.faces)),
+            "note": "deviation measured on the full-resolution mesh; recognition used the reduced copy"}
+        dv, ply_mesh = dv_f, full
+        # `accepted` is left as the recognition gate decided it. The STEP decision does not move.
     if deviation_ply:
         from .deviation import save_deviation_ply
-        save_deviation_ply(mesh, dv, deviation_ply)
+        save_deviation_ply(ply_mesh, dv, deviation_ply)
     if accepted and out_step:
         write_step(shape, out_step); rep["step"] = str(out_step); rep["status"] = "ok"
+        rep["end_reason"] = "ok"
     elif not accepted:
         rep["status"] = "failed"
+        rep["end_reason"] = "rejected_by_gate"
         rep["failure"] = "impeller solid is valid but deviates beyond the acceptance limits; STEP not written"
     else:
         rep["status"] = "ok_no_output"
+        rep["end_reason"] = "ok"
     if preview_png:
         from .render import render_preview
         try:

@@ -591,7 +591,7 @@ def test_toolbar_panels_promoted_on_utilities_and_mesh_and_cleaned_up(monkeypatc
     assert os.path.isfile(os.path.join(cd.resourceFolder, "32x32.png"))
     for pid in ("MeshSolidPanel_Utilities", "MeshSolidPanel_Mesh"):
         p = reg[pid]
-        assert p.name == "MESHSOLID 1.0.2a"
+        assert p.name == "MESHSOLID 2.0.0"
         for cid in (m.CMD_ID, "meshsolid_metrology"):
             c = p.controls.itemById(cid)
             assert c is not None and c.isPromoted and c.isPromotedByDefault, cid

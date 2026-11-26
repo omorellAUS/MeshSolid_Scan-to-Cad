@@ -41,8 +41,10 @@ def find_pairs(in_dir, recursive=False):
 
 
 def _name(mesh, in_dir):
+    from .names import safe_part_id
     rel = mesh.relative_to(in_dir).with_suffix("")
-    return "__".join(rel.parts)
+    # Display names may contain '&' (KK&K Stage 1). Every output file uses the safe id.
+    return "__".join(safe_part_id(p) for p in rel.parts)
 
 
 def run_one(mesh, truth, out_dir, name, engine_args, timeout, python=sys.executable):

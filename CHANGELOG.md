@@ -1,3 +1,23 @@
+# MeshSolid 2.0.0
+
+Reliability and traceability on the 1.0.2a engine. Solid-building geometry and the gate that decides whether a STEP is written are unchanged, so a Stage 3 run still writes its STEP.
+
+## What's new
+
+- **End reason on every run:** `ok`, `crashed`, `cancelled`, `timed_out` or `rejected_by_gate`, including a cancel (SIGTERM) and a watchdog timeout.
+- **Per-stage time limits**, shortened when the run budget is almost gone.
+- **Heartbeat child process** that keeps rewriting the heartbeat file during a long stage. A thread cannot run while OpenCASCADE holds the interpreter, which is why the file used to stop moving on Test Net.
+- **Large-mesh recognition.** Above about 300,000 faces, recognition uses a reduced copy. Deviation is measured on the untouched full-resolution mesh.
+- **Units check** flags a mesh scaled by 25.4 or by 1000. Nothing is rescaled automatically.
+- **Job folders** drop the copied mesh, the deviation PLY and the heartbeat once the run finishes. The STEP, the reports, the logs and the preview PNG stay (the Fusion review opens that PNG as soon as the run returns).
+- **Gate text.** When the 1.5x blade-scatter rule keeps a solid that missed the class limit, the verdict says so (for example `5.6x over 0.009 mm`). The accept boolean, and whether the STEP is written, is the same.
+- **`&` in a display name** (KK&K Stage 1) stays in the report. File names use the safe id `KKandK_Stage_1` in the add-in and the batch runner.
+- **Seven report bugs:** scoreboard `Path` import, units `asarray` axis, the misleading accepted-at-5.6x line, the stalled heartbeat, `solids=None` on an impeller build, the PDF shift labelled `m`, and the PDF beyond-cap percentage that did not match the JSON.
+
+## Known open issues
+
+- The open issues from 1.0.2a below still apply. This release does not retune impeller or gear geometry.
+
 # MeshSolid 1.0.2a
 
 Bug-fix release on top of 1.0.2, from the user's 1.0.2 test runs (X2-B1941 STG1, KK&K stage 1, LS pinion).

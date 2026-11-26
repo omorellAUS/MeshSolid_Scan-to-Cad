@@ -1068,8 +1068,8 @@ def export_pdf_report(res, ui=None):
     dlg.title = "Export metrology report (PDF)"
     dlg.filter = "PDF files (*.pdf)"
     part = ((res.get("meta") or {}).get("part_name") or "metrology").strip() or "metrology"
-    safe = "".join(ch if ch.isalnum() or ch in "-_. " else "_" for ch in part)
-    dlg.initialFilename = f"{safe}_metrology_report.pdf"
+    from .names import safe_part_id
+    dlg.initialFilename = f"{safe_part_id(part)}_metrology_report.pdf"
     if dlg.showSave() != adsk.core.DialogResults.DialogOK:
         return None
     dest = dlg.filename

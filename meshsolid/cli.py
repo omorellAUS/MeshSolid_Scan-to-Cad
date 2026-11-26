@@ -2,26 +2,109 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 
 from .pipeline import Params, run
 
 
 def _install_timeout_report():
-    """On SIGTERM (e.g. `timeout`), write the partial report with status "timeout" and the last stage
-    reached, then exit 124. Never reports success."""
+    """On SIGTERM (user cancel / external timeout), write a partial report and exit 124.
+    The end reason is cancelled. Never reports success."""
     import signal
     from . import pipeline as P
 
     def h(signum, frame):
         rep = P.CURRENT.get("rep")
         if rep is not None and P.CURRENT.get("report_path"):
-            rep["status"] = "timeout"
-            rep["failure"] = f"killed by signal {signum} during stage '{rep.get('last_stage')}'"
-            from pathlib import Path
+            rep["status"] = "cancelled"
+            rep["end_reason"] = "cancelled"
+            rep["failure"] = f"cancelled by user (signal {signum}) during stage '{rep.get('last_stage')}'"
             Path(P.CURRENT["report_path"]).write_text(json.dumps(rep, indent=2, default=P._js))
-        print(f"TIMEOUT during stage {rep.get('last_stage') if rep else None}", file=sys.stderr, flush=True)
+        print(f"CANCELLED during stage {rep.get('last_stage') if rep else None}", file=sys.stderr, flush=True)
         os._exit(124)
     signal.signal(signal.SIGTERM, h)
+
+
+def _keep_job_file(path: Path) -> bool:
+    """STEP, reports, logs, and the preview PNG.
+
+    The Fusion review reads the preview as soon as the CLI returns, so that PNG stays.
+    Copied meshes, deviation PLY and the heartbeat do not.
+    """
+    name = path.name.lower()
+    if "heartbeat" in name or name.endswith(".stage") or name.endswith(".tmp"):
+        return False
+    if name.endswith((".step", ".stp", ".log")):
+        return True
+    if name.endswith(".png") and "preview" in name:
+        return True
+    if name.endswith(".json") and "report" in name:
+        return True
+    return False
+
+
+def prune_job_folder(report_path, preview_path=None, deviation_ply_path=None):
+    """Drop copied meshes, deviation PLY and the heartbeat.
+
+    STEP, reports, logs and the preview PNG stay. A shared batch folder (more than one
+    report) only drops this run's deviation ply and heartbeat."""
+    if not report_path:
+        return []
+    report = Path(report_path)
+    folder = report.parent
+    if not folder.is_dir():
+        return []
+    def keep(p: Path) -> bool:
+        try:
+            if p.resolve() == report.resolve():
+                return True
+        except OSError:
+            pass
+        return _keep_job_file(p)
+
+    reports = [p for p in folder.iterdir() if p.is_file() and keep(p) and p.suffix.lower() == ".json"]
+    single = len(reports) <= 1
+    deleted = []
+    targets = []
+    if single:
+        targets = [p for p in folder.iterdir() if p.is_file() and not keep(p)]
+    else:
+        # Shared batch folder: only this run's deviation ply and heartbeat. Previews stay
+        # for the same reason as a single job folder (the review reads them).
+        if deviation_ply_path:
+            targets.append(Path(deviation_ply_path))
+        targets.append(Path(str(report.with_suffix(".heartbeat.json"))))
+        targets.append(Path(str(report.with_suffix(".stage"))))
+    seen = set()
+    for p in targets:
+        key = str(p)
+        if key in seen or not p.is_file():
+            continue
+        if p.resolve().parent != folder.resolve() and not single:
+            # named intermediates may sit beside the report; don't follow a path outside the folder
+            if p.parent.resolve() != folder.resolve():
+                continue
+        seen.add(key)
+        try:
+            p.unlink()
+            deleted.append(str(p))
+        except OSError:
+            pass
+    return deleted
+
+
+def format_build_line(rep) -> str:
+    """One log line. Impeller builds used to print solids=None; the count lives on the build record."""
+    b = dict((rep.get("stages") or {}).get("build") or {})
+    imp = ((rep.get("impeller") or {}).get("build") or {})
+    if b.get("n_solids") is None and imp.get("n_solids") is not None:
+        b["n_solids"] = imp["n_solids"]
+    if b.get("n_faces") is None and imp.get("n_faces") is not None:
+        b["n_faces"] = imp["n_faces"]
+    valid = b.get("brepcheck_valid", b.get("valid", imp.get("valid", b.get("ok"))))
+    volume = b.get("volume", 0) or 0
+    return (f"regions: {len(rep.get('regions', []))}  build: valid={valid} solids={b.get('n_solids')} "
+            f"faces={b.get('n_faces')} volume={float(volume):.3f} (mesh {rep.get('mesh', {}).get('volume')})")
 
 
 def main(argv=None):
@@ -93,10 +176,9 @@ def main(argv=None):
         print("FAILURE:", rep["failure"])
         return 2
     b = rep["stages"].get("build", {})
-    print(f"status: {rep['status']}")
+    print(f"status: {rep['status']}  end_reason: {rep.get('end_reason')}")
     print(f"tol: {rep['tolerance']['tol']:.4f} (noise est {rep['tolerance']['noise_sigma_est']})  method: {b.get('method')}")
-    print(f"regions: {len(rep.get('regions', []))}  build: valid={b.get('brepcheck_valid', b.get('ok'))} solids={b.get('n_solids')} "
-          f"faces={b.get('n_faces')} volume={b.get('volume', 0):.3f} (mesh {rep.get('mesh', {}).get('volume')})")
+    print(format_build_line(rep))
     if "deviation" in rep:
         v = rep["deviation"]["mesh_vertices_to_solid"]
         print("deviation vertices->solid (all vertices, reference): max={:.4f} rms={:.4f} p95={:.4f}".format(
@@ -117,10 +199,20 @@ def main(argv=None):
                 float(d["max"]), float(d["mean"]), float(d["rms"]), float(d["p95"])))
     for d in rep.get("dimensions", []):
         print(f"  {d['name']}: {d['type']} {d['value']:.4f} (fit {d['fit_value']:.4f}) regions {d['regions']}")
+    summary = ((rep.get("deviation") or {}).get("acceptance") or {}).get("summary")
+    if summary:
+        print(summary)
+    plain = (rep.get("verdict") or {}).get("plain") if isinstance(rep.get("verdict"), dict) else None
+    if plain and plain != summary:
+        print(plain)
     if rep.get("failure"):
         print("FAILURE:", rep["failure"])
     for c in rep.get("measurement_checks", []):
         print("  measure", c)
+    if a.report:
+        deleted = prune_job_folder(a.report, a.preview, a.deviation_ply)
+        if deleted:
+            print(f"pruned: deleted {len(deleted)} file(s); kept STEP, reports and logs")
     return 0 if rep["status"] == "ok" else 2
 
 

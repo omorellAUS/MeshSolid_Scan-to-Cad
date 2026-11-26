@@ -32,6 +32,55 @@ def _version():
         return "?"
 
 
+def format_shift_mm(value):
+    """Shift in millimetres. A 3-vector is a translation in mm, never labelled as metres.
+
+    The old pose cell was one long sentence. The value column clipped the last ``m`` of
+    ``mm``, so ``shift 0.0124 mm`` was read as ``shift 0.0124 m``.
+    """
+    if value is None:
+        return None
+    arr = np.asarray(value, float).reshape(-1)
+    if arr.size == 0 or not np.isfinite(arr).all():
+        return None
+    mag = float(np.linalg.norm(arr)) if arr.size != 1 else float(arr[0])
+    return f"{mag:.4f} mm"
+
+
+def pose_table_rows(ps):
+    """Short rows that fit the summary value column. Each value stays in millimetres."""
+    if not ps or ps.get("rotation_about_axis_deg") is None:
+        return []
+    warn = " (WARNING)" if ps.get("warnings") else ""
+    rot = f"rot {ps['rotation_about_axis_deg']:+.4f}° about the axis"
+    if ps.get("rotation_bound_deg") is not None:
+        rot += f" (bound ±{ps['rotation_bound_deg']:g}°)"
+    rows = [[f"alignment rotation{warn}", rot]]
+    if ps.get("tilt_deg") is not None:
+        rows.append(["alignment tilt", f"{float(ps['tilt_deg']):.4f}°"])
+    shift = format_shift_mm(ps.get("translation_mm"))
+    if shift is not None:
+        rows.append(["alignment shift", shift])
+    return rows
+
+
+def not_inspected_pct(entry, stats):
+    """Percentage shown for one Not-inspected row.
+
+    Recomputing ``n_new / (n + n_excluded)`` does not match the JSON. A beyond-cap row
+    whose JSON ``pct_beyond_cap`` is 79.89 was drawn as 78.91. Use the stored figure.
+    """
+    stats = stats or {}
+    entry = entry or {}
+    reason = str(entry.get("reason") or "").lower()
+    if "beyond" in reason and stats.get("pct_beyond_cap") is not None:
+        return float(stats["pct_beyond_cap"])
+    if entry.get("pct_of_scan") is not None:
+        return float(entry["pct_of_scan"])
+    n_scan = int(stats.get("n") or 0) + int(stats.get("n_excluded") or 0)
+    return 100.0 * float(entry.get("n_new", entry.get("n") or 0)) / max(n_scan, 1)
+
+
 def _fmt(v, nd=4, unit=" mm", signed=False):
     if v is None:
         return "—"
@@ -192,11 +241,7 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
     for r_, n_ in (st.get("excluded_by_reason") or {}).items():
         rows.append([f"   – {r_}", f"{n_:,} not inspected"])
     ps = st.get("pose_summary") or ((report.get("alignment") or {}).get("final_pose")) or {}
-    if ps.get("rotation_about_axis_deg") is not None:
-        rows.append(["final alignment pose" + (" (WARNING)" if ps.get("warnings") else ""),
-                     f"rot {ps['rotation_about_axis_deg']:+.4f}° about the axis"
-                     + (f" (bound ±{ps['rotation_bound_deg']:g}°)" if ps.get("rotation_bound_deg") else "")
-                     + f", tilt {ps['tilt_deg']:.4f}°, shift {ps['translation_mm']:.4f} mm"])
+    rows.extend(pose_table_rows(ps))
     for f_ in (st.get("face_features_flagged") or [])[:3]:
         rows.append([f"   flagged, kept inspected", _short(f_.get("label"), 58)])
     nr = len(rows)
@@ -320,7 +365,7 @@ def write_pdf(report, out_dir, dv=None, section=None, path=None):
             return f"{a:.1f}" if a is not None else "—"
         erows = [[e.get("reason", ""), _short(e.get("label") or e.get("reason", ""), 28),
                   _area(e), f"{e['n']:,}",
-                  f"{e.get('n_new', e['n']):,}", f"{100.0 * e.get('n_new', e['n']) / max(n_scan, 1):.2f} %"]
+                  f"{e.get('n_new', e['n']):,}", f"{not_inspected_pct(e, st):.2f} %"]
                  for e in nin]
         tot_new = sum(e.get("n_new", e["n"]) for e in nin)
         tot_area = sum(e.get("area_mm2") or 0.0 for e in nin)

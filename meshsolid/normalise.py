@@ -136,6 +136,87 @@ def apply(mesh, mode="report"):
     return m, rep
 
 
+def check_units(mesh):
+    """Flag a mesh whose size says the numbers are not millimetres.
+
+    ``np.asarray`` does not take ``axis`` (that was a TypeError). A part scaled by
+    25.4 (inches written out as millimetres) or by 1000 (metres written out as
+    millimetres) is flagged and never rescaled.
+    """
+    V = np.asarray(getattr(mesh, "vertices", mesh))
+    ext = float(np.ptp(V, axis=0).max()) if len(V) else 0.0
+    info = {"largest_extent_mm": round(ext, 3), "mis_scaled": False, "scale_factor": 1.0}
+    if ext >= 10000.0:
+        info.update(unit="mm", mis_scaled=True, scale_factor=1000,
+                    note=(f"largest extent {ext:.0f} mm is about x1000 too big "
+                          "(metres written as millimetres). Confirm units before build."))
+    elif ext >= 1000.0:
+        info.update(unit="mm", mis_scaled=True, scale_factor=25.4, ambiguous_inches=True,
+                    note=(f"largest extent {ext:.0f} mm looks like a millimetre mesh scaled by "
+                          "25.4 (inches treated as millimetres). Confirm units before build."))
+    elif 0 < ext < 1.0:
+        info.update(unit="m (scaled x1000 to mm)", mis_scaled=True, scale_factor=0.001,
+                    note="largest extent < 1: interpreted as metres and scaled to mm")
+    elif 2.0 <= ext <= 20.0:
+        info.update(unit="mm", possible_inches=True,
+                    note="small part; a mm export and an inch export look the same by size alone")
+    else:
+        info.update(unit="mm", note="mm")
+    return info
+
+
+def decimate_for_recognition(mesh, target=300_000):
+    """A new mesh of about ``target`` faces for recognition. The caller's mesh is not modified.
+
+    Uses quadric edge collapse when pymeshlab is available, otherwise trimesh's quadric
+    decimator. Raises if both fail; the caller keeps the full mesh.
+    """
+    import trimesh
+    target = int(target)
+    if len(mesh.faces) <= target:
+        return mesh
+    try:
+        import pymeshlab
+        ms = pymeshlab.MeshSet()
+        ms.add_mesh(pymeshlab.Mesh(np.asarray(mesh.vertices), np.asarray(mesh.faces)), mesh="in")
+        try:
+            ms.apply_filter("meshing_decimation_quadric_edge_collapse",
+                            targetfacenum=target, preservetopology=True)
+        except Exception:
+            ms.apply_filter("simplification_quadric_edge_collapse_decimation",
+                            targetfacenum=target, preservetopology=True)
+        out = ms.current_mesh()
+        return trimesh.Trimesh(vertices=np.asarray(out.vertex_matrix()),
+                               faces=np.asarray(out.face_matrix()), process=False)
+    except Exception:
+        reduced = mesh.simplify_quadric_decimation(target)
+        return reduced
+
+
+def recognition_meshes(mesh, target=300_000, decimate=None):
+    """``(recognition, deviation, info)``.
+
+    Over ``target`` faces, recognition gets a reduced copy and deviation keeps a copy of
+    the full-resolution mesh taken before decimation (so a decimator that edits its input
+    cannot touch the deviation mesh). At or under the target both are the original mesh
+    and ``info`` is None, which is the 1.0.2a path.
+    """
+    target = int(target)
+    n = int(len(mesh.faces))
+    if n <= target:
+        return mesh, mesh, None
+    import trimesh
+    full = trimesh.Trimesh(np.array(mesh.vertices, dtype=float, copy=True),
+                           np.array(mesh.faces, dtype=np.int64, copy=True), process=False)
+    reduced = (decimate or decimate_for_recognition)(mesh, target)
+    if reduced is None or int(len(reduced.faces)) >= n:
+        return mesh, mesh, None
+    info = {"from_faces": n, "to_faces": int(len(reduced.faces)), "deviation_faces": int(len(full.faces)),
+            "target": target, "full_resolution_kept_for_deviation": True,
+            "note": "recognition uses the reduced mesh; deviation uses the untouched full-resolution mesh"}
+    return reduced, full, info
+
+
 def _trsf(M):
     """gp_Trsf for x -> M[:3,:3] x + M[:3,3] with M[:3,:3] = s * rotation (uniform scale s)."""
     from OCP.gp import gp_Trsf
